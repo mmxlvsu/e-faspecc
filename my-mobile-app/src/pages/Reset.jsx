@@ -15,21 +15,36 @@ export default function PasswordInputs() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ left: "11px", top: "56px", width: "24px", height: "24px" }}
+        style={{
+          left: "3vw",
+          top: "7vh",
+          width: "6vw",
+          height: "6vw",
+        }}
         onClick={() => alert("Back clicked")}
       />
 
       {/* Top texts */}
       <h1
         className="absolute font-bold text-black"
-        style={{ left: "30px", top: "220px", width: "261px", height: "48px", fontSize: "32px" }}
+        style={{
+          left: "8vw",
+          top: "22vh",
+          width: "80vw",
+          fontSize: "8vw",
+        }}
       >
         Reset Password
       </h1>
 
       <p
         className="absolute text-[#36570A]"
-        style={{ left: "30px", top: "265px", width: "342px", height: "18px", fontSize: "12px" }}
+        style={{
+          left: "8.5vw",
+          top: "28vh",
+          width: "86vw",
+          fontSize: "3.2vw",
+        }}
       >
         Enter a new password below to reset password
       </p>
@@ -40,21 +55,37 @@ export default function PasswordInputs() {
         placeholder="New Password"
         value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)}
-        className="absolute left-[25px] top-[347px] w-[355px] h-[51px] rounded-lg px-4 text-black placeholder-black"
-        style={{ backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "15px" }}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{
+          left: "7vw",
+          top: "37vh",
+          width: "86vw",
+          height: "7vh",
+          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          fontSize: "4vw",
+        }}
       />
       <img
         src={hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ left: "328px", top: "359px", width: "32px", height: "28px" }}
+        style={{
+          right: "10vw",
+          top: "38.5vh", // aligned with input top
+          width: "8vw", // same scaling as Login component
+          height: "7vw", // match width for square icon
+        }}
         onClick={() => setShowNew(!showNew)}
       />
 
       {/* Text: Password must be 8-16 characters */}
       <p
         className="absolute text-black"
-        style={{ left: "33px", top: "400px", width: "209px", height: "19px", fontSize: "12px" }}
+        style={{
+          left: "8.5vw",
+          top: "45vh",
+          fontSize: "3vw",
+        }}
       >
         Password must be 8-16 characters
       </p>
@@ -65,21 +96,37 @@ export default function PasswordInputs() {
         placeholder="Confirm Password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        className="absolute left-[25px] top-[435px] w-[355px] h-[51px] rounded-lg px-4 text-black placeholder-black"
-        style={{ backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "15px" }}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{
+          left: "7vw",
+          top: "48vh",
+          width: "86vw",
+          height: "7vh",
+          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          fontSize: "4vw",
+        }}
       />
       <img
         src={hideIcon}
         alt="Toggle Confirm Password"
         className="absolute cursor-pointer"
-        style={{ left: "328px", top: "444px", width: "32px", height: "28px" }}
+        style={{
+          right: "10vw",
+          top: "49.5vh", // aligned with input top
+          width: "8vw", // match new password toggle
+          height: "7vw", // match new password toggle
+        }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
       {/* Text: Password must match */}
       <p
         className="absolute text-black"
-        style={{ left: "33px", top: "488px", width: "209px", height: "19px", fontSize: "12px" }}
+        style={{
+          left: "8.5vw",
+          top: "56vh",
+          fontSize: "3vw",
+        }}
       >
         Password must match
       </p>
@@ -87,7 +134,14 @@ export default function PasswordInputs() {
       {/* Reset Password button */}
       <button
         className="absolute rounded-lg text-white font-bold"
-        style={{ left: "25px", top: "536px", width: "355px", height: "51px", backgroundColor: "#36570A", fontSize: "16px" }}
+        style={{
+          left: "7vw",
+          top: "61vh",
+          width: "86vw",
+          height: "7vh",
+          backgroundColor: "#36570A",
+          fontSize: "4vw",
+        }}
         onClick={() => alert("Reset Password clicked")}
       >
         Reset Password
