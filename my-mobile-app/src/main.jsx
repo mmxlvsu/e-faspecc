@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Splash from "./pages/Signup";
+import Splash from "./pages/Home";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
