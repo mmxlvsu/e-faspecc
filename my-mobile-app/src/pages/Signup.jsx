@@ -19,14 +19,14 @@ export default function Signup() {
 
       {/* Header */}
       <h1
-        className="absolute text-[32px] font-bold text-black"
+        className="absolute text-[32px] font-black text-black"
         style={{ left: "21px", top: "202px", width: "307px", height: "48px" }}
       >
         Create an account
       </h1>
 
       <p
-        className="absolute text-[15px] text-[#36570A]"
+        className="absolute text-[15px] text-[#36570A] font-semibold"
         style={{ left: "26px", top: "246px", width: "209px", height: "19px" }}
       >
         Please enter your details
@@ -91,7 +91,7 @@ export default function Signup() {
       {/* Sign Up button */}
       <button
         className="absolute left-[21px] top-[622px] w-[355px] h-[51px] rounded-lg text-white font-bold"
-        style={{ backgroundColor: "black", fontSize: "15px" }}
+        style={{ backgroundColor: "#36570A", fontSize: "15px" }}
         onClick={() => alert("Sign Up clicked")}
       >
         Sign Up
@@ -104,7 +104,7 @@ export default function Signup() {
       >
         Already have an account?{" "}
         <span
-          className="underline cursor-pointer font-semibold"
+          className="underline cursor-pointer font-semibold text-[#36570A]"
           onClick={() => alert("Log in clicked")}
         >
           Log in here.

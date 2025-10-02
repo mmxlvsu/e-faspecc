@@ -149,7 +149,7 @@ export default function BackButtonOnly() {
       {/* Confirm button */}
       <button
         className="absolute rounded-lg text-white font-bold"
-        style={{ left: "63px", top: "572px", width: "286px", height: "53px", backgroundColor: "black", fontSize: "16px" }}
+        style={{ left: "63px", top: "572px", width: "286px", height: "53px", backgroundColor: "#36570A", fontSize: "16px" }}
         onClick={() => alert("Confirm clicked")}
       >
         Confirm

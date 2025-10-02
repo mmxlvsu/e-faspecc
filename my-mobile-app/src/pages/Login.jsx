@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- import navigate
 import hideIcon from "../assets/hide.png"; 
 import backIcon from "../assets/back.png"; 
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // <-- use navigate
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins px-8">
@@ -15,19 +13,19 @@ export default function Login() {
         alt="Back"
         className="absolute cursor-pointer"
         style={{ left: "11px", top: "56px", width: "24px", height: "24px" }}
-        onClick={() => navigate("/")} // <-- back to Splash
+        onClick={() => alert("Back clicked")}
       />
 
       {/* "Welcome Back!" */}
       <h1
-        className="absolute left-[30px] top-[227px] text-[32px] font-bold text-black leading-tight"
+        className="absolute left-[30px] top-[227px] text-[32px] font-extrabold text-black leading-tight"
         style={{ width: "300px" }}
       >
         Welcome Back!
       </h1>
 
       <p
-        className="absolute left-[32px] top-[270px] text-[14px] text-[#36570A]"
+        className="absolute left-[32px] top-[270px] text-[14px] text-[#36570A] font-semibold"
         style={{ width: "209px" }}
       >
         Good to see you again
@@ -59,7 +57,7 @@ export default function Login() {
       {/* Login button */}
       <button
         className="absolute left-[29px] top-[531px] w-[355px] h-[51px] rounded-lg text-white font-bold"
-        style={{ backgroundColor: "black", fontSize: "15px" }}
+        style={{ backgroundColor: "#36570A", fontSize: "15px" }}
         onClick={() => alert("Login clicked")}
       >
         Login
@@ -67,7 +65,7 @@ export default function Login() {
 
       {/* "Forgot password?" */}
       <p
-        className="absolute left-[148px] top-[599px] text-[12px] font-bold text-[#36570A] cursor-pointer"
+        className="absolute left-[148px] top-[599px] text-[12px] font-bold text-[#000000] cursor-pointer"
         style={{ width: "113px", height: "19px" }}
         onClick={() => alert("Forgot password clicked")}
       >
@@ -81,8 +79,8 @@ export default function Login() {
       >
         Don't have an account yet?{" "}
         <span
-          className="underline cursor-pointer font-semibold"
-          onClick={() => navigate("/signup")} // <-- navigate to Signup
+          className="underline cursor-pointer font-semibold text-[#36570A]"
+          onClick={() => alert("Go to signup")}
         >
           Sign up here.
         </span>

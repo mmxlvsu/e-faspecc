@@ -87,7 +87,7 @@ export default function PasswordInputs() {
       {/* Reset Password button */}
       <button
         className="absolute rounded-lg text-white font-bold"
-        style={{ left: "25px", top: "536px", width: "355px", height: "51px", backgroundColor: "black", fontSize: "16px" }}
+        style={{ left: "25px", top: "536px", width: "355px", height: "51px", backgroundColor: "#36570A", fontSize: "16px" }}
         onClick={() => alert("Reset Password clicked")}
       >
         Reset Password

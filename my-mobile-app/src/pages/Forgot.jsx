@@ -15,7 +15,7 @@ export default function BackButtonOnly() {
 
       {/* "Forgot Password?" text */}
       <h1
-        className="absolute font-bold text-black"
+        className="absolute font-extrabold text-black"
         style={{ left: "29px", top: "220px", width: "294px", height: "48px", fontSize: "32px" }}
       >
         Forgot Password?
@@ -48,7 +48,7 @@ export default function BackButtonOnly() {
       {/* Send Validation Code button */}
       <button
         className="absolute left-[27px] top-[459px] w-[355px] h-[51px] rounded-lg text-white font-bold"
-        style={{ backgroundColor: "black", fontSize: "15px" }}
+        style={{ backgroundColor: "#36570A", fontSize: "15px" }}
         onClick={() => alert("Send Validation Code clicked")}
       >
         Send Validation Code
