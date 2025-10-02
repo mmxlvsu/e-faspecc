@@ -1,9 +1,73 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authAPI, storage } from "../lib/api";
 import hideIcon from "../assets/hide.png"; 
 import backIcon from "../assets/back.png"; 
 
 export default function Login() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  
+  // Form data state
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Handle input changes
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Clear error when user starts typing
+    if (error) setError("");
+  };
+
+  // Form validation
+  const validateForm = () => {
+    const { email, password } = formData;
+    
+    if (!email.trim()) return "Email is required";
+    if (!email.includes("@")) return "Please enter a valid email";
+    if (!password) return "Password is required";
+    
+    return null;
+  };
+
+  // Handle form submission
+  const handleLogin = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await authAPI.login(formData.email, formData.password);
+      
+      // Store token and user data
+      storage.setToken(response.token);
+      storage.setUser(response.user);
+      
+      // Navigate based on user role or to home
+      if (response.user.role === "student") {
+        navigate("/home");
+      } else {
+        navigate("/home"); // You can customize this for different roles
+      }
+      
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins px-[5vw]">
@@ -13,7 +77,7 @@ export default function Login() {
         alt="Back"
         className="absolute cursor-pointer"
         style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
-        onClick={() => alert("Back clicked")}
+        onClick={() => navigate("/")}
       />
 
       {/* "Welcome Back!" */}
@@ -41,16 +105,33 @@ export default function Login() {
         Good to see you again
       </p>
 
+      {/* Error Message */}
+      {error && (
+        <div
+          className="absolute text-red-600 font-semibold text-center"
+          style={{ 
+            top: "32vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3.2vw" 
+          }}
+        >
+          {error}
+        </div>
+      )}
+
       {/* Email input */}
       <input
         type="email"
         placeholder="Email Address"
+        value={formData.email}
+        onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "35vh", 
+          top: "36vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -60,12 +141,14 @@ export default function Login() {
       <input
         type={showPassword ? "text" : "password"}
         placeholder="Password"
+        value={formData.password}
+        onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "44vh", 
+          top: "45vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -74,36 +157,37 @@ export default function Login() {
         src={hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "45.5vh", width: "8vw", height: "7vw" }}
+        style={{ right: "10vw", top: "46.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
       {/* Login button */}
       <button
-        className="absolute rounded-lg text-white font-bold"
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ 
-          top: "55vh", 
+          top: "54vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "#36570A", 
           fontSize: "4vw" 
         }}
-        onClick={() => alert("Login clicked")}
+        onClick={handleLogin}
+        disabled={loading}
       >
-        Login
+        {loading ? "Logging in..." : "Login"}
       </button>
 
       {/* "Forgot password?" */}
       <p
         className="absolute font-bold text-[#000000] cursor-pointer text-center"
         style={{ 
-          top: "64vh", 
+          top: "63vh", 
           left: "30vw", 
           fontSize: "3vw", 
           width: "40vw" 
         }}
-        onClick={() => alert("Forgot password clicked")}
+        onClick={() => navigate("/forgot")}
       >
         Forgot password?
       </p>
@@ -121,7 +205,7 @@ export default function Login() {
         Don't have an account yet?{" "}
         <span
           className="underline cursor-pointer font-semibold text-[#36570A]"
-          onClick={() => alert("Go to signup")}
+          onClick={() => navigate("/signup")}
         >
           Sign up here.
         </span>

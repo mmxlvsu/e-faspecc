@@ -1,15 +1,30 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
 
 export default function VerificationCode() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const input1 = useRef(null);
   const input2 = useRef(null);
   const input3 = useRef(null);
   const input4 = useRef(null);
 
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(180); // 3 minutes
   const [showPopup, setShowPopup] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(location.state?.email || "");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  
+  // Get verification code from inputs
+  const getVerificationCode = () => {
+    return [input1, input2, input3, input4]
+      .map(ref => ref.current?.value || "")
+      .join("");
+  };
 
   const handleChange = (e, nextInput) => {
     if (e.target.value.length === 1 && nextInput) nextInput.current.focus();
@@ -30,10 +45,74 @@ export default function VerificationCode() {
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
 
+  // Handle verification code submission
+  const handleVerify = async () => {
+    const code = getVerificationCode();
+    
+    if (code.length !== 4) {
+      setError("Please enter the complete 4-digit code");
+      return;
+    }
+    
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await authAPI.verifyEmail(email, code);
+      setSuccess("Email verified successfully!");
+      
+      // Navigate to home after successful verification
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+      
+    } catch (err) {
+      setError(err.message || "Verification failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle resend code
+  const handleResendCode = async () => {
+    if (!email) {
+      setError("Email is required to resend code");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await authAPI.resendCode(email);
+      setSuccess("New verification code sent to your email!");
+      setTimer(180); // Reset timer
+      setShowPopup(false);
+      
+      // Clear input fields
+      [input1, input2, input3, input4].forEach(ref => {
+        if (ref.current) ref.current.value = "";
+      });
+      
+      // Focus first input
+      if (input1.current) input1.current.focus();
+      
+    } catch (err) {
+      setError(err.message || "Failed to resend code. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleResendYes = () => {
-    alert("Resend clicked");
-    setTimer(180);
-    setShowPopup(false);
+    handleResendCode();
   };
 
   const handleResendCancel = () => setShowPopup(false);
@@ -51,7 +130,7 @@ export default function VerificationCode() {
           width: "6vw",
           height: "6vw",
         }}
-        onClick={() => alert("Back clicked")}
+        onClick={() => navigate("/login")}
       />
 
       {/* Title */}
@@ -82,6 +161,36 @@ export default function VerificationCode() {
         We have sent the code verification to
       </p>
 
+      {/* Error Message */}
+      {error && (
+        <div
+          className="absolute text-red-600 font-semibold text-center"
+          style={{ 
+            top: "31vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3vw" 
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* Success Message */}
+      {success && (
+        <div
+          className="absolute text-green-600 font-semibold text-center"
+          style={{ 
+            top: "31vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3vw" 
+          }}
+        >
+          {success}
+        </div>
+      )}
+
       <div
   className="absolute flex items-center justify-start"
   style={{
@@ -92,17 +201,17 @@ export default function VerificationCode() {
   }}
 >
   <input
-    type="text"
+    type="email"
     value={email}
     onChange={(e) => setEmail(e.target.value)}
-    placeholder="laplap.mariel05@edu.ph"
-    className="bg-white focus:outline-none font-bold" // changed from bg-transparent
+    placeholder="your.email@example.com"
+    className="bg-white focus:outline-none font-bold"
     style={{
       fontSize: "3vw",
       color: "black",
       borderBottom: "none",
-      flexShrink: 1, // allow shrinking on small screens
-      minWidth: "40vw", // prevent it from getting too small
+      flexShrink: 1,
+      minWidth: "40vw",
       width: `${Math.max(4 * (email.length || 20), 40)}vw`,
       transition: "width 0.2s ease",
     }}
@@ -112,9 +221,9 @@ export default function VerificationCode() {
     style={{
       fontSize: "3vw",
       color: "#36570A",
-      whiteSpace: "nowrap", // force the text to stay in one line
+      whiteSpace: "nowrap",
     }}
-    onClick={() => alert("Change email clicked")}
+    onClick={() => navigate("/signup")}
   >
     Change email address?
   </p>
@@ -171,37 +280,38 @@ export default function VerificationCode() {
 
       {/* Confirm button */}
       <button
-        className="absolute rounded-lg text-white font-bold"
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           top: "53vh",
           left: "7vw",
           width: "86vw",
-          height: "7vh",
+          height: "6vh",
           backgroundColor: "#36570A",
           fontSize: "4vw",
         }}
-        onClick={() => alert("Confirm clicked")}
+        onClick={handleVerify}
+        disabled={loading}
       >
-        Confirm
+        {loading ? "Verifying..." : "Confirm"}
       </button>
 
       {/* Resend button */}
       <button
-        className="absolute rounded-lg"
+        className="absolute rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           top: "61vh",
           left: "7vw",
           width: "86vw",
-          height: "7vh",
+          height: "6vh",
           backgroundColor: "rgba(54,87,10,0.2)",
           fontSize: "4vw",
           color: "black",
           opacity: timer > 0 ? 0.5 : 1,
         }}
-        onClick={() => alert("Resend clicked")}
-        disabled={timer > 0}
+        onClick={handleResendCode}
+        disabled={timer > 0 || loading}
       >
-        Resend
+        {loading ? "Sending..." : "Resend"}
       </button>
 
       {/* Popup */}

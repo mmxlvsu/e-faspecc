@@ -1,23 +1,30 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../lib/api";
 import homeIcon from "../assets/home.png";
 import menuIcon from "../assets/menu.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
-import personIcon from "../assets/person.png";
+import personIcon from "../assets/profile.png"; // Using profile.png instead of person.png
 import backIcon from "../assets/back.png";
-import promo1 from "../assets/promo1.jpg";
+import promo1 from "../assets/promo1.jpg"; // Commented out since it's causing errors
 
 export default function BottomBarWithTabs() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Dashboard");
 
-  // Placeholder click handlers
-  const handleLogout = () => alert("Log Out clicked");
+  // Logout handler - clears authentication and redirects to splash
+  const handleLogout = () => {
+    logout(navigate);
+  };
+
+  // Navigation handlers
   const handleEditProfile = () => alert("Edit Profile clicked");
-  const handleHomeClick = () => alert("Home clicked");
-  const handleMenuClick = () => alert("Menu clicked");
-  const handleCartClick = () => alert("Cart clicked");
-  const handleOrdersClick = () => alert("Orders clicked");
-  const handleProfileClick = () => alert("Profile clicked");
+  const handleHomeClick = () => navigate("/home");
+  const handleMenuClick = () => navigate("/home"); // Navigate to home for now since Menu page doesn't exist
+  const handleCartClick = () => navigate("/cart");
+  const handleOrdersClick = () => navigate("/home"); // Navigate to home for now since Orders page doesn't exist
+  const handleProfileClick = () => navigate("/profile");
 
   // Width of the indicator line
   const indicatorWidth = 68;

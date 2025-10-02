@@ -1,14 +1,25 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import splashImage from "../assets/splash.png";
 import logo1 from "../assets/logo1.png"; // Google logo
 import logo2 from "../assets/logo2.png"; // Facebook logo
 
 export default function Splash() {
-  // Click handlers show alerts only
-  const handleGetStarted = () => alert("Get Started clicked!");
-  const handleGoogle = () => alert("Continue with Google clicked!");
-  const handleFacebook = () => alert("Continue with Facebook clicked!");
-  const handleLogin = () => alert("Log in clicked!");
+  const navigate = useNavigate();
+
+  // Click handlers with proper navigation
+  const handleGetStarted = () => navigate("/signup");
+  const handleGoogle = () => {
+    // For now, navigate to signup. You can implement Google OAuth later
+    console.log("Google authentication would be implemented here");
+    navigate("/signup");
+  };
+  const handleFacebook = () => {
+    // For now, navigate to signup. You can implement Facebook OAuth later
+    console.log("Facebook authentication would be implemented here");
+    navigate("/signup");
+  };
+  const handleLogin = () => navigate("/login");
 
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-black font-poppins">
@@ -70,7 +81,7 @@ export default function Splash() {
         <div className="flex-grow border-t border-white"></div>
         <span
           className="mx-2 text-[3.5vw] text-white text-center cursor-pointer"
-          onClick={() => alert("Social sign up clicked!")}
+          onClick={() => navigate("/signup")}
         >
           or use social sign up
         </span>

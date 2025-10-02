@@ -1,10 +1,86 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authAPI, storage } from "../lib/api";
 import backIcon from "../assets/back.png"; 
 import hideIcon from "../assets/hide.png"; 
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  
+  // Form data state
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    studentId: "",
+    contact: "",
+  });
+
+  // Handle input changes
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Clear error when user starts typing
+    if (error) setError("");
+  };
+
+  // Form validation
+  const validateForm = () => {
+    const { fullName, email, password, confirmPassword, studentId, contact } = formData;
+    
+    if (!fullName.trim()) return "Full name is required";
+    if (!email.trim()) return "Email is required";
+    if (!email.includes("@")) return "Please enter a valid email";
+    if (!password) return "Password is required";
+    if (password.length < 8 || password.length > 16) return "Password must be 8-16 characters";
+    if (password !== confirmPassword) return "Passwords do not match";
+    if (!studentId.trim()) return "Student ID is required";
+    if (!contact.trim()) return "Contact number is required";
+    
+    return null;
+  };
+
+  // Handle form submission
+  const handleSignup = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const { confirmPassword, ...registrationData } = formData;
+      
+      const response = await authAPI.register(registrationData);
+      
+      // Store token and user data
+      storage.setToken(response.token);
+      storage.setUser(response.user);
+      
+      // Navigate to verification page or home
+      navigate("/verify", { 
+        state: { 
+          email: formData.email,
+          message: "Registration successful! Please check your email for verification code."
+        }
+      });
+      
+    } catch (err) {
+      setError(err.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
@@ -14,7 +90,7 @@ export default function Signup() {
         alt="Back"
         className="absolute cursor-pointer"
         style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
-        onClick={() => alert("Back clicked")}
+        onClick={() => navigate("/")}
       />
 
       {/* Header */}
@@ -32,16 +108,33 @@ export default function Signup() {
         Please enter your details
       </p>
 
-      {/* Username */}
+      {/* Error Message */}
+      {error && (
+        <div
+          className="absolute text-red-600 font-semibold text-center"
+          style={{ 
+            top: "26vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3.2vw" 
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* Full Name */}
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Full Name"
+        value={formData.fullName}
+        onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "30vh", 
+          top: "29vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -49,14 +142,50 @@ export default function Signup() {
 
       {/* Email */}
       <input
-        type="text"
+        type="email"
         placeholder="Email Address"
+        value={formData.email}
+        onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "39vh", 
+          top: "37vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
+          backgroundColor: "rgba(54, 87, 10, 0.2)", 
+          fontSize: "3.8vw" 
+        }}
+      />
+
+      {/* Student ID */}
+      <input
+        type="text"
+        placeholder="Student ID"
+        value={formData.studentId}
+        onChange={(e) => handleInputChange("studentId", e.target.value)}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{ 
+          top: "45vh", 
+          left: "7vw", 
+          width: "86vw", 
+          height: "6vh", 
+          backgroundColor: "rgba(54, 87, 10, 0.2)", 
+          fontSize: "3.8vw" 
+        }}
+      />
+
+      {/* Contact */}
+      <input
+        type="tel"
+        placeholder="Contact Number"
+        value={formData.contact}
+        onChange={(e) => handleInputChange("contact", e.target.value)}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{ 
+          top: "53vh", 
+          left: "7vw", 
+          width: "86vw", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -66,12 +195,14 @@ export default function Signup() {
       <input
         type={showPassword ? "text" : "password"}
         placeholder="Password"
+        value={formData.password}
+        onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "48vh", 
+          top: "61vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -80,13 +211,13 @@ export default function Signup() {
         src={hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "50vh", width: "8vw", height: "7vw" }}
+        style={{ right: "10vw", top: "62.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
       <p
-        className="absolute text-black"
-        style={{ left: "8vw", top: "56vh", fontSize: "3vw", width: "70vw" }}
+        className="absolute text-gray-600"
+        style={{ left: "8vw", top: "68vh", fontSize: "2.8vw", width: "70vw" }}
       >
         Password must be 8-16 characters
       </p>
@@ -95,12 +226,14 @@ export default function Signup() {
       <input
         type={showConfirm ? "text" : "password"}
         placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "59vh", 
+          top: "71vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "rgba(54, 87, 10, 0.2)", 
           fontSize: "3.8vw" 
         }}
@@ -109,31 +242,32 @@ export default function Signup() {
         src={hideIcon}
         alt="Toggle Confirm Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "61vh", width: "8vw", height: "7vw" }}
+        style={{ right: "10vw", top: "72.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
       {/* Sign Up button */}
       <button
-        className="absolute rounded-lg text-white font-bold"
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ 
-          top: "69vh", 
+          top: "80vh", 
           left: "7vw", 
           width: "86vw", 
-          height: "7vh", 
+          height: "6vh", 
           backgroundColor: "#36570A", 
           fontSize: "4vw" 
         }}
-        onClick={() => alert("Sign Up clicked")}
+        onClick={handleSignup}
+        disabled={loading}
       >
-        Sign Up
+        {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
       {/* Already have an account? */}
       <p
         className="absolute text-black text-center"
         style={{ 
-          top: "90vh", 
+          top: "89vh", 
           left: "10vw", 
           fontSize: "3.2vw", 
           width: "80vw" 
@@ -142,7 +276,7 @@ export default function Signup() {
         Already have an account?{" "}
         <span
           className="underline cursor-pointer font-semibold text-[#36570A]"
-          onClick={() => alert("Log in clicked")}
+          onClick={() => navigate("/login")}
         >
           Log in here.
         </span>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import homeIcon from "../assets/home.png";
 import menuIcon from "../assets/menu.png";
 import cartIcon from "../assets/cart.png";
@@ -16,6 +17,7 @@ import todayPic5 from "../assets/t5.png";
 import todayPic6 from "../assets/car1.png";
 
 export default function BottomBar() {
+  const navigate = useNavigate();
   const [notificationCount] = useState(3);
   const [heartCount] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,11 +39,11 @@ export default function BottomBar() {
   }, []);
 
   const items = [
-    { icon: homeIcon, onClick: () => alert("Go to Home"), filter: "brightness(0) saturate(100%) invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)", iconSize: "6vw" },
-    { icon: menuIcon, onClick: () => alert("Go to Menu"), filter: "invert(0%)", iconSize: "6vw" },
-    { icon: cartIcon, onClick: () => alert("Go to Cart"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
-    { icon: orderIcon, onClick: () => alert("Go to Orders"), filter: "invert(0%)", iconSize: "6vw" },
-    { icon: personIcon, onClick: () => alert("Go to Profile"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
+    { icon: homeIcon, onClick: () => navigate("/home"), filter: "brightness(0) saturate(100%) invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)", iconSize: "6vw" },
+    { icon: menuIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" }, // Navigate to home for now since Menu page doesn't exist
+    { icon: cartIcon, onClick: () => navigate("/cart"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
+    { icon: orderIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" }, // Navigate to home for now since Orders page doesn't exist
+    { icon: personIcon, onClick: () => navigate("/profile"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
   ];
 
   const categories = [

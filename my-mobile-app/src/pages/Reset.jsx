@@ -1,12 +1,61 @@
 import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
 import hideIcon from "../assets/hide.png";
 
-export default function PasswordInputs() {
+export default function ResetPassword() {
+  const navigate = useNavigate();
+  const { token } = useParams(); // Get token from URL params
+  
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Form validation
+  const validateForm = () => {
+    if (!newPassword) return "New password is required";
+    if (newPassword.length < 8 || newPassword.length > 16) return "Password must be 8-16 characters";
+    if (newPassword !== confirmPassword) return "Passwords do not match";
+    return null;
+  };
+
+  // Handle password reset
+  const handleResetPassword = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    if (!token) {
+      setError("Invalid reset token");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      await authAPI.resetPassword(token, newPassword);
+      setSuccess("Password reset successfully! Redirecting to login...");
+      
+      // Navigate to login after successful reset
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+      
+    } catch (err) {
+      setError(err.message || "Failed to reset password. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
@@ -21,7 +70,7 @@ export default function PasswordInputs() {
           width: "6vw",
           height: "6vw",
         }}
-        onClick={() => alert("Back clicked")}
+        onClick={() => navigate("/login")}
       />
 
       {/* Top texts */}
@@ -49,20 +98,54 @@ export default function PasswordInputs() {
         Enter a new password below to reset password
       </p>
 
+      {/* Error Message */}
+      {error && (
+        <div
+          className="absolute text-red-600 font-semibold text-center"
+          style={{ 
+            top: "33vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3vw" 
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* Success Message */}
+      {success && (
+        <div
+          className="absolute text-green-600 font-semibold text-center"
+          style={{ 
+            top: "33vh", 
+            left: "7vw", 
+            width: "86vw", 
+            fontSize: "3vw",
+            lineHeight: "4.5vw"
+          }}
+        >
+          {success}
+        </div>
+      )}
+
       {/* New Password input */}
       <input
         type={showNew ? "text" : "password"}
         placeholder="New Password"
         value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
+        onChange={(e) => {
+          setNewPassword(e.target.value);
+          if (error) setError("");
+        }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
           left: "7vw",
-          top: "37vh",
+          top: "38vh",
           width: "86vw",
-          height: "7vh",
+          height: "6vh",
           backgroundColor: "rgba(54, 87, 10, 0.2)",
-          fontSize: "4vw",
+          fontSize: "3.8vw",
         }}
       />
       <img
@@ -71,20 +154,20 @@ export default function PasswordInputs() {
         className="absolute cursor-pointer"
         style={{
           right: "10vw",
-          top: "38.5vh", // aligned with input top
-          width: "8vw", // same scaling as Login component
-          height: "7vw", // match width for square icon
+          top: "39.5vh",
+          width: "6vw",
+          height: "3vh",
         }}
         onClick={() => setShowNew(!showNew)}
       />
 
       {/* Text: Password must be 8-16 characters */}
       <p
-        className="absolute text-black"
+        className="absolute text-gray-600"
         style={{
           left: "8.5vw",
           top: "45vh",
-          fontSize: "3vw",
+          fontSize: "2.8vw",
         }}
       >
         Password must be 8-16 characters
@@ -95,15 +178,18 @@ export default function PasswordInputs() {
         type={showConfirm ? "text" : "password"}
         placeholder="Confirm Password"
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e) => {
+          setConfirmPassword(e.target.value);
+          if (error) setError("");
+        }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
           left: "7vw",
           top: "48vh",
           width: "86vw",
-          height: "7vh",
+          height: "6vh",
           backgroundColor: "rgba(54, 87, 10, 0.2)",
-          fontSize: "4vw",
+          fontSize: "3.8vw",
         }}
       />
       <img
@@ -112,20 +198,20 @@ export default function PasswordInputs() {
         className="absolute cursor-pointer"
         style={{
           right: "10vw",
-          top: "49.5vh", // aligned with input top
-          width: "8vw", // match new password toggle
-          height: "7vw", // match new password toggle
+          top: "49.5vh",
+          width: "6vw",
+          height: "3vh",
         }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
       {/* Text: Password must match */}
       <p
-        className="absolute text-black"
+        className="absolute text-gray-600"
         style={{
           left: "8.5vw",
-          top: "56vh",
-          fontSize: "3vw",
+          top: "55vh",
+          fontSize: "2.8vw",
         }}
       >
         Password must match
@@ -133,18 +219,19 @@ export default function PasswordInputs() {
 
       {/* Reset Password button */}
       <button
-        className="absolute rounded-lg text-white font-bold"
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           left: "7vw",
-          top: "61vh",
+          top: "59vh",
           width: "86vw",
-          height: "7vh",
+          height: "6vh",
           backgroundColor: "#36570A",
           fontSize: "4vw",
         }}
-        onClick={() => alert("Reset Password clicked")}
+        onClick={handleResetPassword}
+        disabled={loading}
       >
-        Reset Password
+        {loading ? "Resetting..." : "Reset Password"}
       </button>
     </div>
   );
