@@ -3,7 +3,7 @@ import homeIcon from "../assets/home.png";
 import menuIcon from "../assets/menu.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
-import personIcon from "../assets/person.png";
+import personIcon from "../assets/profile.png";
 import notiIcon from "../assets/not.png";
 import heartIcon from "../assets/heart.png";
 import searchIcon from "../assets/search.png";
