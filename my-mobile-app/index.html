@@ -5,7 +5,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>My Mobile App</title>
+    <style>
+      /* Force mobile app style */
+      body {
+        margin: 0;
+        background: #36570A; /* fallback bg */
+        display: flex;
+        justify-content: center;
+      }
+      #root {
+        width: 100%;
+        max-width: 414px; /* lock width like iPhone screen */
+        height: 100vh;
+        background: white;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
