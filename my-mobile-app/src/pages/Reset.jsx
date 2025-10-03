@@ -141,7 +141,7 @@ export default function ResetPassword() {
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
           left: "7vw",
-          top: "38vh",
+          top: "37vh",
           width: "86vw",
           height: "6vh",
           backgroundColor: "rgba(54, 87, 10, 0.2)",
@@ -154,7 +154,7 @@ export default function ResetPassword() {
         className="absolute cursor-pointer"
         style={{
           right: "10vw",
-          top: "39.5vh",
+          top: "38.5vh",
           width: "6vw",
           height: "3vh",
         }}
@@ -166,7 +166,7 @@ export default function ResetPassword() {
         className="absolute text-gray-600"
         style={{
           left: "8.5vw",
-          top: "45vh",
+          top: "44vh",
           fontSize: "2.8vw",
         }}
       >
@@ -185,7 +185,7 @@ export default function ResetPassword() {
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
           left: "7vw",
-          top: "48vh",
+          top: "47vh",
           width: "86vw",
           height: "6vh",
           backgroundColor: "rgba(54, 87, 10, 0.2)",
@@ -198,7 +198,7 @@ export default function ResetPassword() {
         className="absolute cursor-pointer"
         style={{
           right: "10vw",
-          top: "49.5vh",
+          top: "48.5vh",
           width: "6vw",
           height: "3vh",
         }}
@@ -210,7 +210,7 @@ export default function ResetPassword() {
         className="absolute text-gray-600"
         style={{
           left: "8.5vw",
-          top: "55vh",
+          top: "54vh",
           fontSize: "2.8vw",
         }}
       >
@@ -222,7 +222,7 @@ export default function ResetPassword() {
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           left: "7vw",
-          top: "59vh",
+          top: "58vh",
           width: "86vw",
           height: "6vh",
           backgroundColor: "#36570A",
