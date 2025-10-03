@@ -812,7 +812,7 @@ export default function BottomBar() {
       </div>
 
       {showBottomBar && (
-        <div style={{ position:"fixed", bottom:"0px", left:"0px", right:"0px", height:"67px", borderTop:"0.5px solid #CECECE", backgroundColor:"#fff", display:"flex", justifyContent:"space-around", alignItems:"center", zIndex:9999 }}>
+        <div style={{ position:"fixed", bottom:"0px", left:"0px", right:"0px", height:"67px", borderTop:"0.8px solid #CECECE", backgroundColor:"#fff", display:"flex", justifyContent:"space-around", alignItems:"center", zIndex:9999 }}>
           {items.map((item,index)=>(
             <img key={index} src={item.icon} alt={`icon-${index}`} onClick={item.onClick} style={{ width:item.iconSize, height:item.iconSize, filter:item.filter, cursor:"pointer" }} />
           ))}

@@ -2,265 +2,195 @@ import React from "react";
 import backIcon from "../assets/back.png";
 
 export default function WhiteAndGreenRectangle() {
+  const vw = (px) => `${(px / 414) * 100}vw`;
+  const vh = (px) => `${(px / 896) * 100}vh`; // Assuming design height 896px (iPhone 14 Pro)
+
+  const responsiveText = (px) => `${(px / 414) * 100}vw`;
+
   return (
-    <div style={{ width: "414px", height: "100vh", position: "relative" }}>
-      {/* Back Button */}
+    <div style={{ width: "100%", height: "100vh", position: "relative" }}>
       <img
         src={backIcon}
         alt="Back"
         onClick={() => alert("Back clicked")}
         style={{
           position: "absolute",
-          left: "12px",
-          top: "73px",
-          width: "24px",
-          height: "24px",
+          left: vw(12),
+          top: vh(73),
+          width: vw(24),
+          height: vw(24),
           cursor: "pointer",
           zIndex: 3,
         }}
       />
 
-      {/* Cart Text */}
       <p
         style={{
           position: "absolute",
-          left: "43px",
-          top: "75px",
-          width: "32px",
-          height: "21px",
-          fontSize: "14px",
+          left: vw(43),
+          top: vh(75),
+          fontSize: responsiveText(14),
           fontWeight: 600,
           fontFamily: "Poppins, sans-serif",
           color: "#000000",
-          lineHeight: "21px",
+          lineHeight: responsiveText(21),
           zIndex: 3,
         }}
       >
         Cart
       </p>
 
-      {/* 3-Step Process Tracker */}
       <div
         style={{
           position: "absolute",
-          top: "115px",
+          top: vh(115),
           left: 0,
           width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: "90px", // wider gap
+          gap: vw(90),
           zIndex: 2,
         }}
       >
-        {/* Step 1: Menu */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div
-            style={{
-              width: "28px",
-              height: "28px",
-              borderRadius: "50%",
-              backgroundColor: "#000000",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#FFFFFF",
-              fontWeight: 300,
-              fontSize: "12px",
-            }}
-          >
-            1
+        {["Menu", "Cart", "Checkout"].map((label, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div
+              style={{
+                width: vw(28),
+                height: vw(28),
+                borderRadius: "50%",
+                backgroundColor:"black",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#fff",
+                fontWeight: 300,
+                fontSize: responsiveText(12),
+              }}
+            >
+              {i + 1}
+            </div>
+            <span
+              style={{
+                marginTop: vw(4),
+                fontSize: responsiveText(10),
+                color: i < 2 ? "#000" : "#8C8C8C",
+                fontFamily: "Poppins, sans-serif",
+              }}
+            >
+              {label}
+            </span>
           </div>
-          <span
-            style={{
-              marginTop: "4px",
-              fontSize: "10px",
-              color: "#000000",
-              fontFamily: "Poppins, sans-serif",
-            }}
-          >
-            Menu
-          </span>
-        </div>
-
-        {/* Step 2: Cart */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div
-            style={{
-              width: "28px",
-              height: "28px",
-              borderRadius: "50%",
-              backgroundColor: "#000000",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#FFFFFF",
-              fontWeight: 300,
-              fontSize: "12px",
-            }}
-          >
-            2
-          </div>
-          <span
-            style={{
-              marginTop: "4px",
-              fontSize: "10px",
-              color: "#000000",
-              fontFamily: "Poppins, sans-serif",
-            }}
-          >
-            Cart
-          </span>
-        </div>
-
-        {/* Step 3: Checkout */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div
-            style={{
-              width: "28px",
-              height: "28px",
-              borderRadius: "50%",
-              backgroundColor: "black",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#FFFFFF",
-              fontWeight: 300,
-              fontSize: "12px",
-            }}
-          >
-            3
-          </div>
-          <span
-            style={{
-              marginTop: "4px",
-              fontSize: "10px",
-              color: "#8C8C8C",
-              fontFamily: "Poppins, sans-serif",
-            }}
-          >
-            Checkout
-          </span>
-        </div>
+        ))}
       </div>
 
-      {/* Horizontal Line Under Steps */}
       <div
         style={{
           position: "absolute",
-          top: "130px", // slightly below the circles
-          left: "0%",
-          transform: "translateX(-50%)",
-          width: "827px", // line length
-          height: "2px",
-          backgroundColor: "black",
+          top: vh(130),
+          left: 0,
+          width: "100%",
+          height: vh(2),
+          backgroundColor: "#000",
           zIndex: 1,
         }}
       />
 
-      {/* White Rectangle with Stroke */}
       <div
         style={{
-          position: "absolute",
-          left: "-2px",
-          top: "802px",
-          width: "417px",
-          height: "132px",
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          width: "100%", 
+          height: vh(160),
           backgroundColor: "#FFFFFF",
-          border: "0.5px solid #CECECE",
-          zIndex: 1,
-        }}
-      />
-
-      {/* Total Text */}
-      <p
-        style={{
-          position: "absolute",
-          left: "19px",
-          top: "815px",
-          width: "30px",
-          height: "18px",
-          fontSize: "12px",
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: 400,
-          color: "#000000",
-          lineHeight: "18px",
-          zIndex: 2,
+          borderTop: `${vw(0.5)} solid #CECECE`,
+          boxShadow: '0 -2px 5px rgba(0,0,0,0.05)',
+          zIndex: 5,
         }}
       >
-        Total
-      </p>
-
-      {/* Total Amount */}
-      <p
-        style={{
-          position: "absolute",
-          left: "343px",
-          top: "815px",
-          width: "48px",
-          height: "18px",
-          fontSize: "12px",
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: 900,
-          color: "#36570A",
-          lineHeight: "18px",
-          textAlign: "right",
-          zIndex: 2,
-        }}
-      >
-        P 719.00
-      </p>
-
-      {/* See Summary Text (Clickable, Underlined) */}
-      <p
-        style={{
-          position: "absolute",
-          left: "19px",
-          top: "832px",
-          width: "84px",
-          height: "18px",
-          fontSize: "12px",
-          fontFamily: "Poppins, sans-serif",
-          fontWeight: 400,
-          color: "#8C8C8C",
-          textDecoration: "underline",
-          cursor: "pointer",
-          lineHeight: "18px",
-          zIndex: 2,
-        }}
-        onClick={() => alert("See Summary clicked")}
-      >
-        See summary
-      </p>
-
-      {/* Green Rectangle with Rounded Corners */}
-      <div
-        style={{
-          position: "absolute",
-          left: "18px",
-          top: "865px",
-          width: "376px",
-          height: "42px",
-          backgroundColor: "#36570A",
-          borderRadius: "6px",
-          zIndex: 2,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-        onClick={() => alert("Review Payment clicked")}
-      >
-        <span
+        <p
           style={{
-            color: "#FFFFFF",
-            fontSize: "13px",
+            position: "absolute",
+            left: vw(19),
+            top: vh(13), 
+            fontSize: responsiveText(12),
             fontFamily: "Poppins, sans-serif",
-            fontWeight: 600,
+            fontWeight: 400,
+            color: "#000000",
+            lineHeight: responsiveText(18),
+            zIndex: 6,
           }}
         >
-          Pay Now
-        </span>
+          Total
+        </p>
+
+        <p
+          style={{
+            position: "absolute",
+            right: vw(19),
+            top: vh(13),
+            fontSize: responsiveText(12),
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 900,
+            color: "#36570A",
+            lineHeight: responsiveText(18),
+            textAlign: "right",
+            zIndex: 6,
+          }}
+        >
+          P 719.00
+        </p>
+
+        <p
+          style={{
+            position: "absolute",
+            left: vw(19),
+            top: vh(36),
+            fontSize: responsiveText(12),
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 400,
+            color: "#8C8C8C",
+            textDecoration: "underline",
+            cursor: "pointer",
+            lineHeight: responsiveText(18),
+            zIndex: 6,
+          }}
+          onClick={() => handleAction("See Summary")}
+        >
+          See summary
+        </p>
+
+        <div
+          style={{
+            position: "absolute",
+            left: vw(18),
+            right: vw(18),
+            bottom: vw(25),
+            width: `calc(100% - ${vw(36)})`, 
+            height: vw(42),
+            backgroundColor: "#36570A",
+            borderRadius: vw(6),
+            zIndex: 6,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={() => handleAction("Review Payment")}
+        >
+          <span
+            style={{
+              color: "#FFFFFF",
+              fontSize: responsiveText(13),
+              fontFamily: "Poppins, sans-serif",
+              fontWeight: 600,
+            }}
+          >
+            Review Payment
+          </span>
+        </div>
       </div>
     </div>
   );
