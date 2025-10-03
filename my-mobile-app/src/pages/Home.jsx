@@ -91,7 +91,7 @@ export default function BottomBar() {
       <img src={foodIcon} alt="Food" style={{ position: "absolute", top: "16vh", right: "1%", width: "150px", height: "150px", zIndex: 1 }} />
 
       {/* Greeting */}
-      <div style={{ position: "fixed", top: "19vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
+      <div style={{ position: "fixed", top: "21vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
         <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello, Mariel!</p>
         <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "500", color: "#FFFFFF", marginTop: "-2px" }}>Explore our food deals</p>
       </div>
