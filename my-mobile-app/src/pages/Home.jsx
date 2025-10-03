@@ -91,14 +91,14 @@ export default function BottomBar() {
 
 
       {/* Greeting */}
-      <div style={{ position: "fixed", top: "21vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
+      <div style={{ position: "fixed", top: "20vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
         <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello, Mariel!</p>
         <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "500", color: "#FFFFFF", marginTop: "-1px" }}>Let's find a best food match for you</p>
       </div>
 
       {/* Search Bar */}
       <form onSubmit={(e)=>{e.preventDefault(); alert(`You searched for: ${searchQuery}`);}}
-        style={{ position: "fixed", left: "50%", top: "10vh", transform: "translateX(-50%)", width: "90%", maxWidth: "370px", height: "35px", backgroundColor: "#FFF", border: "1px solid #36570A", borderRadius: "20px", display: "flex", alignItems: "center", zIndex: 9999 }}>
+        style={{ position: "fixed", left: "50%", top: "11vh", transform: "translateX(-50%)", width: "90%", maxWidth: "370px", height: "35px", backgroundColor: "#FFF", border: "1px solid #36570A", borderRadius: "20px", display: "flex", alignItems: "center", zIndex: 9999 }}>
         <img src={searchIcon} alt="Search" style={{ marginLeft: "12px", width: "18px", height: "18px", filter: "brightness(0) saturate(100%)", cursor: "pointer" }} onClick={()=>alert(`Search for: ${searchQuery}`)} />
         <input type="text" placeholder="Have an exact order in mind?" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} style={{ marginLeft:"12px", width:"100%", fontSize:"12px", fontFamily:"Poppins, sans-serif", fontWeight:"400", color:"#4A4A4A", border:"none", outline:"none", background:"transparent" }} />
       </form>
