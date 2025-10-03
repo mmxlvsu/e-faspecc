@@ -137,7 +137,7 @@ export default function VerificationCode() {
       <h1
         className="absolute font-extrabold text-black"
         style={{
-          top: "18vh",
+          top: "17vh",
           left: "7vw",
           width: "86vw",
           fontSize: "8vw",
@@ -166,7 +166,7 @@ export default function VerificationCode() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "31vh", 
+            top: "33vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3vw" 
@@ -181,7 +181,7 @@ export default function VerificationCode() {
         <div
           className="absolute text-green-600 font-semibold text-center"
           style={{ 
-            top: "31vh", 
+            top: "33vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3vw" 
@@ -235,7 +235,7 @@ export default function VerificationCode() {
       <div
         className="absolute flex justify-between"
         style={{
-          top: "34vh",
+          top: "37vh",
           left: "7vw",
           width: "86vw",
         }}
@@ -267,7 +267,7 @@ export default function VerificationCode() {
       <div
         className="absolute text-black"
         style={{
-          top: "46vh",
+          top: "49vh",
           left: "35vw",
           fontSize: "3vw",
         }}
@@ -282,7 +282,7 @@ export default function VerificationCode() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "53vh",
+          top: "55vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -297,13 +297,13 @@ export default function VerificationCode() {
 
       {/* Resend button */}
       <button
-        className="absolute rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
         style={{
-          top: "61vh",
+          top: "63vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54,87,10,0.2)",
+          backgroundColor: "rgba(54,87,10,0.3)",
           fontSize: "4vw",
           color: "black",
           opacity: timer > 0 ? 0.5 : 1,
