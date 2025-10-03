@@ -22,7 +22,7 @@ import cat3 from "../assets/cat3.png";
 import cat4 from "../assets/cat4.png";
 import cat5 from "../assets/cat5.png";
 import cat6 from "../assets/cat6.png";
-
+import reco1 from "../assets/reco.png";
 
 export default function BottomBar() {
   const navigate = useNavigate();
@@ -71,29 +71,29 @@ export default function BottomBar() {
         `}
       </style>
 
-     {/* Half-Screen Image Background with Dark Overlay */}
-<div 
-  style={{ 
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "50vh",
-    backgroundImage: `linear-gradient(rgba(54, 87, 10, 0.8), rgba(54, 87, 10, 0.9)), url(${splashBg})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    zIndex: 0,
-  }} 
-/>
+      {/* Half-Screen Image Background with Dark Overlay */}
+      <div 
+        style={{ 
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "50vh",
+          backgroundImage: `linear-gradient(rgba(54, 87, 10, 0.8), rgba(54, 87, 10, 0.9)), url(${splashBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          zIndex: 0,
+        }} 
+      />
 
       {/* Food Icon */}
       <img src={foodIcon} alt="Food" style={{ position: "absolute", top: "16vh", right: "1%", width: "150px", height: "150px", zIndex: 1 }} />
 
       {/* Greeting */}
       <div style={{ position: "fixed", top: "19vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
-        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "600", color: "#FFFFFF", margin: 0 }}>Hello, Mariel!</p>
-        <p style={{ fontSize: "10px", fontFamily: "Poppins, sans-serif", fontWeight: "300", color: "#FFFFFF", margin: 0, marginTop: "1px" }}>Explore our food deals!</p>
+        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello, Mariel!</p>
+        <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "500", color: "#FFFFFF", marginTop: "-2px" }}>Explore our food deals</p>
       </div>
 
       {/* Search Bar */}
@@ -171,7 +171,26 @@ export default function BottomBar() {
         </div>
 
         {/* Categories */}
-<div style={{ marginTop: "33px" }}>
+        <div style={{ marginTop: "33px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Categories</p>
+            <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Categories")}>See All</p>
+          </div>
+
+          <div style={{ display: "flex", overflowX: "auto", gap: "13px", paddingBottom: "20px" }} className="hide-scrollbar">
+            {[{ label: "Budget\nSnacks", icon: cat1 }, { label: "Snacks", icon: cat2 }, { label: "Value\nMeals", icon: cat3 }, { label: "Packed\nMeals", icon: cat4 }, { label: "Short\nOrders", icon: cat5 }, { label: "Buffet", icon: cat6 }].map((item, index) => (
+              <div key={index} style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+                <div style={{ width: "90px", height: "90px", backgroundColor: "#F3F3F3", borderRadius: "10px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center" }} onClick={() => alert(`Clicked ${item.label}`)}>
+                  <img src={item.icon} alt={item.label} style={{ width: "40px", height: "40px" }} />
+                </div>
+                <p style={{ marginTop: "9px", fontSize: "12px", fontWeight: "600", color: "#36570A", textAlign: "center", whiteSpace: "pre-line" }}>{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recommendations */}
+<div style={{ marginTop: "20px" }}>
   <div
     style={{
       display: "flex",
@@ -188,7 +207,7 @@ export default function BottomBar() {
         margin: 0,
       }}
     >
-      Categories
+      Our Recommendations
     </p>
     <p
       style={{
@@ -199,90 +218,103 @@ export default function BottomBar() {
         cursor: "pointer",
         textDecoration: "underline",
       }}
-      onClick={() => alert("See All Categories")}
+      onClick={() => alert("See All Recommendations")}
     >
       See All
     </p>
   </div>
 
+  {/* Carousel (for now one image reco.png) */}
+  <div
+    style={{ display: "flex", overflowX: "auto", gap: "10px" }}
+    className="hide-scrollbar"
+  >
+    <img
+      src={reco1}
+      alt="Recommendation 1"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation")}
+    />
+  </div>
+
+  {/* 5 stacked images vertically */}
   <div
     style={{
       display: "flex",
-      overflowX: "auto",
-      gap: "13px",
-      paddingBottom: "20px",
+      flexDirection: "column",
+      gap: "12px",
+      marginTop: "15px",
     }}
-    className="hide-scrollbar"
   >
-    {[
-      { label: "Budget\nSnacks", icon: cat1 },
-      { label: "Snacks", icon: cat2 },
-      { label: "Value\nMeals", icon: cat3 },
-      { label: "Packed\nMeals", icon: cat4 },
-      { label: "Short\nOrders", icon: cat5 },
-      { label: "Buffet", icon: cat6 },
-    ].map((item, index) => (
-      <div
-        key={index}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          flexShrink: 0,
-        }}
-      >
-        <div
-          style={{
-            width: "90px",
-            height: "90px",
-            backgroundColor: "#F3F3F3",
-            borderRadius: "10px",
-            cursor: "pointer",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={() => alert(`Clicked ${item.label}`)}
-        >
-          <img
-            src={item.icon}
-            alt={item.label}
-            style={{ width: "35px", height: "35px" }} // 🔹 adjustable size here
-          />
-        </div>
-        <p
-          style={{
-            marginTop: "9px",
-            fontSize: "12px",
-            fontWeight: "600",
-            color: "#36570A",
-            textAlign: "center",
-            whiteSpace: "pre-line",
-          }}
-        >
-          {item.label}
-        </p>
-      </div>
-    ))}
+    <img
+      src={reco1}
+      alt="Recommendation 1"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation 1")}
+    />
+    <img
+      src={reco1}
+      alt="Recommendation 2"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation 2")}
+    />
+    <img
+      src={reco1}
+      alt="Recommendation 3"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation 3")}
+    />
+    <img
+      src={reco1}
+      alt="Recommendation 4"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation 4")}
+    />
+    <img
+      src={reco1}
+      alt="Recommendation 5"
+      style={{
+        width: "100%",
+        maxWidth: "366px",
+        height: "134px",
+        borderRadius: "12px",
+        cursor: "pointer",
+      }}
+      onClick={() => alert("Clicked Recommendation 5")}
+    />
   </div>
 </div>
-
-
-        {/* Recommendations (vertical scroll) */}
-        <div style={{ marginTop: "33px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Our Recommendation</p>
-            <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Recommendations")}>See All</p>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "15px", maxHeight: "500px", overflowY: "auto", paddingBottom: "20px" }} className="hide-scrollbar">
-            {[...Array(10)].map((_, index) => (
-              <div key={index} style={{ cursor: "pointer", borderRadius: "12px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", height: "160px", width: "100%", backgroundColor: "#E0E0E0" }} onClick={() => alert(`Clicked recommendation ${index + 1}`)}>
-                <p style={{ color: "#555", fontSize: "12px" }}>Image {index + 1}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+</div>
 
       {/* Heart & Notifications */}
       <div style={{ position: "fixed", top: "5vh", right: "5%", display: "flex", alignItems: "center", zIndex: 9999 }}>
