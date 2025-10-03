@@ -96,14 +96,14 @@ export default function Signup() {
       {/* Header */}
       <h1
         className="absolute font-black text-black"
-        style={{ left: "8vw", top: "17vh", fontSize: "8vw", width: "80vw" }}
+        style={{ left: "8vw", top: "12vh", fontSize: "8vw", width: "80vw" }}
       >
         Create an account
       </h1>
 
       <p
         className="absolute font-semibold text-[#36570A]"
-        style={{ left: "8.5vw", top: "23vh", fontSize: "3.8vw", width: "70vw" }}
+        style={{ left: "8.5vw", top: "18vh", fontSize: "3.8vw", width: "70vw" }}
       >
         Please enter your details
       </p>
@@ -131,7 +131,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "29vh", 
+          top: "25vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -148,7 +148,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "37vh", 
+          top: "33vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -165,7 +165,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("studentId", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "45vh", 
+          top: "41vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -182,7 +182,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("contact", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "53vh", 
+          top: "49vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -199,7 +199,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "61vh", 
+          top: "57vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -211,13 +211,13 @@ export default function Signup() {
         src={hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "62.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "58.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
       <p
         className="absolute text-gray-600"
-        style={{ left: "8vw", top: "68vh", fontSize: "2.8vw", width: "70vw" }}
+        style={{ left: "8vw", top: "64vh", fontSize: "2.8vw", width: "70vw" }}
       >
         Password must be 8-16 characters
       </p>
@@ -230,7 +230,7 @@ export default function Signup() {
         onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ 
-          top: "71vh", 
+          top: "67vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -242,7 +242,7 @@ export default function Signup() {
         src={hideIcon}
         alt="Toggle Confirm Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "72.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "68.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
@@ -250,7 +250,7 @@ export default function Signup() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ 
-          top: "80vh", 
+          top: "76vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
@@ -267,7 +267,7 @@ export default function Signup() {
       <p
         className="absolute text-black text-center"
         style={{ 
-          top: "89vh", 
+          top: "84vh", 
           left: "10vw", 
           fontSize: "3.2vw", 
           width: "80vw" 

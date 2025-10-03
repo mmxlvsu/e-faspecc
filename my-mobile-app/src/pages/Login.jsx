@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, storage } from "../lib/api";
 import hideIcon from "../assets/hide.png"; 
-import backIcon from "../assets/back.png"; 
+import backIcon from "../assets/back.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -196,7 +196,7 @@ export default function Login() {
       <p
         className="absolute text-black text-center"
         style={{ 
-          top: "90vh", 
+          top: "75vh", 
           left: "10vw", 
           fontSize: "3.2vw", 
           width: "80vw" 
