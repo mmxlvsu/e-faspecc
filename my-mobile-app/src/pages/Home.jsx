@@ -8,7 +8,6 @@ import personIcon from "../assets/profile.png";
 import notiIcon from "../assets/not.png";
 import heartIcon from "../assets/heart.png";
 import searchIcon from "../assets/search.png";
-import foodIcon from "../assets/food.png";
 import todayPic1 from "../assets/t1.png";
 import todayPic2 from "../assets/t2.png";
 import todayPic3 from "../assets/t3.png";
@@ -30,6 +29,7 @@ export default function BottomBar() {
   const [heartCount] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
   const [showBottomBar, setShowBottomBar] = useState(true);
+  const [popupMealIndex, setPopupMealIndex] = useState(null);
 
   const scrollRef = useRef(null);
   const lastScrollTop = useRef(0);
@@ -37,10 +37,9 @@ export default function BottomBar() {
   useEffect(() => {
     const handleScroll = () => {
       const st = scrollRef.current.scrollTop;
-      setShowBottomBar(st <= lastScrollTop.current); // hide on scroll down, show on scroll up
+      setShowBottomBar(st <= lastScrollTop.current);
       lastScrollTop.current = st <= 0 ? 0 : st;
     };
-
     const scrollEl = scrollRef.current;
     scrollEl.addEventListener("scroll", handleScroll);
     return () => scrollEl.removeEventListener("scroll", handleScroll);
@@ -55,268 +54,132 @@ export default function BottomBar() {
   ];
 
   const todayItems = [todayPic1, todayPic2, todayPic3, todayPic4, todayPic5, todayPic6];
+  const valueMeals = [
+    { name: "VM 1", price: "Php 55" },
+    { name: "VM 2", price: "Php 70" },
+    { name: "VM 3", price: "Php 70" },
+    { name: "VM 4", price: "Php 85" },
+  ];
+
+  const categories = [
+    { label: "Budget\nSnacks", icon: cat1 },
+    { label: "Snacks", icon: cat2 },
+    { label: "Value\nMeals", icon: cat3 },
+    { label: "Packed\nMeals", icon: cat4 },
+    { label: "Short\nOrders", icon: cat5 },
+    { label: "Buffet", icon: cat6 },
+  ];
 
   return (
     <div style={{ position: "relative", width: "100%", minHeight: "100vh" }}>
-      {/* Global CSS to hide all scrollbars */}
+      {/* Hide scrollbars */}
       <style>
         {`
-          .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-          }
-          .hide-scrollbar {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-          }
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+          .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
         `}
       </style>
 
-      {/* Half-Screen Image Background with Dark Overlay */}
+      {/* Background */}
       <div 
         style={{ 
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "50vh",
-          backgroundImage: `linear-gradient(rgba(54, 87, 10, 0.8), rgba(54, 87, 10, 0.9)), url(${splashBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          zIndex: 0,
+          position: "absolute", top: 0, left: 0, width: "100%", height: "50vh",
+          backgroundImage: `linear-gradient(rgba(54,87,10,0.8), rgba(54,87,10,0.9)), url(${splashBg})`,
+          backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", zIndex: 0 
         }} 
       />
 
-      {/* Food Icon */}
-      <img src={foodIcon} alt="Food" style={{ position: "absolute", top: "16vh", right: "1%", width: "150px", height: "150px", zIndex: 1 }} />
 
       {/* Greeting */}
       <div style={{ position: "fixed", top: "21vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
         <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello, Mariel!</p>
-        <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "500", color: "#FFFFFF", marginTop: "-2px" }}>Explore our food deals</p>
+        <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "500", color: "#FFFFFF", marginTop: "-1px" }}>Let's find a best food match for you</p>
       </div>
 
       {/* Search Bar */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); alert(`You searched for: ${searchQuery}`); }}
-        style={{
-          position: "fixed",
-          left: "50%",
-          top: "10vh",
-          transform: "translateX(-50%)",
-          width: "90%",
-          maxWidth: "370px",
-          height: "35px",
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #36570A",
-          borderRadius: "20px",
-          display: "flex",
-          alignItems: "center",
-          zIndex: 9999,
-        }}
-      >
-        <img src={searchIcon} alt="Search" style={{ marginLeft: "12px", width: "18px", height: "18px", filter: "brightness(0) saturate(100%)", cursor: "pointer" }} onClick={() => alert(`Search for: ${searchQuery}`)} />
-        <input
-          type="text"
-          placeholder="Have an exact order in mind?"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ marginLeft: "12px", width: "100%", fontSize: "12px", fontFamily: "Poppins, sans-serif", fontWeight: "400", color: "#4A4A4A", border: "none", outline: "none", background: "transparent" }}
-        />
+      <form onSubmit={(e)=>{e.preventDefault(); alert(`You searched for: ${searchQuery}`);}}
+        style={{ position: "fixed", left: "50%", top: "10vh", transform: "translateX(-50%)", width: "90%", maxWidth: "370px", height: "35px", backgroundColor: "#FFF", border: "1px solid #36570A", borderRadius: "20px", display: "flex", alignItems: "center", zIndex: 9999 }}>
+        <img src={searchIcon} alt="Search" style={{ marginLeft: "12px", width: "18px", height: "18px", filter: "brightness(0) saturate(100%)", cursor: "pointer" }} onClick={()=>alert(`Search for: ${searchQuery}`)} />
+        <input type="text" placeholder="Have an exact order in mind?" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} style={{ marginLeft:"12px", width:"100%", fontSize:"12px", fontFamily:"Poppins, sans-serif", fontWeight:"400", color:"#4A4A4A", border:"none", outline:"none", background:"transparent" }} />
       </form>
 
       {/* Scrollable White Container */}
-      <div
-        ref={scrollRef}
-        className="hide-scrollbar"
-        style={{
-          position: "absolute",
-          top: "29.5vh",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: "#FFFFFF",
-          borderTopLeftRadius: "6%",
-          borderTopRightRadius: "6%",
-          padding: "20px",
-          overflowY: "auto",
-          zIndex: 2,
-        }}
-      >
-        {/* What's Available Today */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-          <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>What's Available Today</p>
-          <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Today’s Specials")}>See All</p>
+      <div ref={scrollRef} className="hide-scrollbar" style={{ position:"absolute", top:"29.5vh", left:0, right:0, bottom:0, backgroundColor:"#FFF", borderTopLeftRadius:"6%", borderTopRightRadius:"6%", padding:"20px", overflowY:"auto", zIndex:2 }}>
+        
+        {/* Today's Specials */}
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
+          <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>What's Available Today</p>
+          <p style={{ fontSize:"13px", fontWeight:"400", color:"#36570A", margin:0, cursor:"pointer", textDecoration:"underline" }} onClick={()=>alert("See All Today’s Specials")}>See All</p>
         </div>
-
-        <div style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "20px" }} className="hide-scrollbar">
-          {todayItems.map((img, index) => (
-            <div key={index} style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
-              <img src={img} alt={`Today ${index + 1}`} style={{ width: "140px", height: "140px", borderRadius: "12px", cursor: "pointer" }} onClick={() => alert(`Clicked item ${index + 1}`)} />
-              <p style={{ marginTop: "5px", fontSize: "12px", fontWeight: "500", color: "#000000" }}>Food {index + 1}</p>
+        <div style={{ display:"flex", overflowX:"auto", gap:"15px", paddingBottom:"20px" }} className="hide-scrollbar">
+          {todayItems.map((img,index)=>(
+            <div key={index} style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
+              <img src={img} alt={`Today ${index+1}`} style={{ width:"140px", height:"140px", borderRadius:"12px", cursor:"pointer" }} onClick={()=>alert(`Clicked item ${index+1}`)} />
+              <p style={{ marginTop:"5px", fontSize:"12px", fontWeight:"500", color:"#000" }}>Food {index+1}</p>
             </div>
           ))}
         </div>
 
         {/* Value Meals */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", marginTop: "10px" }}>
-          <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Value Meals</p>
-          <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Value Meals")}>See All</p>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px", marginTop:"10px" }}>
+          <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>Value Meals</p>
         </div>
-
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
-          {[{ text: "VM 1:\nPhp 55" }, { text: "VM 2:\nPhp 70" }, { text: "VM 3:\nPhp 70" }, { text: "VM 4:\nPhp 85" }].map((btn, index) => (
-            <button key={index} onClick={() => alert(`Clicked ${btn.text.replace("\n", " ")}`)} style={{ padding: "15px", borderRadius: "10px", border: "1px solid #36570A", backgroundColor: "white", color: "#000000", fontWeight: "400", cursor: "pointer", flex: "1 1 40%", textAlign: "center", whiteSpace: "pre-line", lineHeight: "1.2", fontSize: "14px" }}>{btn.text}</button>
+        <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", marginTop:"8px" }}>
+          {valueMeals.map((meal,index)=>(
+            <button key={index} onClick={()=>setPopupMealIndex(index)} style={{ padding:"15px", borderRadius:"10px", border:"1px solid #36570A", backgroundColor:"#fff", color:"#000", fontWeight:"400", cursor:"pointer", flex:"1 1 40%", textAlign:"center", whiteSpace:"pre-line", lineHeight:"1.2", fontSize:"14px" }}>
+              {meal.name + "\n" + meal.price}
+            </button>
           ))}
         </div>
 
         {/* Categories */}
         <div style={{ marginTop: "33px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Categories</p>
-            <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Categories")}>See All</p>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
+            <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>Categories</p>
+            <p style={{ fontSize:"13px", fontWeight:"400", color:"#36570A", margin:0, cursor:"pointer", textDecoration:"underline" }} onClick={()=>alert("See All Categories")}>See All</p>
           </div>
-
-          <div style={{ display: "flex", overflowX: "auto", gap: "13px", paddingBottom: "20px" }} className="hide-scrollbar">
-            {[{ label: "Budget\nSnacks", icon: cat1 }, { label: "Snacks", icon: cat2 }, { label: "Value\nMeals", icon: cat3 }, { label: "Packed\nMeals", icon: cat4 }, { label: "Short\nOrders", icon: cat5 }, { label: "Buffet", icon: cat6 }].map((item, index) => (
-              <div key={index} style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
-                <div style={{ width: "90px", height: "90px", backgroundColor: "#F3F3F3", borderRadius: "10px", cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center" }} onClick={() => alert(`Clicked ${item.label}`)}>
-                  <img src={item.icon} alt={item.label} style={{ width: "40px", height: "40px" }} />
+          <div style={{ display:"flex", overflowX:"auto", gap:"13px", paddingBottom:"20px" }} className="hide-scrollbar">
+            {categories.map((item,index)=>(
+              <div key={index} style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
+                <div style={{ width:"90px", height:"90px", backgroundColor:"#F3F3F3", borderRadius:"10px", cursor:"pointer", display:"flex", justifyContent:"center", alignItems:"center" }} onClick={()=>alert(`Clicked ${item.label}`)}>
+                  <img src={item.icon} alt={item.label} style={{ width:"40px", height:"40px" }} />
                 </div>
-                <p style={{ marginTop: "9px", fontSize: "12px", fontWeight: "600", color: "#36570A", textAlign: "center", whiteSpace: "pre-line" }}>{item.label}</p>
+                <p style={{ marginTop:"9px", fontSize:"12px", fontWeight:"600", color:"#36570A", textAlign:"center", whiteSpace:"pre-line" }}>{item.label}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Recommendations */}
-<div style={{ marginTop: "20px" }}>
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "15px",
-    }}
-  >
-    <p
-      style={{
-        fontSize: "16px",
-        fontWeight: "600",
-        color: "#000000",
-        margin: 0,
-      }}
-    >
-      Our Recommendations
-    </p>
-    <p
-      style={{
-        fontSize: "13px",
-        fontWeight: "400",
-        color: "#36570A",
-        margin: 0,
-        cursor: "pointer",
-        textDecoration: "underline",
-      }}
-      onClick={() => alert("See All Recommendations")}
-    >
-      See All
-    </p>
-  </div>
+        <div style={{ marginTop: "20px" }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
+            <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>Our Recommendations</p>
+            <p style={{ fontSize:"13px", fontWeight:"400", color:"#36570A", margin:0, cursor:"pointer", textDecoration:"underline" }} onClick={()=>alert("See All Recommendations")}>See All</p>
+          </div>
+          <div style={{ display:"flex", overflowX:"auto", gap:"10px" }} className="hide-scrollbar">
+            <img src={reco1} alt="Recommendation 1" style={{ width:"100%", maxWidth:"366px", height:"134px", borderRadius:"12px", cursor:"pointer" }} onClick={()=>alert("Clicked Recommendation")} />
+          </div>
+          <div style={{ display:"flex", flexDirection:"column", gap:"12px", marginTop:"15px" }}>
+            {[1,2,3,4,5].map((i)=>(
+              <img key={i} src={reco1} alt={`Recommendation ${i}`} style={{ width:"100%", maxWidth:"366px", height:"134px", borderRadius:"12px", cursor:"pointer" }} onClick={()=>alert(`Clicked Recommendation ${i}`)} />
+            ))}
+          </div>
+        </div>
+      </div>
 
-  {/* Carousel (for now one image reco.png) */}
-  <div
-    style={{ display: "flex", overflowX: "auto", gap: "10px" }}
-    className="hide-scrollbar"
-  >
-    <img
-      src={reco1}
-      alt="Recommendation 1"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation")}
-    />
-  </div>
+      {/* Individual Popup for Each Value Meal */}
+      {popupMealIndex !== null && (
+        <div style={{ position:"fixed", top:0, left:0, width:"100%", height:"100%", backgroundColor:"rgba(0,0,0,0.5)", zIndex:10000, display:"flex", justifyContent:"center", alignItems:"center", padding:"15px" }}>
+          <div style={{ width:"calc(100% - 1px)", height:"calc(100% - 80px)", maxWidth:"400px", maxHeight:"600px", backgroundColor:"#FFF", borderRadius:"12px", padding:"20px", position:"relative", overflowY:"auto", boxShadow:"0 4px 12px rgba(0,0,0,0.2)" }}>
+            <button onClick={()=>setPopupMealIndex(null)} style={{ position:"absolute", top:"10px", right:"10px", padding:"10px 15px", border:"1px solid #36570A", borderRadius:"8px", background:"#36570A", color:"#FFF", cursor:"pointer" }}>Close</button>
+            <h2 style={{ fontSize:"24px", fontWeight:"700", marginBottom:"20px", textAlign:"center" }}>{valueMeals[popupMealIndex].name}</h2>
+            <p style={{ fontSize:"18px", fontWeight:"600", textAlign:"center", color:"#36570A" }}>{valueMeals[popupMealIndex].price}</p>
+            <p style={{ fontSize:"14px", marginTop:"10px", textAlign:"center" }}>Here you can add more details about {valueMeals[popupMealIndex].name}.</p>
+          </div>
+        </div>
+      )}
 
-  {/* 5 stacked images vertically */}
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "12px",
-      marginTop: "15px",
-    }}
-  >
-    <img
-      src={reco1}
-      alt="Recommendation 1"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation 1")}
-    />
-    <img
-      src={reco1}
-      alt="Recommendation 2"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation 2")}
-    />
-    <img
-      src={reco1}
-      alt="Recommendation 3"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation 3")}
-    />
-    <img
-      src={reco1}
-      alt="Recommendation 4"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation 4")}
-    />
-    <img
-      src={reco1}
-      alt="Recommendation 5"
-      style={{
-        width: "100%",
-        maxWidth: "366px",
-        height: "134px",
-        borderRadius: "12px",
-        cursor: "pointer",
-      }}
-      onClick={() => alert("Clicked Recommendation 5")}
-    />
-  </div>
-</div>
-</div>
-
-      {/* Heart & Notifications */}
+      {/* Heart & Notifications Wrapper */}
       <div style={{ position: "fixed", top: "5vh", right: "5%", display: "flex", alignItems: "center", zIndex: 9999 }}>
         <div style={{ position: "relative", width: "26px", height: "26px", marginRight: "15px", cursor: "pointer" }} onClick={() => alert("Go to Favorites")}>
           <img src={heartIcon} alt="Heart" style={{ width: "23px", height: "23px", filter: "invert(100%) brightness(150%)" }} />
@@ -330,23 +193,10 @@ export default function BottomBar() {
       </div>
 
       {/* Bottom Bar */}
-      <div style={{
-        position: "fixed",
-        bottom: showBottomBar ? 0 : "-10vh",
-        left: 0,
-        width: "100%",
-        height: "7vh",
-        backgroundColor: "#FFFFFF",
-        borderTop: "0.2vw solid #CECECE",
-        zIndex: 9999,
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        transition: "bottom 0.3s ease"
-      }}>
-        {items.map((item, index) => (
-          <div key={index} style={{ cursor: "pointer" }} onClick={item.onClick}>
-            <img src={item.icon} alt="" style={{ width: item.iconSize, height: item.iconSize, filter: item.filter }} />
+      <div style={{ position:"fixed", bottom: showBottomBar?0:"-10vh", left:0, width:"100%", height:"7vh", backgroundColor:"#FFF", borderTop:"0.2vw solid #CECECE", zIndex:9999, display:"flex", justifyContent:"space-around", alignItems:"center", transition:"bottom 0.3s ease" }}>
+        {items.map((item,index)=>(
+          <div key={index} style={{ cursor:"pointer" }} onClick={item.onClick}>
+            <img src={item.icon} alt="" style={{ width:item.iconSize, height:item.iconSize, filter:item.filter }} />
           </div>
         ))}
       </div>
