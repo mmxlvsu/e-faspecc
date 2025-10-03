@@ -16,6 +16,13 @@ import todayPic4 from "../assets/t4.png";
 import todayPic5 from "../assets/t5.png";
 import todayPic6 from "../assets/car1.png";
 import splashBg from "../assets/splash.png";
+import cat1 from "../assets/cat1.png";
+import cat2 from "../assets/cat2.png";
+import cat3 from "../assets/cat3.png";
+import cat4 from "../assets/cat4.png";
+import cat5 from "../assets/cat5.png";
+import cat6 from "../assets/cat6.png";
+
 
 export default function BottomBar() {
   const navigate = useNavigate();
@@ -164,7 +171,7 @@ export default function BottomBar() {
         </div>
 
         {/* Categories */}
-<div style={{ marginTop: "20px" }}>
+<div style={{ marginTop: "33px" }}>
   <div
     style={{
       display: "flex",
@@ -208,13 +215,13 @@ export default function BottomBar() {
     className="hide-scrollbar"
   >
     {[
-      "Budget\nSnacks",
-      "Snacks",
-      "Value\nMeals",
-      "Packed\nMeals",
-      "Short\nOrders",
-      "Buffet",
-    ].map((label, index) => (
+      { label: "Budget\nSnacks", icon: cat1 },
+      { label: "Snacks", icon: cat2 },
+      { label: "Value\nMeals", icon: cat3 },
+      { label: "Packed\nMeals", icon: cat4 },
+      { label: "Short\nOrders", icon: cat5 },
+      { label: "Buffet", icon: cat6 },
+    ].map((item, index) => (
       <div
         key={index}
         style={{
@@ -231,12 +238,21 @@ export default function BottomBar() {
             backgroundColor: "#F3F3F3",
             borderRadius: "10px",
             cursor: "pointer",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          onClick={() => alert(`Clicked ${label}`)}
-        />
+          onClick={() => alert(`Clicked ${item.label}`)}
+        >
+          <img
+            src={item.icon}
+            alt={item.label}
+            style={{ width: "35px", height: "35px" }} // 🔹 adjustable size here
+          />
+        </div>
         <p
           style={{
-            marginTop: "6px",
+            marginTop: "9px",
             fontSize: "12px",
             fontWeight: "600",
             color: "#36570A",
@@ -244,7 +260,7 @@ export default function BottomBar() {
             whiteSpace: "pre-line",
           }}
         >
-          {label}
+          {item.label}
         </p>
       </div>
     ))}
@@ -253,9 +269,9 @@ export default function BottomBar() {
 
 
         {/* Recommendations (vertical scroll) */}
-        <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: "33px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Recommendation</p>
+            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Our Recommendation</p>
             <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Recommendations")}>See All</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "15px", maxHeight: "500px", overflowY: "auto", paddingBottom: "20px" }} className="hide-scrollbar">
