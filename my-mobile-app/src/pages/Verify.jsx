@@ -230,38 +230,40 @@ export default function VerificationCode() {
 </div>
 
 
-
-      {/* Verification code boxes */}
-      <div
-        className="absolute flex justify-between"
+{/* Verification code boxes */}
+<div
+  className="absolute flex justify-between"
+  style={{
+    top: "37vh",
+    left: "7vw",
+    width: "86vw",
+  }}
+>
+  {[input1, input2, input3, input4].map((ref, idx) => {
+    const prevInput = idx > 0 ? [input1, input2, input3][idx - 1] : null;
+    const nextInput = idx < 3 ? [input2, input3, input4][idx] : null;
+    return (
+      <input
+        key={idx}
+        type="tel"                // ✅ triggers number keypad on mobile
+        inputMode="numeric"       // ✅ extra hint for mobile keyboards
+        pattern="[0-9]*"          // ✅ restricts to numbers
+        maxLength={1}
+        ref={ref}
+        className="text-center rounded-lg font-bold"
         style={{
-          top: "37vh",
-          left: "7vw",
-          width: "86vw",
+          width: "18vw",
+          height: "18vw",
+          fontSize: "6vw",
+          backgroundColor: "rgba(54,87,10,0.3)",
         }}
-      >
-        {[input1, input2, input3, input4].map((ref, idx) => {
-          const prevInput = idx > 0 ? [input1, input2, input3][idx - 1] : null;
-          const nextInput = idx < 3 ? [input2, input3, input4][idx] : null;
-          return (
-            <input
-              key={idx}
-              type="text"
-              maxLength={1}
-              ref={ref}
-              className="text-center rounded-lg font-bold"
-              style={{
-                width: "18vw",
-                height: "18vw",
-                fontSize: "6vw",
-                backgroundColor: "rgba(54,87,10,0.3)",
-              }}
-              onChange={(e) => handleChange(e, nextInput)}
-              onKeyDown={(e) => handleKeyDown(e, prevInput)}
-            />
-          );
-        })}
-      </div>
+        onChange={(e) => handleChange(e, nextInput)}
+        onKeyDown={(e) => handleKeyDown(e, prevInput)}
+      />
+    );
+  })}
+</div>
+
 
       {/* Timer */}
       <div
