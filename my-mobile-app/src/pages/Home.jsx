@@ -15,6 +15,7 @@ import todayPic3 from "../assets/t3.png";
 import todayPic4 from "../assets/t4.png";
 import todayPic5 from "../assets/t5.png";
 import todayPic6 from "../assets/car1.png";
+import splashBg from "../assets/splash.png";
 
 export default function BottomBar() {
   const navigate = useNavigate();
@@ -40,19 +41,10 @@ export default function BottomBar() {
 
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), filter: "brightness(0) saturate(100%) invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)", iconSize: "6vw" },
-    { icon: menuIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" }, // Navigate to home for now since Menu page doesn't exist
+    { icon: menuIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" },
     { icon: cartIcon, onClick: () => navigate("/cart"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
-    { icon: orderIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" }, // Navigate to home for now since Orders page doesn't exist
+    { icon: orderIcon, onClick: () => navigate("/home"), filter: "invert(0%)", iconSize: "6vw" },
     { icon: personIcon, onClick: () => navigate("/profile"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
-  ];
-
-  const categories = [
-    { img: todayPic1, text: "Budget Snacks", width: "105px" },
-    { img: todayPic2, text: "Snacks", width: "60px" },
-    { img: todayPic3, text: "Value Meals", width: "91px" },
-    { img: todayPic4, text: "Packed Meals", width: "150px" },
-    { img: todayPic5, text: "Short Orders", width: "92px" },
-    { img: todayPic6, text: "Buffet", width: "51px" },
   ];
 
   const todayItems = [todayPic1, todayPic2, todayPic3, todayPic4, todayPic5, todayPic6];
@@ -62,20 +54,31 @@ export default function BottomBar() {
       {/* Global CSS to hide all scrollbars */}
       <style>
         {`
-          /* Chrome, Edge, Safari */
           .hide-scrollbar::-webkit-scrollbar {
             display: none;
           }
-          /* Firefox */
           .hide-scrollbar {
             scrollbar-width: none;
-            -ms-overflow-style: none; /* IE 10+ */
+            -ms-overflow-style: none;
           }
         `}
       </style>
 
-      {/* Half-Screen Green Background */}
-      <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "50vh", backgroundColor: "#36570A", zIndex: 0 }} />
+     {/* Half-Screen Image Background with Dark Overlay */}
+<div 
+  style={{ 
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "50vh",
+    backgroundImage: `linear-gradient(rgba(54, 87, 10, 0.8), rgba(54, 87, 10, 0.9)), url(${splashBg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    zIndex: 0,
+  }} 
+/>
 
       {/* Food Icon */}
       <img src={foodIcon} alt="Food" style={{ position: "absolute", top: "16vh", right: "1%", width: "150px", height: "150px", zIndex: 1 }} />
@@ -155,49 +158,99 @@ export default function BottomBar() {
         </div>
 
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
-          {[{ text: "VM 1:\nPhp 55", fill: "white", stroke: "#36570A" }, { text: "VM 2:\nPhp 70", fill: "white", stroke: "#36570A" }, { text: "VM 3:\nPhp 70", fill: "white", stroke: "#36570A" }, { text: "VM 4:\nPhp 85", fill: "white", stroke: "#36570A" }].map((btn, index) => (
-            <button key={index} onClick={() => alert(`Clicked ${btn.text.replace("\n", " ")}`)} style={{ padding: "15px", borderRadius: "10px", border: `1px solid ${btn.stroke}`, backgroundColor: btn.fill, color: "#000000", fontWeight: "400", cursor: "pointer", flex: "1 1 40%", textAlign: "center", whiteSpace: "pre-line", lineHeight: "1.2", fontSize: "14px" }}>{btn.text}</button>
+          {[{ text: "VM 1:\nPhp 55" }, { text: "VM 2:\nPhp 70" }, { text: "VM 3:\nPhp 70" }, { text: "VM 4:\nPhp 85" }].map((btn, index) => (
+            <button key={index} onClick={() => alert(`Clicked ${btn.text.replace("\n", " ")}`)} style={{ padding: "15px", borderRadius: "10px", border: "1px solid #36570A", backgroundColor: "white", color: "#000000", fontWeight: "400", cursor: "pointer", flex: "1 1 40%", textAlign: "center", whiteSpace: "pre-line", lineHeight: "1.2", fontSize: "14px" }}>{btn.text}</button>
           ))}
         </div>
 
         {/* Categories */}
-        <div style={{ marginTop: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-            <p style={{ fontSize: "16px", fontWeight: "600", color: "#000000", margin: 0 }}>Categories</p>
-            <p style={{ fontSize: "13px", fontWeight: "400", color: "#36570A", margin: 0, cursor: "pointer", textDecoration: "underline" }} onClick={() => alert("See All Categories")}>See All</p>
-          </div>
+<div style={{ marginTop: "20px" }}>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "15px",
+    }}
+  >
+    <p
+      style={{
+        fontSize: "16px",
+        fontWeight: "600",
+        color: "#000000",
+        margin: 0,
+      }}
+    >
+      Categories
+    </p>
+    <p
+      style={{
+        fontSize: "13px",
+        fontWeight: "400",
+        color: "#36570A",
+        margin: 0,
+        cursor: "pointer",
+        textDecoration: "underline",
+      }}
+      onClick={() => alert("See All Categories")}
+    >
+      See All
+    </p>
+  </div>
 
-          <div style={{ display: "flex", overflowX: "auto", gap: "12px", paddingBottom: "20px" }} className="hide-scrollbar">
-            {categories.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  position: "relative",
-                  flexShrink: 0,
-                  cursor: "pointer",
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                  display: "inline-flex",
-                  alignItems: "flex-end",
-                }}
-                onClick={() => alert(`Clicked ${item.text}`)}
-              >
-                <img src={item.img} alt={item.text} style={{ height: "40px", width: item.width, objectFit: "cover" }} />
-                <div style={{
-                  position: "absolute",
-                  bottom: "0",
-                  background: "rgba(0,0,0,0.5)",
-                  color: "#fff",
-                  textAlign: "center",
-                  padding: "5px 8px",
-                  fontSize: "12px",
-                  fontWeight: "500",
-                  whiteSpace: "nowrap",
-                }}>{item.text}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+  <div
+    style={{
+      display: "flex",
+      overflowX: "auto",
+      gap: "13px",
+      paddingBottom: "20px",
+    }}
+    className="hide-scrollbar"
+  >
+    {[
+      "Budget\nSnacks",
+      "Snacks",
+      "Value\nMeals",
+      "Packed\nMeals",
+      "Short\nOrders",
+      "Buffet",
+    ].map((label, index) => (
+      <div
+        key={index}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            width: "90px",
+            height: "90px",
+            backgroundColor: "#F3F3F3",
+            borderRadius: "10px",
+            cursor: "pointer",
+          }}
+          onClick={() => alert(`Clicked ${label}`)}
+        />
+        <p
+          style={{
+            marginTop: "6px",
+            fontSize: "12px",
+            fontWeight: "600",
+            color: "#36570A",
+            textAlign: "center",
+            whiteSpace: "pre-line",
+          }}
+        >
+          {label}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>
+
 
         {/* Recommendations (vertical scroll) */}
         <div style={{ marginTop: "20px" }}>
