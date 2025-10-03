@@ -93,7 +93,7 @@ export default function BottomBar() {
       {/* Greeting */}
       <div style={{ position: "fixed", top: "19vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
         <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "600", color: "#FFFFFF", margin: 0 }}>Hello, Mariel!</p>
-        <p style={{ fontSize: "10px", fontFamily: "Poppins, sans-serif", fontWeight: "300", color: "#FFFFFF", margin: 0, marginTop: "1px" }}>Let's find a best food match for you</p>
+        <p style={{ fontSize: "10px", fontFamily: "Poppins, sans-serif", fontWeight: "300", color: "#FFFFFF", margin: 0, marginTop: "1px" }}>Explore our food deals!</p>
       </div>
 
       {/* Search Bar */}
