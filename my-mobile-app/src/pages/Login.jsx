@@ -113,7 +113,7 @@ export default function Login() {
             top: "32vh", 
             left: "7vw", 
             width: "86vw", 
-            fontSize: "3.2vw" 
+            fontSize: "3vw" 
           }}
         >
           {error}

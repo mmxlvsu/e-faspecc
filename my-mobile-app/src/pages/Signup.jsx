@@ -113,10 +113,10 @@ export default function Signup() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "26vh", 
+            top: "22vh", 
             left: "7vw", 
             width: "86vw", 
-            fontSize: "3.2vw" 
+            fontSize: "3vw" 
           }}
         >
           {error}
