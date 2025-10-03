@@ -250,7 +250,7 @@ export default function Signup() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ 
-          top: "76vh", 
+          top: "75vh", 
           left: "7vw", 
           width: "86vw", 
           height: "6vh", 
