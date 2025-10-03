@@ -29,7 +29,7 @@ import dish4 from "../assets/dish4.png";
 import dish5 from "../assets/dish5.png";
 import rice from "../assets/rice.png";
 import vegetable from "../assets/vegetable.png";
-import drink from "../assets/drink.png";
+import drink from "../assets/drink.png"; // Added drink import
 
 export default function BottomBar() {
   const navigate = useNavigate();
@@ -39,9 +39,9 @@ export default function BottomBar() {
   const [showBottomBar, setShowBottomBar] = useState(true);
   const [popupMealIndex, setPopupMealIndex] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedDish, setSelectedDish] = useState(null); // null = nothing selected
-  const [selectAllSelected, setSelectAllSelected] = useState([false, false, false]); // three items
-
+  // Renamed to selectedDishes to handle multiple selections
+  const [selectedDishes, setSelectedDishes] = useState([]); 
+  const [selectAllSelected, setSelectAllSelected] = useState([false, false, false]); // three items: Rice, Vegetable, Drink
   const scrollRef = useRef(null);
   const lastScrollTop = useRef(0);
 
@@ -69,9 +69,8 @@ export default function BottomBar() {
     { name: "VM 1", price: "Php 55" },
     { name: "VM 2", price: "Php 70" },
     { name: "VM 3", price: "Php 70" },
-    { name: "VM 4", price: "Php 85" },
+    { name: "VM 4", price: "Php 85" }, // Target Meal Index 3
   ];
-
   const categories = [
     { label: "Budget\nSnacks", icon: cat1 },
     { label: "Snacks", icon: cat2 },
@@ -81,9 +80,49 @@ export default function BottomBar() {
     { label: "Buffet", icon: cat6 },
   ];
 
-  // Check if Add to Cart can be clicked
-  const canAddToCart = selectedDish !== null && (
-    popupMealIndex === 0 ? selectAllSelected.slice(0, 2).every(Boolean) : selectAllSelected.every(Boolean)
+  const toggleDishSelection = (dishIndex) => {
+    // VM 1 (index 0) and VM 2 (index 1) require 1 dish
+    if (popupMealIndex === 0 || popupMealIndex === 1) {
+      // Single selection logic
+      setSelectedDishes(selectedDishes[0] === dishIndex ? [] : [dishIndex]);
+    } 
+    // VM 3 (index 2) and VM 4 (index 3) require 2 dishes
+    else if (popupMealIndex === 2 || popupMealIndex === 3) { 
+      // Multi-selection (max 2) logic
+      if (selectedDishes.includes(dishIndex)) {
+        // Deselect if already selected
+        setSelectedDishes(selectedDishes.filter(i => i !== dishIndex));
+      } else if (selectedDishes.length < 2) {
+        // Select if less than 2 are selected
+        setSelectedDishes([...selectedDishes, dishIndex]);
+      }
+    }
+  };
+
+  const dishList = [
+    { name: "Chicken\nCurry", img: dish1 },
+    { name: "Chicken\nTeriyaki", img: dish2 },
+    { name: "Chicken\nFingers", img: dish3 },
+    { name: "Fish Pater", img: dish4 },
+    { name: "Minced Pork", img: dish5 },
+  ];
+
+  // Logic to determine if all required selections are made
+  let isDishSelectionValid = false;
+  if (popupMealIndex === 0 || popupMealIndex === 1) {
+      // VM 1, VM 2 require 1 dish
+      isDishSelectionValid = selectedDishes.length === 1;
+  } else if (popupMealIndex === 2 || popupMealIndex === 3) {
+      // VM 3, VM 4 require 2 dishes
+      isDishSelectionValid = selectedDishes.length === 2;
+  }
+
+  const canAddToCart = isDishSelectionValid && (
+    // VM 1 (index 0) and VM 3 (index 2) need Rice & Veg (indices 0 and 1 of selectAllSelected)
+    popupMealIndex === 0 || popupMealIndex === 2 
+    ? selectAllSelected.slice(0, 2).every(Boolean) 
+    // VM 2 (index 1) and VM 4 (index 3) need Rice, Veg, & Drink (all 3 indices)
+    : selectAllSelected.every(Boolean)
   );
 
   return (
@@ -95,7 +134,7 @@ export default function BottomBar() {
         `}
       </style>
 
-      {/* Background */}
+      {/* Background and Headers (unchanged) */}
       <div 
         style={{ 
           position: "absolute", top: 0, left: 0, width: "100%", height: "50vh",
@@ -104,20 +143,18 @@ export default function BottomBar() {
         }} 
       />
 
-      {/* Greeting */}
       <div style={{ position: "fixed", top: "20vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
         <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello there, Mariel!</p>
         <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "600", color: "#FFFFFF", marginTop: "-1px" }}>Let's find a best food match for you</p>
       </div>
 
-      {/* Search Bar */}
       <form onSubmit={(e)=>{e.preventDefault(); alert(`You searched for: ${searchQuery}`);}}
         style={{ position: "fixed", left: "50%", top: "11vh", transform: "translateX(-50%)", width: "90%", maxWidth: "370px", height: "35px", backgroundColor: "#FFF", border: "1px solid #36570A", borderRadius: "20px", display: "flex", alignItems: "center", zIndex: 9999 }}>
         <img src={searchIcon} alt="Search" style={{ marginLeft: "12px", width: "18px", height: "18px", filter: "brightness(0) saturate(100%)", cursor: "pointer" }} onClick={()=>alert(`Search for: ${searchQuery}`)} />
         <input type="text" placeholder="Have an exact order in mind?" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} style={{ marginLeft:"12px", width:"100%", fontSize:"12px", fontFamily:"Poppins, sans-serif", fontWeight:"400", color:"#4A4A4A", border:"none", outline:"none", background:"transparent" }} />
       </form>
 
-      {/* Scrollable White Container */}
+      {/* Scrollable White Container (unchanged) */}
       <div ref={scrollRef} className="hide-scrollbar" style={{ position:"absolute", top:"29.5vh", left:0, right:0, bottom:0, backgroundColor:"#FFF", borderTopLeftRadius:"6%", borderTopRightRadius:"6%", padding:"20px", overflowY:"auto", zIndex:2 }}>
         {/* Today's Specials */}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
@@ -139,13 +176,22 @@ export default function BottomBar() {
         </div>
         <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", marginTop:"8px" }}>
           {valueMeals.map((meal,index)=>(
-            <button key={index} onClick={()=>{setPopupMealIndex(index); setQuantity(1); setSelectedDish(null)}} style={{ padding:"15px", borderRadius:"10px", border:"1px solid #36570A", backgroundColor:"#fff", color:"#000", fontWeight:"400", cursor:"pointer", flex:"1 1 40%", textAlign:"center", whiteSpace:"pre-line", lineHeight:"1.2", fontSize:"14px" }}>
+            <button 
+                key={index} 
+                onClick={()=>{
+                    setPopupMealIndex(index); 
+                    setQuantity(1); 
+                    setSelectedDishes([]); // Reset to empty array
+                    setSelectAllSelected([false, false, false]);
+                }} 
+                style={{ padding:"15px", borderRadius:"10px", border:"1px solid #36570A", backgroundColor:"#fff", color:"#000", fontWeight:"400", cursor:"pointer", flex:"1 1 40%", textAlign:"center", whiteSpace:"pre-line", lineHeight:"1.2", fontSize:"14px" }}
+            >
               {meal.name + "\n" + meal.price}
             </button>
           ))}
         </div>
 
-        {/* Categories */}
+        {/* Categories, Recommendations, etc. (unchanged) */}
         <div style={{ marginTop: "33px" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
             <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>Categories</p>
@@ -163,7 +209,6 @@ export default function BottomBar() {
           </div>
         </div>
 
-        {/* Recommendations */}
         <div style={{ marginTop: "20px" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
             <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>Our Recommendations</p>
@@ -179,247 +224,581 @@ export default function BottomBar() {
         </div>
       </div>
 
-{/* Popup */}
-{popupMealIndex !== null && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0,0,0,0.5)",
-      zIndex: 10000,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "15px",
-    }}
-  >
-    <div
-      style={{
-        width: "100%",
-        maxWidth: "400px",
-        maxHeight: "90%",
-        backgroundColor: "#FFF",
-        borderRadius: "12px",
-        padding: "20px",
-        position: "relative",
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-      }}
-    >
-      {/* Close Button */}
-      <button
-        onClick={() => setPopupMealIndex(null)}
-        style={{
-          position: "absolute",
-          top: "15px",
-          right: "10px",
-          width: "40px",
-          height: "40px",
-          borderRadius: "50%",
-          border: "none",
-          fontWeight: "900",
-          fontSize: "18px",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        ×
-      </button>
-
-      {/* Meal Name & Price */}
-      <p
-        style={{
-          fontSize: "20px",
-          fontWeight: "600",
-          textAlign: "center",
-          color: "#36570A",
-          margin: "40px 0 10px",
-        }}
-      >
-        {valueMeals[popupMealIndex].name}: {valueMeals[popupMealIndex].price}
-      </p>
-
-      {/* Single-select Dish */}
-      {popupMealIndex === 0 && (
-        <>
-          <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "0 0 7px" }}>
-            • Choose 1 Dish
-          </p>
-          <div
-            style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "10px" }}
-            className="hide-scrollbar"
-          >
-            {[
-              { name: "Chicken\nCurry", img: dish1 },
-              { name: "Chicken\nTeriyaki", img: dish2 },
-              { name: "Chicken\nFingers", img: dish3 },
-              { name: "Fish Pater", img: dish4 },
-              { name: "Minced Pork", img: dish5 },
-            ].map((dish, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedDish(index)}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  flexShrink: 0,
-                  cursor: "pointer",
-                  border: selectedDish === index ? "2px solid #36570A" : "2px solid transparent",
-                  borderRadius: "5px",
-                  padding: "2px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "72px",
-                    height: "80px",
-                    backgroundColor: "white",
-                    borderRadius: "5px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <img src={dish.img} alt={dish.name} style={{ width: "67px", height: "75px" }} />
-                </div>
-                <p
-                  style={{
-                    marginTop: "5px",
-                    fontSize: "12px",
-                    fontWeight: "500",
-                    textAlign: "center",
-                    whiteSpace: "pre-line",
-                  }}
-                >
-                  {dish.name}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Select All Section */}
-          <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "15px 0 7px" }}>
-            • Select All
-          </p>
-          <div style={{ display: "flex", gap: "15px", paddingBottom: "10px" }}>
-            {[{ name: "Rice", img: rice }, { name: "Vegetable", img: vegetable }].map(
-              (item, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    const newSelection = [...selectAllSelected];
-                    newSelection[index] = !newSelection[index];
-                    setSelectAllSelected(newSelection);
-                  }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    flexShrink: 0,
-                    cursor: "pointer",
-                    border: selectAllSelected[index]
-                      ? "2px solid #36570A"
-                      : "2px solid transparent",
-                    borderRadius: "5px",
-                    padding: "2px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "72px",
-                      height: "80px",
-                      backgroundColor: "white",
-                      borderRadius: "5px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img src={item.img} alt={item.name} style={{ width: "67px", height: "75px" }} />
-                  </div>
-                  <p
-                    style={{
-                      marginTop: "5px",
-                      fontSize: "12px",
-                      fontWeight: "500",
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.name}
-                  </p>
-                </div>
-              )
-            )}
-          </div>
-        </>
-      )}
-
-      {/* Quantity + Add to Cart */}
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          alignItems: "center",
-          marginTop: "auto",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <button
-            onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
-            style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: "18px" }}
-          >
-            –
-          </button>
-          <span style={{ fontWeight: "600", fontSize: "14px", minWidth: "20px", textAlign: "center" }}>
-            {quantity}
-          </span>
-          <button
-            onClick={() => setQuantity((prev) => prev + 1)}
-            style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: "18px" }}
-          >
-            +
-          </button>
-        </div>
-        <button
-          onClick={() =>
-            alert(
-              `${quantity} x ${valueMeals[popupMealIndex].name}${
-                selectedDish !== null ? ` (Dish ${selectedDish + 1})` : ""
-              } added to Cart`
-            )
-          }
-          disabled={!canAddToCart}
+      {/* Popup */}
+      {popupMealIndex !== null && (
+        <div
           style={{
-            flex: 1,
-            height: "35px",
-            borderRadius: "5px",
-            backgroundColor: canAddToCart ? "#36570A" : "#ccc",
-            color: "white",
-            fontWeight: "600",
-            fontSize: "12px",
-            cursor: canAddToCart ? "pointer" : "not-allowed",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: 10000,
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
-            gap: "8px",
+            alignItems: "center",
+            padding: "15px",
           }}
         >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "400px",
+              maxHeight: "90%",
+              backgroundColor: "#FFF",
+              borderRadius: "12px",
+              padding: "20px",
+              position: "relative",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px",
+            }}
+            className="hide-scrollbar" 
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setPopupMealIndex(null)}
+              style={{
+                position: "absolute",
+                top: "15px",
+                right: "10px",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                border: "none",
+                fontWeight: "900",
+                fontSize: "18px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              ×
+            </button>
 
-      {/* Heart & Notifications */}
+            {/* Meal Name & Price */}
+            <p
+              style={{
+                fontSize: "20px",
+                fontWeight: "600",
+                textAlign: "center",
+                color: "#36570A",
+                margin: "40px 0 10px",
+              }}
+            >
+              {valueMeals[popupMealIndex].name}: {valueMeals[popupMealIndex].price}
+            </p>
+
+
+            {/* VALUE MEAL 1 POPUP (Choose 1 Dish) - unchanged */}
+            {popupMealIndex === 0 && (
+              <>
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "0 0 7px" }}>
+                  • Choose 1 Dish
+                </p>
+                <div
+                  style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "10px" }}
+                  className="hide-scrollbar"
+                >
+                  {dishList.map((dish, index) => (
+                    <div
+                      key={index}
+                      onClick={() => toggleDishSelection(index)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        flexShrink: 0,
+                        cursor: "pointer",
+                        border: selectedDishes.includes(index) ? "2px solid #36570A" : "2px solid transparent",
+                        borderRadius: "5px",
+                        padding: "2px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "72px",
+                          height: "80px",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={dish.img} alt={dish.name} style={{ width: "67px", height: "75px" }} />
+                      </div>
+                      <p
+                        style={{
+                          marginTop: "5px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {dish.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Select All Section (VM 1 - Rice and Veg) */}
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "15px 0 7px" }}>
+                  • Select All
+                </p>
+                <div style={{ display: "flex", gap: "15px", paddingBottom: "10px" }}>
+                  {[{ name: "Rice", img: rice }, { name: "Vegetable", img: vegetable }].map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          const newSelection = [...selectAllSelected];
+                          newSelection[index] = !newSelection[index];
+                          setSelectAllSelected(newSelection);
+                        }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          flexShrink: 0,
+                          cursor: "pointer",
+                          border: selectAllSelected[index]
+                            ? "2px solid #36570A"
+                            : "2px solid transparent",
+                          borderRadius: "5px",
+                          padding: "2px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "72px",
+                            height: "80px",
+                            backgroundColor: "white",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={item.img} alt={item.name} style={{ width: "67px", height: "75px" }} />
+                        </div>
+                        <p
+                          style={{
+                            marginTop: "5px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.name}
+                        </p>
+                      
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+
+
+            {/* VALUE MEAL 2 POPUP (Choose 1 Dish + Drink) - unchanged */}
+            {popupMealIndex === 1 && (
+              <>
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "0 0 7px" }}>
+                  • Choose 1 Dish
+                </p>
+                <div
+                  style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "10px" }}
+                  className="hide-scrollbar"
+                >
+                  {dishList.map((dish, index) => (
+                    <div
+                      key={index}
+                      onClick={() => toggleDishSelection(index)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        flexShrink: 0,
+                        cursor: "pointer",
+                        border: selectedDishes.includes(index) ? "2px solid #36570A" : "2px solid transparent",
+                        borderRadius: "5px",
+                        padding: "2px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "72px",
+                          height: "80px",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={dish.img} alt={dish.name} style={{ width: "67px", height: "75px" }} />
+                      </div>
+                      <p
+                        style={{
+                          marginTop: "5px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {dish.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Select All Section (VM 2 - Rice, Veg, and Drink) */}
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "15px 0 7px" }}>
+                  • Select All
+                </p>
+                <div style={{ display: "flex", gap: "15px", paddingBottom: "10px" }}>
+                  {/* This includes the Drink item (index 2) */}
+                  {[{ name: "Rice", img: rice }, { name: "Vegetable", img: vegetable }, { name: "Drink", img: drink }].map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          const newSelection = [...selectAllSelected];
+                          newSelection[index] = !newSelection[index];
+                          setSelectAllSelected(newSelection);
+                        }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          flexShrink: 0,
+                          cursor: "pointer",
+                          border: selectAllSelected[index]
+                            ? "2px solid #36570A"
+                            : "2px solid transparent",
+                          borderRadius: "5px",
+                          padding: "2px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "72px",
+                            height: "80px",
+                            backgroundColor: "white",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={item.img} alt={item.name} style={{ width: "67px", height: "75px" }} />
+                        </div>
+                        <p
+                          style={{
+                            marginTop: "5px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.name}
+                        </p>
+                      
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* VALUE MEAL 3 POPUP (index == 2, Choose 2 Dishes, Rice & Veg) - unchanged */}
+            {popupMealIndex === 2 && (
+              <>
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "0 0 7px" }}>
+                  • Choose 2 Dishes
+                </p>
+                <div
+                  style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "10px" }}
+                  className="hide-scrollbar"
+                >
+                  {dishList.map((dish, index) => (
+                    <div
+                      key={index}
+                      onClick={() => toggleDishSelection(index)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        flexShrink: 0,
+                        cursor: "pointer", // Simplified cursor for previous request
+                        border: selectedDishes.includes(index) ? "2px solid #36570A" : "2px solid transparent",
+                        borderRadius: "5px",
+                        padding: "2px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "72px",
+                          height: "80px",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={dish.img} alt={dish.name} style={{ width: "67px", height: "75px" }} />
+                      </div>
+                      <p
+                        style={{
+                          marginTop: "5px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {dish.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Select All Section (VM 3 - Rice and Veg) */}
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "15px 0 7px" }}>
+                  • Select All
+                </p>
+                <div style={{ display: "flex", gap: "15px", paddingBottom: "10px" }}>
+                  {[{ name: "Rice", img: rice }, { name: "Vegetable", img: vegetable }].map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          const newSelection = [...selectAllSelected];
+                          newSelection[index] = !newSelection[index];
+                          setSelectAllSelected(newSelection);
+                        }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          flexShrink: 0,
+                          cursor: "pointer",
+                          border: selectAllSelected[index]
+                            ? "2px solid #36570A"
+                            : "2px solid transparent",
+                          borderRadius: "5px",
+                          padding: "2px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "72px",
+                            height: "80px",
+                            backgroundColor: "white",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={item.img} alt={item.name} style={{ width: "67px", height: "75px" }} />
+                        </div>
+                        <p
+                          style={{
+                            marginTop: "5px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.name}
+                        </p>
+                      
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+            
+            {/* VALUE MEAL 4 POPUP (index == 3, Choose 2 Dishes, Rice, Veg, & Drink) */}
+            {popupMealIndex === 3 && (
+              <>
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "0 0 7px" }}>
+                  • Choose 2 Dishes
+                </p>
+                <div
+                  style={{ display: "flex", overflowX: "auto", gap: "15px", paddingBottom: "10px" }}
+                  className="hide-scrollbar"
+                >
+                  {dishList.map((dish, index) => (
+                    <div
+                      key={index}
+                      // Use toggleDishSelection which handles multiple selections (max 2)
+                      onClick={() => toggleDishSelection(index)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        flexShrink: 0,
+                        cursor: "pointer",
+                        border: selectedDishes.includes(index) ? "2px solid #36570A" : "2px solid transparent",
+                        borderRadius: "5px",
+                        padding: "2px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "72px",
+                          height: "80px",
+                          backgroundColor: "white",
+                          borderRadius: "5px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={dish.img} alt={dish.name} style={{ width: "67px", height: "75px" }} />
+                      </div>
+                      <p
+                        style={{
+                          marginTop: "5px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                          whiteSpace: "pre-line",
+                        }}
+                      >
+                        {dish.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Select All Section (VM 4 - Rice, Veg, and Drink - same as VM 2) */}
+                <p style={{ fontSize: "14px", fontWeight: "600", color: "black", margin: "15px 0 7px" }}>
+                  • Select All
+                </p>
+                <div style={{ display: "flex", gap: "15px", paddingBottom: "10px" }}>
+                  {/* This includes the Drink item (index 2) */}
+                  {[{ name: "Rice", img: rice }, { name: "Vegetable", img: vegetable }, { name: "Drink", img: drink }].map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          const newSelection = [...selectAllSelected];
+                          newSelection[index] = !newSelection[index];
+                          setSelectAllSelected(newSelection);
+                        }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          flexShrink: 0,
+                          cursor: "pointer",
+                          border: selectAllSelected[index]
+                            ? "2px solid #36570A"
+                            : "2px solid transparent",
+                          borderRadius: "5px",
+                          padding: "2px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "72px",
+                            height: "80px",
+                            backgroundColor: "white",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={item.img} alt={item.name} style={{ width: "67px", height: "75px" }} />
+                        </div>
+                        <p
+                          style={{
+                            marginTop: "5px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.name}
+                        </p>
+                      
+                      </div>
+                    )
+                  )}
+                </div>
+              </>
+            )}
+
+
+            {/* Quantity + Add to Cart (unchanged) */}
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                marginTop: "auto",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <button
+                  onClick={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+                  style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: "18px" }}
+                >
+                  –
+                </button>
+                <span style={{ fontWeight: "600", fontSize: "14px", minWidth: "20px", textAlign: "center" }}>
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity((prev) => prev + 1)}
+                  style={{ border: "none", background: "transparent", cursor: "pointer", fontSize: "18px" }}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                onClick={() =>
+                  alert(
+                    `${quantity} x ${valueMeals[popupMealIndex].name} added to Cart`
+                  )
+                }
+                disabled={!canAddToCart}
+                style={{
+                  flex: 1,
+                  height: "35px",
+                  borderRadius: "5px",
+                  backgroundColor: canAddToCart ? "#36570A" : "#ccc",
+                  color: "white",
+                  fontWeight: "600",
+                  fontSize: "12px",
+                  cursor: canAddToCart ? "pointer" : "not-allowed",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* Heart & Notifications, Bottom Bar (unchanged) */}
       <div style={{ position:"fixed", top:"5vh", right:"5%", display:"flex", alignItems:"center", zIndex:9999 }}>
         <div style={{ position:"relative", width:"26px", height:"26px", marginRight:"15px", cursor:"pointer" }} onClick={()=>alert("Go to Favorites")}>
           <img src={heartIcon} alt="Heart" style={{ width:"23px", height:"23px", filter:"invert(100%) brightness(150%)" }} />
@@ -432,7 +811,6 @@ export default function BottomBar() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       {showBottomBar && (
         <div style={{ position:"fixed", bottom:"0px", left:"0px", right:"0px", height:"67px", borderTop:"0.5px solid #CECECE", backgroundColor:"#fff", display:"flex", justifyContent:"space-around", alignItems:"center", zIndex:9999 }}>
           {items.map((item,index)=>(
