@@ -85,7 +85,7 @@ export default function Login() {
         className="absolute font-extrabold text-black leading-tight"
         style={{ 
           left: "8vw", 
-          top: "22vh", 
+          top: "18vh", 
           fontSize: "8vw", 
           width: "80vw" 
         }}
@@ -97,7 +97,7 @@ export default function Login() {
         className="absolute font-semibold text-[#36570A]"
         style={{ 
           left: "8.5vw", 
-          top: "28vh", 
+          top: "24vh", 
           fontSize: "3.5vw", 
           width: "60vw" 
         }}
@@ -196,7 +196,7 @@ export default function Login() {
       <p
         className="absolute text-black text-center"
         style={{ 
-          top: "75vh", 
+          top: "80vh", 
           left: "10vw", 
           fontSize: "3.2vw", 
           width: "80vw" 
