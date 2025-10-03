@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
-import Home from "./pages/Reset";   
+import Home from "./pages/Verify";   
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
