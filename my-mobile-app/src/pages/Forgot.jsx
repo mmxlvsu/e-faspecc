@@ -58,7 +58,7 @@ export default function ForgotPassword() {
       {/* "Forgot Password?" text */}
       <h1
         className="absolute font-extrabold text-black"
-        style={{ left: "7vw", top: "25vh", width: "80vw", fontSize: "8vw" }}
+        style={{ left: "7vw", top: "20vh", width: "80vw", fontSize: "8vw" }}
       >
         Forgot Password?
       </h1>
@@ -68,7 +68,7 @@ export default function ForgotPassword() {
         className="absolute"
         style={{
           left: "7vw",
-          top: "33vh",
+          top: "27vh",
           width: "85vw",
           fontSize: "3.5vw",
           lineHeight: "5vw",
@@ -84,7 +84,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "40vh", 
+            top: "38vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw" 
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-green-600 font-semibold text-center"
           style={{ 
-            top: "40vh", 
+            top: "38vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw",
@@ -121,7 +121,7 @@ export default function ForgotPassword() {
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "46vh",
+          top: "43vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -135,7 +135,7 @@ export default function ForgotPassword() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "55vh",
+          top: "52vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
