@@ -428,9 +428,24 @@ export default function WhiteAndGreenRectangle() {
                     </span>
                 </div>
             </div>
-
-        
+{/* Placeholder for Add ons content */}
+            <div
+                style={{
+                    height: vh(80),
+                    backgroundColor: "#f0f0f0", // Light gray background for placeholder
+                    borderRadius: vw(6),
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontFamily: "Poppins, sans-serif",
+                    fontSize: responsiveText(12),
+                    color: "#555555",
+                }}
+            >
+                Add ons List/Items go here
+            </div>
         </div>
+
       </div>
 
       {/* Bottom Total and Review Payment */}
