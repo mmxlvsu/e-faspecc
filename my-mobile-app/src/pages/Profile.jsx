@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import homeIcon from "../assets/home.png";
 import menuIcon from "../assets/menu.png";
@@ -6,17 +6,12 @@ import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png";
 import self from "../assets/self.png";
-// Import the new icon
 import editIcon from "../assets/edit.png";
 
 export default function BottomBarPage() {
   const navigate = useNavigate();
 
-  // Mock user data (for backend fetching simulation)
-  const userData = {
-    name: "Jennie Kim",
-    role: "Student", // Could be 'Instructor' or 'Visitor'
-  };
+  const userData = { name: "Jennie Kim", role: "Student" };
 
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(0%) brightness(0%)" },
@@ -31,36 +26,33 @@ export default function BottomBarPage() {
     navigate("/login");
   };
 
-  const handleEditClick = () => {
-    console.log("Edit button clicked");
-    // Add navigation or modal opening logic here
-  };
+  const handleEditClick = () => console.log("Edit clicked");
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100vh", backgroundColor: "#fff" }}>
 
-      {/* Top Half Backdrop */}
+      {/* Top Half Green Backdrop */}
       <div
         style={{
           position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
-          height: "15vh", // Original height for the green area
+          height: "15vh",
           backgroundColor: "#36570A",
           display: "flex",
           justifyContent: "center",
-          alignItems: "flex-end", // Align image near the bottom of the backdrop
+          alignItems: "flex-end",
           zIndex: 998,
         }}
       >
-        {/* Profile Image Container (for positioning context) */}
+        {/* Profile Image Container */}
         <div 
           style={{ 
             position: 'relative', 
-            width: "75px",
-            height: "75px",
-            marginBottom: "-35px", // pull the image slightly down over the main content
+            width: "90px",
+            height: "90px",
+            marginBottom: "-35px",
             zIndex: 999,
           }}
         >
@@ -78,7 +70,7 @@ export default function BottomBarPage() {
             }}
           />
           
-          {/* FLOATING EDIT ICON */}
+          {/* Edit Icon */}
           <div
             onClick={handleEditClick}
             style={{
@@ -100,43 +92,35 @@ export default function BottomBarPage() {
             <img
               src={editIcon}
               alt="Edit"
-              style={{
-                width: "15px",
-                height: "15px",
-                filter: "invert(0%) brightness(0%)"
-              }}
+              style={{ width: "15px", height: "15px", filter: "invert(0%) brightness(0%)" }}
             />
           </div>
         </div>
       </div>
       
-      {/* Profile Name and Banner Section - ABSOLUTELY POSITIONED UNDER THE IMAGE (BUT CENTERED) */}
+      {/* Name & Role Banner */}
       <div style={{ 
         position: 'absolute', 
-        top: '15vh', // Starts where the green backdrop ends (15vh)
+        top: '15vh',
         width: '100%', 
         display: 'flex', 
         flexDirection: 'column', 
-        alignItems: 'center', 
-        // ADJUSTABLE GAP 1: Controls the space between the image and the name.
+        alignItems: 'center',
         paddingTop: '40px', 
         zIndex: 999 
       }}>
-        {/* User Name */}
         <p style={{
           fontSize: '18px',
           fontWeight: '600',
-          color: '#000', // Black text against white background
-          // ADJUSTABLE GAP 2: Controls the space between the name and the banner.
+          color: '#000',
           margin: '0 0 5px 0', 
           fontFamily: "Poppins, sans-serif",
         }}>
           {userData.name}
         </p>
 
-        {/* Role Banner */}
         <div style={{
-          backgroundColor: '#FFECA2', // Banner color
+          backgroundColor: '#FFECA2',
           borderRadius: '15px',
           padding: '3px 15px',
         }}>
@@ -144,8 +128,7 @@ export default function BottomBarPage() {
             fontSize: '10px',
             fontWeight: '500',
             color: 'black',
-            // ADJUSTABLE GAP 3: Controls the space inside the banner (top/bottom padding)
-            margin: 0, 
+            margin: 0,
             fontFamily: "Poppins, sans-serif",
             textTransform: 'uppercase',
           }}>
@@ -154,7 +137,7 @@ export default function BottomBarPage() {
         </div>
       </div>
 
-      {/* Sign Out Button (fixed position relative to viewport) */}
+      {/* Sign Out Button */}
       <div
         style={{
           position: "fixed",
