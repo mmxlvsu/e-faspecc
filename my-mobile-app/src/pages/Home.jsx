@@ -29,7 +29,7 @@ import dish4 from "../assets/dish4.png";
 import dish5 from "../assets/dish5.png";
 import rice from "../assets/rice.png";
 import vegetable from "../assets/vegetable.png";
-import drink from "../assets/drink.png"; // Added drink import
+import drink from "../assets/drink.png";
 
 export default function BottomBar() {
   const navigate = useNavigate();
@@ -39,9 +39,8 @@ export default function BottomBar() {
   const [showBottomBar, setShowBottomBar] = useState(true);
   const [popupMealIndex, setPopupMealIndex] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  // Renamed to selectedDishes to handle multiple selections
   const [selectedDishes, setSelectedDishes] = useState([]); 
-  const [selectAllSelected, setSelectAllSelected] = useState([false, false, false]); // three items: Rice, Vegetable, Drink
+  const [selectAllSelected, setSelectAllSelected] = useState([false, false, false]);
   const scrollRef = useRef(null);
   const lastScrollTop = useRef(0);
 
@@ -69,7 +68,7 @@ export default function BottomBar() {
     { name: "VM 1", price: "Php 55" },
     { name: "VM 2", price: "Php 70" },
     { name: "VM 3", price: "Php 70" },
-    { name: "VM 4", price: "Php 85" }, // Target Meal Index 3
+    { name: "VM 4", price: "Php 85" },
   ];
   const categories = [
     { label: "Budget\nSnacks", icon: cat1 },
@@ -81,19 +80,13 @@ export default function BottomBar() {
   ];
 
   const toggleDishSelection = (dishIndex) => {
-    // VM 1 (index 0) and VM 2 (index 1) require 1 dish
     if (popupMealIndex === 0 || popupMealIndex === 1) {
-      // Single selection logic
       setSelectedDishes(selectedDishes[0] === dishIndex ? [] : [dishIndex]);
     } 
-    // VM 3 (index 2) and VM 4 (index 3) require 2 dishes
     else if (popupMealIndex === 2 || popupMealIndex === 3) { 
-      // Multi-selection (max 2) logic
       if (selectedDishes.includes(dishIndex)) {
-        // Deselect if already selected
         setSelectedDishes(selectedDishes.filter(i => i !== dishIndex));
       } else if (selectedDishes.length < 2) {
-        // Select if less than 2 are selected
         setSelectedDishes([...selectedDishes, dishIndex]);
       }
     }
@@ -107,21 +100,16 @@ export default function BottomBar() {
     { name: "Minced Pork", img: dish5 },
   ];
 
-  // Logic to determine if all required selections are made
   let isDishSelectionValid = false;
   if (popupMealIndex === 0 || popupMealIndex === 1) {
-      // VM 1, VM 2 require 1 dish
       isDishSelectionValid = selectedDishes.length === 1;
   } else if (popupMealIndex === 2 || popupMealIndex === 3) {
-      // VM 3, VM 4 require 2 dishes
       isDishSelectionValid = selectedDishes.length === 2;
   }
 
   const canAddToCart = isDishSelectionValid && (
-    // VM 1 (index 0) and VM 3 (index 2) need Rice & Veg (indices 0 and 1 of selectAllSelected)
     popupMealIndex === 0 || popupMealIndex === 2 
     ? selectAllSelected.slice(0, 2).every(Boolean) 
-    // VM 2 (index 1) and VM 4 (index 3) need Rice, Veg, & Drink (all 3 indices)
     : selectAllSelected.every(Boolean)
   );
 
@@ -181,7 +169,7 @@ export default function BottomBar() {
                 onClick={()=>{
                     setPopupMealIndex(index); 
                     setQuantity(1); 
-                    setSelectedDishes([]); // Reset to empty array
+                    setSelectedDishes([]);
                     setSelectAllSelected([false, false, false]);
                 }} 
                 style={{ padding:"15px", borderRadius:"10px", border:"1px solid #36570A", backgroundColor:"#fff", color:"#000", fontWeight:"400", cursor:"pointer", flex:"1 1 40%", textAlign:"center", whiteSpace:"pre-line", lineHeight:"1.2", fontSize:"14px" }}
@@ -536,7 +524,7 @@ export default function BottomBar() {
                         flexDirection: "column",
                         alignItems: "center",
                         flexShrink: 0,
-                        cursor: "pointer", // Simplified cursor for previous request
+                        cursor: "pointer",
                         border: selectedDishes.includes(index) ? "2px solid #36570A" : "2px solid transparent",
                         borderRadius: "5px",
                         padding: "2px",
@@ -641,7 +629,6 @@ export default function BottomBar() {
                   {dishList.map((dish, index) => (
                     <div
                       key={index}
-                      // Use toggleDishSelection which handles multiple selections (max 2)
                       onClick={() => toggleDishSelection(index)}
                       style={{
                         display: "flex",

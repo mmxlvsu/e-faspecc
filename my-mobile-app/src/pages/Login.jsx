@@ -1,216 +1,161 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, storage } from "../lib/api";
-import hideIcon from "../assets/hide.png"; 
+import hideIcon from "../assets/hide.png";
 import backIcon from "../assets/back.png";
-import showIcon from "../assets/show.png"; // NEW: Import the unslashed eye icon
+import showIcon from "../assets/show.png";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  
-  // Form data state
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // Handle input changes
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    // Clear error when user starts typing
-    if (error) setError("");
-  };
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (error) setError("");
+  };
 
-  // Form validation
-  const validateForm = () => {
-    const { email, password } = formData;
-    
-    if (!email.trim()) return "Email is required";
-    if (!email.includes("@")) return "Please enter a valid email";
-    if (!password) return "Password is required";
-    
-    return null;
-  };
+  const validateForm = () => {
+    const { email, password } = formData;
+    if (!email.trim()) return "Email is required";
+    if (!email.includes("@")) return "Please enter a valid email";
+    if (!password) return "Password is required";
+    return null;
+  };
 
-  // Handle form submission
-  const handleLogin = async () => {
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+  const handleLogin = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
-    setLoading(true);
-    setError("");
+    setLoading(true);
+    setError("");
 
-    try {
-      const response = await authAPI.login(formData.email, formData.password);
-      
-      // Store token and user data
-      storage.setToken(response.token);
-      storage.setUser(response.user);
-      
-      // Navigate based on user role or to home
-      if (response.user.role === "student") {
-        navigate("/home");
-      } else {
-        navigate("/home"); // You can customize this for different roles
-      }
-      
-    } catch (err) {
-      setError(err.message || "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    try {
+      const response = await authAPI.login(formData.email, formData.password);
+      storage.setToken(response.token);
+      storage.setUser(response.user);
 
-  return (
-    <div className="w-screen h-screen relative bg-white font-poppins px-[5vw]">
-      {/* Back button */}
-      <img
-        src={backIcon}
-        alt="Back"
-        className="absolute cursor-pointer"
-        style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
-        onClick={() => navigate("/")}
-      />
+      navigate("/home");
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {/* "Welcome Back!" */}
-      <h1
-        className="absolute font-extrabold text-black leading-tight"
-        style={{ 
-          left: "8vw", 
-          top: "22vh", 
-          fontSize: "8vw", 
-          width: "80vw" 
-        }}
-      >
-        Welcome Back!
-      </h1>
+  return (
+    <div className="w-screen h-screen relative bg-white font-poppins px-[5vw]">
+      <img
+        src={backIcon}
+        alt="Back"
+        className="absolute cursor-pointer"
+        style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
+        onClick={() => navigate("/")}
+      />
 
-      <p
-        className="absolute font-semibold text-[#36570A]"
-        style={{ 
-          left: "8.5vw", 
-          top: "28vh", 
-          fontSize: "3.5vw", 
-          width: "60vw" 
-        }}
-      >
-        Good to see you again
-      </p>
+      <h1
+        className="absolute font-extrabold text-black leading-tight"
+        style={{ left: "8vw", top: "22vh", fontSize: "8vw", width: "80vw" }}
+      >
+        Welcome Back!
+      </h1>
 
-      {/* Error Message */}
-      {error && (
-        <div
-          className="absolute text-red-600 font-semibold text-center"
-          style={{ 
-            top: "33vh", 
-            left: "7vw", 
-            width: "86vw", 
-            fontSize: "3vw" 
-          }}
-        >
-          {error}
-        </div>
-      )}
+      <p
+        className="absolute font-semibold text-[#36570A]"
+        style={{ left: "8.5vw", top: "28vh", fontSize: "3.5vw", width: "60vw" }}
+      >
+        Good to see you again
+      </p>
 
-      {/* Email input */}
-      <input
-        type="email"
-        placeholder="Email Address"
-        value={formData.email}
-        onChange={(e) => handleInputChange("email", e.target.value)}
-        className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ 
-          top: "36vh", 
-          left: "7vw", 
-          width: "86vw", 
-          height: "6vh", 
-          backgroundColor: "rgba(54, 87, 10, 0.2)", 
-          fontSize: "3.8vw" 
-        }}
-      />
+      {error && (
+        <div
+          className="absolute text-red-600 font-semibold text-center"
+          style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+        >
+          {error}
+        </div>
+      )}
 
-      {/* Password input */}
-      <input
-        type={showPassword ? "text" : "password"}
-        placeholder="Password"
-        value={formData.password}
-        onChange={(e) => handleInputChange("password", e.target.value)}
-        className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ 
-          top: "45vh", 
-          left: "7vw", 
-          width: "86vw", 
-          height: "6vh", 
-          backgroundColor: "rgba(54, 87, 10, 0.2)", 
-          fontSize: "3.8vw" 
-        }}
-      />
-      <img
-        src={showPassword ? showIcon : hideIcon} // CONDITIONAL ICON SOURCE
-        alt="Toggle Password"
-        className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "46.5vh", width: "6vw", height: "3vh" }}
-        onClick={() => setShowPassword(!showPassword)}
-      />
+      <input
+        type="email"
+        placeholder="Email Address"
+        value={formData.email}
+        onChange={e => handleInputChange("email", e.target.value)}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{
+          top: "36vh",
+          left: "7vw",
+          width: "86vw",
+          height: "6vh",
+          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          fontSize: "3.8vw"
+        }}
+      />
 
-      {/* Login button */}
-      <button
-        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ 
-          top: "54vh", 
-          left: "7vw", 
-          width: "86vw", 
-          height: "6vh", 
-          backgroundColor: "#36570A", 
-          fontSize: "4vw" 
-        }}
-        onClick={handleLogin}
-        disabled={loading}
-      >
-        {loading ? "Logging in..." : "Login"}
-      </button>
+      <input
+        type={showPassword ? "text" : "password"}
+        placeholder="Password"
+        value={formData.password}
+        onChange={e => handleInputChange("password", e.target.value)}
+        className="absolute rounded-lg px-4 text-black placeholder-black"
+        style={{
+          top: "45vh",
+          left: "7vw",
+          width: "86vw",
+          height: "6vh",
+          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          fontSize: "3.8vw"
+        }}
+      />
+      <img
+        src={showPassword ? showIcon : hideIcon}
+        alt="Toggle Password"
+        className="absolute cursor-pointer"
+        style={{ right: "10vw", top: "46.5vh", width: "6vw", height: "3vh" }}
+        onClick={() => setShowPassword(!showPassword)}
+      />
 
-      {/* "Forgot password?" */}
-      <p
-        className="absolute font-bold text-[#000000] cursor-pointer text-center"
-        style={{ 
-          top: "63vh", 
-          left: "30vw", 
-          fontSize: "3vw", 
-          width: "40vw" 
-        }}
-        onClick={() => navigate("/forgot")}
-      >
-        Forgot password?
-      </p>
+      <button
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          top: "54vh",
+          left: "7vw",
+          width: "86vw",
+          height: "6vh",
+          backgroundColor: "#36570A",
+          fontSize: "4vw"
+        }}
+        onClick={handleLogin}
+        disabled={loading}
+      >
+        {loading ? "Logging in..." : "Login"}
+      </button>
 
-      {/* "Don't have an account yet? Sign up here." */}
-      <p
-        className="absolute text-black text-center"
-        style={{ 
-          top: "87vh", 
-          left: "10vw", 
-          fontSize: "3.2vw", 
-          width: "80vw" 
-        }}
-      >
-        Don't have an account yet?{" "}
-        <span
-          className="underline cursor-pointer font-bold text-[#36570A]"
-          onClick={() => navigate("/signup")}
-        >
-          Sign up here.
-        </span>
-      </p>
-    </div>
-  );
+      <p
+        className="absolute font-bold text-black cursor-pointer text-center"
+        style={{ top: "63vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
+        onClick={() => navigate("/forgot")}
+      >
+        Forgot password?
+      </p>
+
+      <p
+        className="absolute text-black text-center"
+        style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}
+      >
+        Don't have an account yet?{" "}
+        <span
+          className="underline cursor-pointer font-bold text-[#36570A]"
+          onClick={() => navigate("/signup")}
+        >
+          Sign up here.
+        </span>
+      </p>
+    </div>
+  );
 }
