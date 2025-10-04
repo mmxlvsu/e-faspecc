@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const CheckIconSVG = ({ isChecked, onClick, style }) => (
   <svg
@@ -39,7 +39,7 @@ const handleTermsClick = () => {
     console.log("Terms & Conditions clicked");
 }
 
-const handleAction = (action) => console.log(`$${action} clicked`);
+const handleAction = (action) => console.log(`${action} clicked`);
 
 export default function WhiteAndGreenRectangle() {
   const vw = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
@@ -47,6 +47,14 @@ export default function WhiteAndGreenRectangle() {
   const responsiveText = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
 
   const [selectedPayment, setSelectedPayment] = useState("Cash");
+  // 1. State for controlling the visibility of the bottom bar
+  const [showBottomBar, setShowBottomBar] = useState(true); 
+  
+  // Ref for the scrollable container
+  const scrollContainerRef = useRef(null);
+  
+  // Ref to store the last scroll position
+  const lastScrollTop = useRef(0);
 
   const subtotal = 550;
   const selectedAddOnsTotal = 49;
@@ -64,6 +72,32 @@ export default function WhiteAndGreenRectangle() {
     { id: 9, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
     { id: 10, name: "Soda (Coke)", quantity: 3, price: 25.0 },
   ];
+  
+  // 2. Scroll handler logic
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    
+    // Check if scrolled to the absolute bottom (within a 2px tolerance)
+    // The content is fully visible only when scrolled all the way down.
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 2;
+
+    // Check if scrolling up
+    const isScrollingUp = scrollTop < lastScrollTop.current;
+
+    if (isAtBottom) {
+      // Hide the bar when at the very bottom
+      setShowBottomBar(false);
+    } else if (isScrollingUp) {
+      // Show the bar when scrolling up
+      setShowBottomBar(true);
+    } 
+    
+    // Update the last scroll position
+    lastScrollTop.current = scrollTop <= 0 ? 0 : scrollTop; 
+  };
+
 
   return (
     <div style={{ width: "100%", minHeight: "100vh", position: "relative", backgroundColor: "#FFFFFF" }}>
@@ -152,6 +186,8 @@ export default function WhiteAndGreenRectangle() {
       
       {/* MAIN SCROLLABLE CONTENT AREA */}
       <div 
+        ref={scrollContainerRef} // 3. Attach the ref
+        onScroll={handleScroll} // 4. Attach the scroll handler
         style={{
           position: "absolute",
           top: vh(130), // Start after the separator
@@ -174,7 +210,7 @@ export default function WhiteAndGreenRectangle() {
           <p
             style={{
               fontFamily: "Poppins, sans-serif",
-              fontSize: responsiveText(14),
+              fontSize: responsiveText(16),
               fontWeight: 600,
               marginBottom: vh(10),
               color: "#36570A",
@@ -206,7 +242,7 @@ export default function WhiteAndGreenRectangle() {
                   <span
                     style={{
                       fontFamily: "Poppins, sans-serif",
-                      fontSize: responsiveText(12),
+                      fontSize: responsiveText(14),
                       color: "#000000",
                     }}
                   >
@@ -226,7 +262,7 @@ export default function WhiteAndGreenRectangle() {
             style={{
               marginTop: vh(10),
               backgroundColor: "#FFF8E7",
-              padding: `${vh(8)} ${vw(10)}`,
+              padding: `${vh(8)} ${vw(12)}`,
               borderRadius: vw(8),
               border: "1px solid #E0C97F",
             }}
@@ -259,7 +295,7 @@ export default function WhiteAndGreenRectangle() {
           <p
             style={{
               fontFamily: "Poppins, sans-serif",
-              fontSize: responsiveText(14),
+              fontSize: responsiveText(16),
               fontWeight: 600,
               color: "#36570A",
               marginBottom: vh(10),
@@ -370,13 +406,16 @@ export default function WhiteAndGreenRectangle() {
         style={{
           position: "fixed",
           left: 0,
-          bottom: 0,
+          // 5. Use state to move the bar off-screen when hidden
+          bottom: showBottomBar ? 0 : `-${vh(140)}`, 
           width: "100%",
           height: vh(140),
           backgroundColor: "#FFFFFF",
           borderTop: "0.5px solid #CECECE",
           boxShadow: "0 -2px 5px rgba(0,0,0,0.05)",
           zIndex: 5,
+          // 6. Add transition for smooth animation
+          transition: "bottom 0.3s ease-out", 
         }}
       >
         <p
