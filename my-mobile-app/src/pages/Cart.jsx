@@ -45,7 +45,7 @@ export default function WhiteAndGreenRectangle() {
         style={{
           position: "absolute",
           left: vw(12),
-          top: vh(73),
+          top: vh(30),
           width: vw(24),
           height: vw(24),
           cursor: "pointer",
@@ -58,7 +58,7 @@ export default function WhiteAndGreenRectangle() {
         style={{
           position: "absolute",
           left: vw(43),
-          top: vh(75),
+          top: vh(32),
           fontSize: responsiveText(14),
           fontWeight: 600,
           fontFamily: "Poppins, sans-serif",
@@ -74,7 +74,7 @@ export default function WhiteAndGreenRectangle() {
       <div
         style={{
           position: "absolute",
-          top: vh(115),
+          top: vh(90),
           left: 0,
           width: "100%",
           display: "flex",
@@ -136,7 +136,7 @@ export default function WhiteAndGreenRectangle() {
       <div
         style={{
           position: "absolute",
-          top: vh(130),
+          top: vh(110),
           left: 0,
           width: "100%",
           height: vw(2),
@@ -149,7 +149,7 @@ export default function WhiteAndGreenRectangle() {
       <div
         style={{
           position: "absolute",
-          top: vh(190),
+          top: vh(170),
           left: 0,
           width: "100%",
           maxHeight: `calc(100vh - ${vh(280)})`,
