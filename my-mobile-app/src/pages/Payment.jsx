@@ -94,7 +94,7 @@ export default function WhiteAndGreenRectangle() {
           zIndex: 3,
         }}
       >
-        Cart
+        Checkout
       </p>
 
       {/* Step Indicator and Separator */}
