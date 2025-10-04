@@ -7,7 +7,7 @@ import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png"; // Using profile.png instead of person.png
 import backIcon from "../assets/back.png";
-import promo1 from "../assets/promo1.jpg"; // Commented out since it's causing errors
+// import promo1 from "../assets/promo1.jpg"; // Commented out since it's causing errors
 
 export default function BottomBarWithTabs() {
   const navigate = useNavigate();

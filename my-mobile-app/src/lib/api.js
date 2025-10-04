@@ -6,6 +6,8 @@ export const apiCall = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
   
   const config = {
+    mode: 'cors',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
