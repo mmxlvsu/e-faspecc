@@ -55,7 +55,7 @@ export default function VerificationCode() {
     }
     
     if (!email) {
-      setError("Email is required");
+      setError("Something went wrong");
       return;
     }
 

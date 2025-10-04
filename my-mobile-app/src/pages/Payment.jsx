@@ -179,7 +179,7 @@ export default function WhiteAndGreenRectangle() {
           top: vh(110),
           width: "100%",
           height: vw(2),
-          backgroundColor: "#CECECE",
+          backgroundColor: "black",
           zIndex: 1,
         }}
       />
@@ -191,7 +191,7 @@ export default function WhiteAndGreenRectangle() {
         style={{
           position: "absolute",
           top: vh(130), // Start after the separator
-          bottom: vh(140), // Stop before the fixed bottom bar
+          bottom: vh(10), // Stop before the fixed bottom bar
           width: "100%",
           overflowY: "auto",
           paddingBottom: vh(20), // Extra space at the bottom of the scroll area

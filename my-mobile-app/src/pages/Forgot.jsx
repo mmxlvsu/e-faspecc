@@ -84,7 +84,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "38vh", 
+            top: "39.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw" 
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-green-600 font-semibold text-center"
           style={{ 
-            top: "38vh", 
+            top: "39.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw",

@@ -144,7 +144,7 @@ export default function BottomBar() {
       />
 
       <div style={{ position: "fixed", top: "20vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
-        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello there, Mariel!</p>
+        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello there, Jennie!</p>
         <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "600", color: "#FFFFFF", marginTop: "-1px" }}>Let's find a best food match for you</p>
       </div>
 
