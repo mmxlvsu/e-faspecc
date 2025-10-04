@@ -143,6 +143,24 @@ export default function WhiteAndGreenRectangle() {
           P 719.00
         </p>
 
+        <p
+          style={{
+            position: "absolute",
+            left: vw(19),
+            top: vh(36),
+            fontSize: responsiveText(12),
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 400,
+            color: "#8C8C8C",
+            textDecoration: "underline",
+            cursor: "pointer",
+            lineHeight: responsiveText(18),
+            zIndex: 6,
+          }}
+          onClick={() => handleAction("See Summary")}
+        >
+          See summary
+        </p>
 
         <div
           style={{
