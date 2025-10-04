@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react"; // Import useRef
 import car1 from "../assets/car1.png"; // placeholder image
 import trash from "../assets/trash.png";
 
@@ -25,6 +25,10 @@ export default function WhiteAndGreenRectangle() {
   const vh = (pixels) => `${(pixels / 9).toFixed(1)}vh`;
   const responsiveText = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
 
+  // STATE FOR HIDING/SHOWING BOTTOM BAR
+  const [isBottomBarVisible, setIsBottomBarVisible] = useState(true);
+  const cartContentRef = useRef(null);
+  
   // Backend-ready cart items
   const [cartItems, setCartItems] = useState([
     { id: 1, name: "Chicken Adobo", description: "Classic Filipino chicken stew", quantity: 1, price: 150, productId: 101, options: {}, image: car1 },
@@ -33,7 +37,6 @@ export default function WhiteAndGreenRectangle() {
     { id: 4, name: "Spring Rolls", description: "Crispy rolls with veggies", quantity: 2, price: 70, productId: 104, options: {}, image: car1 },
     { id: 5, name: "Ice Cream", description: "Sweet frozen dessert", quantity: 1, price: 120, productId: 105, options: {}, image: car1 },
     { id: 6, name: "Ice Cream", description: "Sweet frozen dessert", quantity: 1, price: 120, productId: 105, options: {}, image: car1 },
-
   ]);
 
   const handleRemove = (id) => {
@@ -41,6 +44,23 @@ export default function WhiteAndGreenRectangle() {
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  // SCROLL HANDLER FUNCTION
+  const handleScroll = () => {
+    const element = cartContentRef.current;
+    if (element) {
+      // Check if user is near the bottom (within 1-pixel tolerance)
+      const isAtBottom = element.scrollHeight - element.scrollTop - element.clientHeight <= 1;
+      
+      // Determine the threshold for showing/hiding. 
+      // We'll hide it only when it is exactly at the bottom.
+      if (isAtBottom && isBottomBarVisible) {
+        setIsBottomBarVisible(false);
+      } else if (!isAtBottom && !isBottomBarVisible) {
+        setIsBottomBarVisible(true);
+      }
+    }
+  };
 
   return (
     <div style={{ width: "100%", minHeight: "100vh", position: "relative", paddingBottom: vh(132) }}>
@@ -149,8 +169,10 @@ export default function WhiteAndGreenRectangle() {
         }}
       />
 
-      {/* Cart Content Wrapper - New Container for Dynamic Flow */}
+      {/* Cart Content Wrapper - Apply ref and onScroll handler here */}
       <div
+        ref={cartContentRef}
+        onScroll={handleScroll}
         style={{
           position: "absolute",
           top: vh(150),
@@ -396,8 +418,8 @@ export default function WhiteAndGreenRectangle() {
                 <p
                     style={{
                         fontFamily: "Poppins, sans-serif",
-                        fontSize: responsiveText(12),
-                        fontWeight: 400,
+                        fontSize: responsiveText(16),
+                        fontWeight: 700,
                         margin: 0,
                         color: "#000000",
                     }}
@@ -428,7 +450,8 @@ export default function WhiteAndGreenRectangle() {
                     </span>
                 </div>
             </div>
-{/* Placeholder for Add ons content */}
+
+            {/* Placeholder for Add ons content */}
             <div
                 style={{
                     height: vh(80),
@@ -445,7 +468,6 @@ export default function WhiteAndGreenRectangle() {
                 Add ons List/Items go here
             </div>
         </div>
-
       </div>
 
       {/* Bottom Total and Review Payment */}
@@ -460,6 +482,9 @@ export default function WhiteAndGreenRectangle() {
           borderTop: "0.5px solid #CECECE",
           boxShadow: "0 -2px 5px rgba(0,0,0,0.05)",
           zIndex: 5,
+          // CSS for visibility based on state
+          transform: isBottomBarVisible ? 'translateY(0)' : `translateY(${vh(140)})`,
+          transition: 'transform 0.3s ease-out', // Smooth transition
         }}
       >
         <p
