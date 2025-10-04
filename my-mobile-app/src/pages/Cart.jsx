@@ -149,7 +149,7 @@ export default function WhiteAndGreenRectangle() {
       <div
         style={{
           position: "absolute",
-          top: vh(170),
+          top: vh(150),
           left: 0,
           width: "100%",
           maxHeight: `calc(100vh - ${vh(280)})`,
@@ -164,8 +164,8 @@ export default function WhiteAndGreenRectangle() {
             key={item.id}
             style={{
               display: "flex",
-              alignItems: "flex-start",
-              marginBottom: vh(28),
+              alignItems: "center",
+              marginBottom: vh(20),
               gap: vw(12),
             }}
           >
@@ -178,6 +178,7 @@ export default function WhiteAndGreenRectangle() {
                 height: vw(48),
                 objectFit: "cover",
                 borderRadius: vw(6),
+                marginTop: vh(-31),
               }}
             />
 
@@ -197,45 +198,105 @@ export default function WhiteAndGreenRectangle() {
                 fontSize: responsiveText(12),
                 fontWeight: 400,
                 margin: 0,
-                marginTop: vh(-3),
+                marginTop: vh(4), // more breathing room
                 color: "#555555",
               }}>
                 {item.description}
               </p>
 
-              {/* Rectangle Placeholder with Trash Icon */}
+              {/* Rectangle Placeholder with Trash + Quantity Counter */}
               <div
                 style={{
-                  marginTop: vh(6),
+                  marginTop: vh(10),
                   width: vw(100),
-                  height: vh(36),
+                  height: vh(32),
                   backgroundColor: "#FFFFFF",
                   border: "0.5px solid #CECECE",
                   borderRadius: vw(10),
                   display: "flex",
-                  justifyContent: "center",
                   alignItems: "center",
-                  cursor: "pointer",
+                  justifyContent: "space-between",
+                  padding: `0 ${vw(15)}`,
+                  gap: vw(10),
                 }}
-                onClick={() => handleRemove(item.id)}
               >
+                {/* Trash Icon */}
                 <img
                   src={trash}
                   alt="Remove"
                   style={{
-                    width: vw(16),
-                    height: vw(16),
+                    width: vw(18),
+                    height: vw(18),
+                    cursor: "pointer",
                   }}
+                  onClick={() => handleRemove(item.id)}
                 />
+
+                {/* Counter */}
+                <div style={{ display: "flex", alignItems: "center", gap: vw(8) }}>
+                  {/* Minus */}
+                  <button
+                    onClick={() =>
+                      setCartItems((prev) =>
+                        prev.map((i) =>
+                          i.id === item.id && i.quantity > 1 ? { ...i, quantity: i.quantity - 1 } : i
+                        )
+                      )
+                    }
+                    style={{
+                      border: "none",
+                      background: "none",
+                      fontSize: responsiveText(16),
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      color: "#36570A",
+                    }}
+                  >
+                    –
+                  </button>
+
+                  {/* Quantity Number */}
+                  <span
+                    style={{
+                      fontSize: responsiveText(14),
+                      fontFamily: "Poppins, sans-serif",
+                      fontWeight: 500,
+                      color: "#000000",
+                    }}
+                  >
+                    {item.quantity}
+                  </span>
+
+                  {/* Plus */}
+                  <button
+                    onClick={() =>
+                      setCartItems((prev) =>
+                        prev.map((i) =>
+                          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                        )
+                      )
+                    }
+                    style={{
+                      border: "none",
+                      background: "none",
+                      fontSize: responsiveText(16),
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      color: "#36570A",
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Price */}
             <p style={{
               fontFamily: "Poppins, sans-serif",
-              fontSize: responsiveText(16),
+              fontSize: responsiveText(12),
               fontWeight: 300,
-              marginTop: vh(16),
+              marginTop: vh(68),
               marginBottom: 0,
             }}>
               P {item.price * item.quantity}.00
