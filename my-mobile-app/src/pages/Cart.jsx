@@ -296,7 +296,7 @@ export default function WhiteAndGreenRectangle() {
             position: "absolute",
             left: vw(18),
             right: vw(18),
-            bottom: vw(25),
+            bottom: vw(35),
             width: `calc(100% - ${vw(36)})`,
             height: vw(42),
             backgroundColor: "#36570A",
