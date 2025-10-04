@@ -14,7 +14,7 @@ const CheckIconSVG = ({ isChecked, style }) => (
     strokeLinejoin="round" 
     style={{ ...style, cursor: "pointer", transition: "all 0.1s" }}
   >
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+    <rect x="3.5" y="2" width="20" height="20" rx="2" ry="2"></rect>
     {/* The checkmark polyline now appears and is explicitly colored green */}
     {isChecked && <polyline points="9 11 12 14 20 6" stroke="#36570A" fill="none"></polyline>}
   </svg>
@@ -399,7 +399,7 @@ export default function WhiteAndGreenRectangle() {
               <span
                 style={{
                   fontFamily: "Poppins, sans-serif",
-                  fontSize: responsiveText(10),
+                  fontSize: responsiveText(12),
                   fontWeight: 400,
                   color: "white",
                 }}
@@ -420,7 +420,7 @@ export default function WhiteAndGreenRectangle() {
               <span
                 style={{
                   fontFamily: "Poppins, sans-serif",
-                  fontSize: responsiveText(12),
+                  fontSize: responsiveText(14),
                   fontWeight: 400,
                 }}
               >
@@ -429,7 +429,7 @@ export default function WhiteAndGreenRectangle() {
               <span
                 style={{
                   fontFamily: "Poppins, sans-serif",
-                  fontSize: responsiveText(12),
+                  fontSize: responsiveText(14),
                   fontWeight: 500,
                   color: "#000000",
                 }}
@@ -463,7 +463,7 @@ export default function WhiteAndGreenRectangle() {
                 <p
                     style={{
                         fontFamily: "Poppins, sans-serif",
-                        fontSize: responsiveText(12),
+                        fontSize: responsiveText(16),
                         fontWeight: 600,
                         margin: 0,
                         color: "#36570A",
@@ -565,7 +565,7 @@ export default function WhiteAndGreenRectangle() {
     <p
         style={{
             fontFamily: "Poppins, sans-serif",
-            fontSize: responsiveText(12),
+            fontSize: responsiveText(16),
             fontWeight: 600,
             margin: `0 0 ${vh(3)} 0`,
             color: "#36570A",
@@ -579,7 +579,7 @@ export default function WhiteAndGreenRectangle() {
     <p
         style={{
             fontFamily: "Poppins, sans-serif",
-            fontSize: responsiveText(8),
+            fontSize: responsiveText(10),
             fontWeight: 300,
             margin: `0 0 ${vh(10)} 0`,
             color: "#000000",
@@ -656,7 +656,7 @@ export default function WhiteAndGreenRectangle() {
             position: "absolute",
             left: vw(19),
             top: vh(13),
-            fontSize: responsiveText(13),
+            fontSize: responsiveText(14),
             fontFamily: "Poppins, sans-serif",
             fontWeight: 900,
             color: "#000000",
@@ -672,7 +672,7 @@ export default function WhiteAndGreenRectangle() {
             position: "absolute",
             right: vw(19),
             top: vh(13),
-            fontSize: responsiveText(13),
+            fontSize: responsiveText(14),
             fontFamily: "Poppins, sans-serif",
             fontWeight: 900,
             color: "#36570A",
@@ -705,7 +705,7 @@ export default function WhiteAndGreenRectangle() {
           <span
             style={{
               color: "#FFFFFF",
-              fontSize: responsiveText(13),
+              fontSize: responsiveText(15),
               fontFamily: "Poppins, sans-serif",
               fontWeight: 600,
             }}
