@@ -165,7 +165,7 @@ export default function WhiteAndGreenRectangle() {
             style={{
               display: "flex",
               alignItems: "flex-start",
-              marginBottom: vh(18),
+              marginBottom: vh(28),
               gap: vw(12),
             }}
           >
@@ -174,8 +174,8 @@ export default function WhiteAndGreenRectangle() {
               src={item.image}
               alt={item.name}
               style={{
-                width: vw(40),
-                height: vw(40),
+                width: vw(48),
+                height: vw(48),
                 objectFit: "cover",
                 borderRadius: vw(6),
               }}
@@ -185,7 +185,7 @@ export default function WhiteAndGreenRectangle() {
             <div style={{ flex: 1 }}>
               <p style={{
                 fontFamily: "Poppins, sans-serif",
-                fontSize: responsiveText(12),
+                fontSize: responsiveText(16),
                 fontWeight: 700,
                 margin: 0,
                 color: "#000000",
@@ -194,7 +194,7 @@ export default function WhiteAndGreenRectangle() {
               </p>
               <p style={{
                 fontFamily: "Poppins, sans-serif",
-                fontSize: responsiveText(10),
+                fontSize: responsiveText(12),
                 fontWeight: 400,
                 margin: 0,
                 marginTop: vh(-3),
@@ -207,8 +207,8 @@ export default function WhiteAndGreenRectangle() {
               <div
                 style={{
                   marginTop: vh(6),
-                  width: vw(40),
-                  height: vh(19),
+                  width: vw(100),
+                  height: vh(36),
                   backgroundColor: "#FFFFFF",
                   border: "0.5px solid #CECECE",
                   borderRadius: vw(10),
@@ -223,8 +223,8 @@ export default function WhiteAndGreenRectangle() {
                   src={trash}
                   alt="Remove"
                   style={{
-                    width: vw(12),
-                    height: vw(12),
+                    width: vw(16),
+                    height: vw(16),
                   }}
                 />
               </div>
@@ -233,7 +233,7 @@ export default function WhiteAndGreenRectangle() {
             {/* Price */}
             <p style={{
               fontFamily: "Poppins, sans-serif",
-              fontSize: responsiveText(10),
+              fontSize: responsiveText(16),
               fontWeight: 300,
               marginTop: vh(16),
               marginBottom: 0,
