@@ -32,11 +32,15 @@ export default function WhiteAndGreenRectangle() {
     { id: 3, name: "Soda", description: "Refreshing carbonated drink", quantity: 1, price: 30, productId: 103, options: {}, image: car1 },
     { id: 4, name: "Spring Rolls", description: "Crispy rolls with veggies", quantity: 2, price: 70, productId: 104, options: {}, image: car1 },
     { id: 5, name: "Ice Cream", description: "Sweet frozen dessert", quantity: 1, price: 120, productId: 105, options: {}, image: car1 },
+    { id: 6, name: "Ice Cream", description: "Sweet frozen dessert", quantity: 1, price: 120, productId: 105, options: {}, image: car1 },
+
   ]);
 
   const handleRemove = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div style={{ width: "100%", minHeight: "100vh", position: "relative", paddingBottom: vh(132) }}>
@@ -145,7 +149,7 @@ export default function WhiteAndGreenRectangle() {
         }}
       />
 
-      {/* Dynamic Cart Items */}
+      {/* Cart Content Wrapper - New Container for Dynamic Flow */}
       <div
         style={{
           position: "absolute",
@@ -154,155 +158,279 @@ export default function WhiteAndGreenRectangle() {
           width: "100%",
           maxHeight: `calc(100vh - ${vh(280)})`,
           overflowY: "auto",
-          padding: `${vh(10)} ${vw(18)}`,
-          boxSizing: "border-box",
           zIndex: 4,
         }}
       >
-        {cartItems.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: vh(20),
-              gap: vw(12),
-            }}
-          >
-            {/* Image */}
-            <img
-              src={item.image}
-              alt={item.name}
+        {/* Dynamic Cart Items */}
+        <div
+          style={{
+            width: "100%",
+            padding: `${vh(10)} ${vw(18)}`,
+            boxSizing: "border-box",
+            backgroundColor: "white",
+            borderBottom: "2px solid #CECECE",
+          }}
+        >
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
               style={{
-                width: vw(48),
-                height: vw(48),
-                objectFit: "cover",
-                borderRadius: vw(6),
-                marginTop: vh(-31),
+                display: "flex",
+                alignItems: "center",
+                marginBottom: vh(20),
+                gap: vw(12),
               }}
-            />
+            >
+              {/* Image */}
+              <img
+                src={item.image}
+                alt={item.name}
+                style={{
+                  width: vw(48),
+                  height: vw(48),
+                  objectFit: "cover",
+                  borderRadius: vw(6),
+                  marginTop: vh(-31),
+                }}
+              />
 
-            {/* Title + Description + Rectangle Placeholder */}
-            <div style={{ flex: 1 }}>
-              <p style={{
-                fontFamily: "Poppins, sans-serif",
-                fontSize: responsiveText(16),
-                fontWeight: 700,
-                margin: 0,
-                color: "#000000",
-              }}>
-                {item.name}
-              </p>
+              {/* Title + Description + Rectangle Placeholder */}
+              <div style={{ flex: 1, marginLeft: vw(5) }}>
+                <p style={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: responsiveText(16),
+                  fontWeight: 700,
+                  margin: 0,
+                  color: "#000000",
+                }}>
+                  {item.name}
+                </p>
+                <p style={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: responsiveText(12),
+                  fontWeight: 400,
+                  margin: 0,
+                  marginTop: vh(4),
+                  color: "#555555",
+                }}>
+                  {item.description}
+                </p>
+
+                {/* Rectangle Placeholder with Trash + Quantity Counter */}
+                <div
+                  style={{
+                    marginTop: vh(10),
+                    width: vw(100),
+                    height: vh(32),
+                    backgroundColor: "#FFFFFF",
+                    border: "0.5px solid #CECECE",
+                    borderRadius: vw(10),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: `0 ${vw(15)}`,
+                    gap: vw(10),
+                  }}
+                >
+                  {/* Trash Icon */}
+                  <img
+                    src={trash}
+                    alt="Remove"
+                    style={{
+                      width: vw(18),
+                      height: vw(18),
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleRemove(item.id)}
+                  />
+
+                  {/* Counter */}
+                  <div style={{ display: "flex", alignItems: "center", gap: vw(8) }}>
+                    {/* Minus */}
+                    <button
+                      onClick={() =>
+                        setCartItems((prev) =>
+                          prev.map((i) =>
+                            i.id === item.id && i.quantity > 1 ? { ...i, quantity: i.quantity - 1 } : i
+                          )
+                        )
+                      }
+                      style={{
+                        border: "none",
+                        background: "none",
+                        fontSize: responsiveText(16),
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        color: "#36570A",
+                      }}
+                    >
+                      –
+                    </button>
+
+                    {/* Quantity Number */}
+                    <span
+                      style={{
+                        fontSize: responsiveText(14),
+                        fontFamily: "Poppins, sans-serif",
+                        fontWeight: 500,
+                        color: "#000000",
+                      }}
+                    >
+                      {item.quantity}
+                    </span>
+
+                    {/* Plus */}
+                    <button
+                      onClick={() =>
+                        setCartItems((prev) =>
+                          prev.map((i) =>
+                            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                          )
+                        )
+                      }
+                      style={{
+                        border: "none",
+                        background: "none",
+                        fontSize: responsiveText(16),
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        color: "#36570A",
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Price */}
               <p style={{
                 fontFamily: "Poppins, sans-serif",
                 fontSize: responsiveText(12),
-                fontWeight: 400,
-                margin: 0,
-                marginTop: vh(4), // more breathing room
-                color: "#555555",
+                fontWeight: 300,
+                marginTop: vh(68),
+                marginBottom: 0,
               }}>
-                {item.description}
+                P {item.price * item.quantity}.00
               </p>
+            </div>
+          ))}
 
-              {/* Rectangle Placeholder with Trash + Quantity Counter */}
-              <div
+          {/* Add More + Subtotal Section */}
+          <div style={{ marginTop: vh(5), padding: `${vh(1)} ${vw(1)}`, }}>
+            {/* Add More Button */}
+            <div
+              style={{
+                backgroundColor: "#36570A",
+                borderRadius: vw(10),
+                padding: `${vh(5)} ${vw(10)}`,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => handleAction("Add More Items")}
+            >
+              <span
                 style={{
-                  marginTop: vh(10),
-                  width: vw(100),
-                  height: vh(32),
-                  backgroundColor: "#FFFFFF",
-                  border: "0.5px solid #CECECE",
-                  borderRadius: vw(10),
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: `0 ${vw(15)}`,
-                  gap: vw(10),
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: responsiveText(10),
+                  fontWeight: 400,
+                  color: "white",
                 }}
               >
-                {/* Trash Icon */}
-                <img
-                  src={trash}
-                  alt="Remove"
-                  style={{
-                    width: vw(18),
-                    height: vw(18),
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleRemove(item.id)}
-                />
-
-                {/* Counter */}
-                <div style={{ display: "flex", alignItems: "center", gap: vw(8) }}>
-                  {/* Minus */}
-                  <button
-                    onClick={() =>
-                      setCartItems((prev) =>
-                        prev.map((i) =>
-                          i.id === item.id && i.quantity > 1 ? { ...i, quantity: i.quantity - 1 } : i
-                        )
-                      )
-                    }
-                    style={{
-                      border: "none",
-                      background: "none",
-                      fontSize: responsiveText(16),
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                      color: "#36570A",
-                    }}
-                  >
-                    –
-                  </button>
-
-                  {/* Quantity Number */}
-                  <span
-                    style={{
-                      fontSize: responsiveText(14),
-                      fontFamily: "Poppins, sans-serif",
-                      fontWeight: 500,
-                      color: "#000000",
-                    }}
-                  >
-                    {item.quantity}
-                  </span>
-
-                  {/* Plus */}
-                  <button
-                    onClick={() =>
-                      setCartItems((prev) =>
-                        prev.map((i) =>
-                          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-                        )
-                      )
-                    }
-                    style={{
-                      border: "none",
-                      background: "none",
-                      fontSize: responsiveText(16),
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                      color: "#36570A",
-                    }}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
+                + Add more items
+              </span>
             </div>
 
-            {/* Price */}
-            <p style={{
-              fontFamily: "Poppins, sans-serif",
-              fontSize: responsiveText(12),
-              fontWeight: 300,
-              marginTop: vh(68),
-              marginBottom: 0,
-            }}>
-              P {item.price * item.quantity}.00
-            </p>
+            {/* Subtotal Row */}
+            <div
+              style={{
+                marginTop: vh(15),
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: responsiveText(12),
+                  fontWeight: 400,
+                }}
+              >
+                Subtotal
+              </span>
+              <span
+                style={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: responsiveText(12),
+                  fontWeight: 500,
+                  color: "#000000",
+                }}
+              >
+                P {subtotal}.00
+              </span>
+            </div>
           </div>
-        ))}
+        </div>
+        
+        {/* ADD ONS CONTAINER - New Container Added Here */}
+        <div
+            style={{
+                width: "100%",
+                padding: `${vh(10)} ${vw(18)}`,
+                boxSizing: "border-box",
+                backgroundColor: "white",
+                marginTop: vh(10), // Optional: Add some space above
+            }}
+        >
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between", // To push the badge to the right
+                    alignItems: "center",
+                    marginBottom: vh(10),
+                }}
+            >
+                <p
+                    style={{
+                        fontFamily: "Poppins, sans-serif",
+                        fontSize: responsiveText(12),
+                        fontWeight: 400,
+                        margin: 0,
+                        color: "#000000",
+                    }}
+                >
+                    Add ons
+                </p>
+
+                {/* Optional Rectangle Text Placeholder */}
+                <div
+                    style={{
+                        backgroundColor: "#CECECE",
+                        borderRadius: vw(10),
+                        padding: `${vh(2)} ${vw(8)}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <span
+                        style={{
+                            fontFamily: "Poppins, sans-serif",
+                            fontSize: responsiveText(10),
+                            fontWeight: 400,
+                            color: "#FFFFFF", // White text color
+                        }}
+                    >
+                        Optional
+                    </span>
+                </div>
+            </div>
+
+        
+        </div>
       </div>
 
       {/* Bottom Total and Review Payment */}
@@ -324,9 +452,9 @@ export default function WhiteAndGreenRectangle() {
             position: "absolute",
             left: vw(19),
             top: vh(13),
-            fontSize: responsiveText(12),
+            fontSize: responsiveText(13),
             fontFamily: "Poppins, sans-serif",
-            fontWeight: 400,
+            fontWeight: 900,
             color: "#000000",
             lineHeight: responsiveText(18),
             zIndex: 6,
@@ -340,7 +468,7 @@ export default function WhiteAndGreenRectangle() {
             position: "absolute",
             right: vw(19),
             top: vh(13),
-            fontSize: responsiveText(12),
+            fontSize: responsiveText(13),
             fontFamily: "Poppins, sans-serif",
             fontWeight: 900,
             color: "#36570A",
@@ -349,7 +477,7 @@ export default function WhiteAndGreenRectangle() {
             zIndex: 6,
           }}
         >
-          P 719.00
+          P {subtotal}.00
         </p>
 
         <div
