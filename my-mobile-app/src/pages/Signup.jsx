@@ -26,14 +26,19 @@ export default function Signup() {
     if (error) setError("");
   };
 
+  // Form validation
   const validateForm = () => {
-    const { fullName, email, password, confirmPassword } = formData;
-    if (!fullName.trim()) return "Name is required";
+    const { fullName, email, password, confirmPassword, studentId, contact } = formData;
+    
+    if (!fullName.trim()) return "Full name is required";
     if (!email.trim()) return "Email is required";
     if (!email.includes("@")) return "Please enter a valid email";
     if (!password) return "Password is required";
     if (password.length < 8 || password.length > 16) return "Password must be 8-16 characters";
     if (password !== confirmPassword) return "Passwords do not match";
+    if (!studentId.trim()) return "Student ID is required";
+    if (!contact.trim()) return "Contact number is required";
+    
     return null;
   };
 

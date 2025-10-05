@@ -1,5 +1,5 @@
 // API configuration and utility functions
-const API_BASE_URL = 'https://cafeteria-backend-ky8l.onrender.com';
+const API_BASE_URL = 'https://cafeteria-backend-eight.vercel.app';
 
 // API utility function
 export const apiCall = async (endpoint, options = {}) => {

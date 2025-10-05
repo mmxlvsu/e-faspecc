@@ -10,21 +10,35 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  
+  // Form data state
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
+  // Handle input changes
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Clear error when user starts typing
     if (error) setError("");
   };
 
+  // Form validation
   const validateForm = () => {
     const { email, password } = formData;
+    
     if (!email.trim()) return "Email is required";
     if (!email.includes("@")) return "Please enter a valid email";
     if (!password) return "Password is required";
+    
     return null;
   };
 
+  // Handle form submission
   const handleLogin = async () => {
     const validationError = validateForm();
     if (validationError) {
@@ -37,10 +51,18 @@ export default function Login() {
 
     try {
       const response = await authAPI.login(formData.email, formData.password);
+      
+      // Store token and user data
       storage.setToken(response.token);
       storage.setUser(response.user);
-
-      navigate("/home");
+      
+      // Navigate based on user role or to home
+      if (response.user.role === "student") {
+        navigate("/home");
+      } else {
+        navigate("/home"); // You can customize this for different roles
+      }
+      
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
     } finally {
