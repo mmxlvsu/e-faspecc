@@ -37,7 +37,7 @@ export default function Splash() {
         }}
       />
 
-      <div className="absolute z-30 left-1/2 top-[50%] w-[82%] -translate-x-1/2">
+      <div className="absolute z-30 left-1/2 top-[48%] w-[82%] -translate-x-1/2">
         <button
           onClick={handleGetStarted}
           className="w-full h-[8vh] bg-black text-white text-[4.5vw] font-bold rounded-lg"
@@ -46,7 +46,7 @@ export default function Splash() {
         </button>
       </div>
 
-      <div className="absolute z-30 left-1/2 top-[65%] w-[82%] -translate-x-1/2">
+      <div className="absolute z-30 left-1/2 top-[63%] w-[82%] -translate-x-1/2">
         <button
           onClick={handleGoogle}
           className="w-full h-[8vh] bg-white text-black text-[4.5vw] font-bold rounded-lg flex items-center justify-center gap-2"
@@ -56,7 +56,7 @@ export default function Splash() {
         </button>
       </div>
 
-      <div className="absolute z-30 left-1/2 top-[75%] w-[82%] -translate-x-1/2">
+      <div className="absolute z-30 left-1/2 top-[73%] w-[82%] -translate-x-1/2">
         <button
           onClick={handleFacebook}
           className="w-full h-[8vh] bg-white text-black text-[4.5vw] font-bold flex items-center justify-center gap-2 rounded-lg"
@@ -66,7 +66,7 @@ export default function Splash() {
         </button>
       </div>
 
-      <div className="absolute z-30 left-1/2 top-[60%] w-3/4 -translate-x-1/2 flex items-center">
+      <div className="absolute z-30 left-1/2 top-[58%] w-3/4 -translate-x-1/2 flex items-center">
         <div className="flex-grow border-t border-white"></div>
         <span
           className="mx-2 text-[3.5vw] text-white text-center cursor-pointer"
@@ -77,7 +77,7 @@ export default function Splash() {
         <div className="flex-grow border-t border-white"></div>
       </div>
 
-      <p className="absolute z-30 left-1/2 top-[87%] w-3/4 -translate-x-1/2 text-[3.5vw] text-white text-center">
+      <p className="absolute z-30 left-1/2 top-[83%] w-3/4 -translate-x-1/2 text-[3.5vw] text-white text-center">
         Already have an account?{" "}
         <span onClick={handleLogin} className="underline font-semibold cursor-pointer">
           Log in here.
