@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const CheckIconSVG = ({ isChecked, onClick, style }) => (
   <svg
@@ -40,6 +42,7 @@ const handleTermsClick = () => {
 const handleAction = (action) => console.log(`${action} clicked`);
 
 export default function WhiteAndGreenRectangle() {
+  
   const vw = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
   const vh = (pixels) => `${(pixels / 9).toFixed(1)}vh`;
   const responsiveText = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
@@ -49,6 +52,8 @@ export default function WhiteAndGreenRectangle() {
 
   const scrollContainerRef = useRef(null);
   const lastScrollTop = useRef(0);
+
+  const navigate = useNavigate();
 
   const subtotal = 550;
   const selectedAddOnsTotal = 49;
@@ -65,6 +70,16 @@ export default function WhiteAndGreenRectangle() {
     { id: 8, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
     { id: 9, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
     { id: 10, name: "Soda (Coke)", quantity: 3, price: 25.0 },
+     { id: 11, name: "Chicken Adobo", quantity: 1, price: 40.0 },
+    { id: 12, name: "Leche Flan", quantity: 2, price: 55.5 },
+    { id: 13, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
+    { id: 14, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
+    { id: 15, name: "Soda (Coke)", quantity: 3, price: 25.0 },
+     { id: 16, name: "Chicken Adobo", quantity: 1, price: 40.0 },
+    { id: 17, name: "Leche Flan", quantity: 2, price: 55.5 },
+    { id: 18, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
+    { id: 19, name: "Lumpia Shanghai (10pcs)", quantity: 1, price: 120.0 },
+    { id: 20, name: "Soda (Coke)", quantity: 3, price: 25.0 },
   ];
 
   const handleScroll = () => {
@@ -82,7 +97,7 @@ export default function WhiteAndGreenRectangle() {
   return (
     <div style={{ width: "100%", minHeight: "100vh", position: "relative", backgroundColor: "#FFFFFF" }}>
       <BackIconSVG
-        onClick={() => handleAction("Back")}
+        onClick={() => navigate("/cart")}
         style={{
           position: "absolute",
           left: vw(12),
@@ -204,8 +219,8 @@ export default function WhiteAndGreenRectangle() {
       <div style={{ position: "fixed", left: 0, bottom: showBottomBar ? 0 : `-${vh(140)}`, width: "100%", height: vh(140), backgroundColor: "#FFFFFF", borderTop: "0.5px solid #CECECE", boxShadow: "0 -2px 5px rgba(0,0,0,0.05)", zIndex: 5, transition: "bottom 0.3s ease-out" }}>
         <p style={{ position: "absolute", left: vw(19), top: vh(13), fontSize: responsiveText(14), fontFamily: "Poppins, sans-serif", fontWeight: 900 }}>Total</p>
         <p style={{ position: "absolute", right: vw(19), top: vh(13), fontSize: responsiveText(14), fontFamily: "Poppins, sans-serif", fontWeight: 900, color: "#36570A" }}>P {grandTotal}.00</p>
-        <div style={{ position: "absolute", left: vw(18), right: vw(18), bottom: vw(35), width: `calc(100% - ${vw(36)})`, height: vw(42), backgroundColor: "#36570A", borderRadius: vw(6), zIndex: 6, display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }} onClick={() => handleAction("Review Payment")}>
-          <span style={{ color: "#FFFFFF", fontSize: responsiveText(15), fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>Review Payment</span>
+        <div style={{ position: "absolute", left: vw(18), right: vw(18), bottom: vw(35), width: `calc(100% - ${vw(36)})`, height: vw(42), backgroundColor: "#36570A", borderRadius: vw(6), zIndex: 6, display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer" }} onClick={() => handleAction("Pay Now")}>
+          <span style={{ color: "#FFFFFF", fontSize: responsiveText(15), fontFamily: "Poppins, sans-serif", fontWeight: 600 }}>Pay Now</span>
         </div>
       </div>
     </div>

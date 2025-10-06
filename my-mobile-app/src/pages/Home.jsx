@@ -143,7 +143,7 @@ export default function BottomBar() {
       </form>
 
       {/* Scrollable White Container (unchanged) */}
-      <div ref={scrollRef} className="hide-scrollbar" style={{ position:"absolute", top:"29.5vh", left:0, right:0, bottom:0, backgroundColor:"#FFF", borderTopLeftRadius:"6%", borderTopRightRadius:"6%", padding:"20px", overflowY:"auto", zIndex:2 }}>
+      <div ref={scrollRef} className="hide-scrollbar" style={{ position:"absolute", top:"29.5vh", left:0, right:0, bottom:0, backgroundColor:"#FFF", borderTopLeftRadius:"3%", borderTopRightRadius:"3%", padding:"20px", overflowY:"auto", zIndex:2 }}>
         {/* Today's Specials */}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px" }}>
           <p style={{ fontSize:"16px", fontWeight:"600", color:"#000" }}>What's Available Today</p>

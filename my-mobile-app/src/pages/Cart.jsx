@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import car1 from "../assets/car1.png";
 import trash from "../assets/trash.png";
 
@@ -39,6 +40,7 @@ const BackIconSVG = ({ style, onClick }) => (
 const handleAction = (action) => console.log(`${action} clicked`);
 
 export default function WhiteAndGreenRectangle() {
+  const navigate = useNavigate();
   const vw = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
   const vh = (pixels) => `${(pixels / 9).toFixed(1)}vh`;
   const responsiveText = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
@@ -82,7 +84,7 @@ export default function WhiteAndGreenRectangle() {
 
   return (
     <div style={{ width: "100%", minHeight: "100vh", position: "relative" }}>
-      <BackIconSVG onClick={() => handleAction("Back")} style={{ position: "absolute", left: vw(12), top: vh(30), width: vw(24), height: vw(24), cursor: "pointer", zIndex: 3, color: "#000" }} />
+      <BackIconSVG onClick={() => navigate("/home")} style={{ position: "absolute", left: vw(12), top: vh(30), width: vw(24), height: vw(24), cursor: "pointer", zIndex: 3, color: "#000" }} />
       <p style={{ position: "absolute", left: vw(43), top: vh(32), fontSize: responsiveText(14), fontWeight: 600, fontFamily: "Poppins, sans-serif", color: "#000", zIndex: 3 }}>Cart</p>
 
       {/* Steps */}
@@ -172,7 +174,7 @@ export default function WhiteAndGreenRectangle() {
       <div style={{ position:"fixed", left:0, bottom:0, width:"100%", height: vh(140), backgroundColor:"#fff", borderTop:"0.5px solid #CECECE", boxShadow:"0 -2px 5px rgba(0,0,0,0.05)", zIndex:5, transform: isBottomBarVisible?'translateY(0)':`translateY(${vh(140)})`, transition:"transform 0.3s ease-out" }}>
         <p style={{ position:"absolute", left: vw(19), top: vh(13), fontSize:responsiveText(14), fontFamily:"Poppins,sans-serif", fontWeight:900, color:"#000", lineHeight:responsiveText(18), zIndex:6 }}>Total</p>
         <p style={{ position:"absolute", right: vw(19), top: vh(13), fontSize:responsiveText(14), fontFamily:"Poppins,sans-serif", fontWeight:900, color:"#36570A", lineHeight:responsiveText(18), textAlign:"right", zIndex:6 }}>P {grandTotal}.00</p>
-        <div style={{ position:"absolute", left: vw(18), right: vw(18), bottom: vw(35), width:`calc(100% - ${vw(36)})`, height: vw(42), backgroundColor:"#36570A", borderRadius: vw(6), zIndex:6, display:"flex", justifyContent:"center", alignItems:"center", cursor:"pointer" }} onClick={()=>handleAction("Review Payment")}>
+        <div style={{ position:"absolute", left: vw(18), right: vw(18), bottom: vw(35), width:`calc(100% - ${vw(36)})`, height: vw(42), backgroundColor:"#36570A", borderRadius: vw(6), zIndex:6, display:"flex", justifyContent:"center", alignItems:"center", cursor:"pointer" }} onClick={()=>navigate("/payment")}>
           <span style={{ color:"#fff", fontSize:responsiveText(15), fontFamily:"Poppins,sans-serif", fontWeight:600 }}>Review Payment</span>
         </div>
       </div>
