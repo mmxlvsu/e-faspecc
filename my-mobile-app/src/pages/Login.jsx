@@ -76,20 +76,20 @@ export default function Login() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
+        style={{ left: "3vw", top: "4vh", width: "6vw", height: "6vw" }}
         onClick={() => navigate("/")}
       />
 
       <h1
         className="absolute font-extrabold text-black leading-tight"
-        style={{ left: "8vw", top: "22vh", fontSize: "8vw", width: "80vw" }}
+        style={{ left: "8vw", top: "20vh", fontSize: "8vw", width: "80vw" }}
       >
         Welcome Back!
       </h1>
 
       <p
         className="absolute font-semibold text-[#36570A]"
-        style={{ left: "8.5vw", top: "28vh", fontSize: "3.5vw", width: "60vw" }}
+        style={{ left: "8.5vw", top: "26vh", fontSize: "3.5vw", width: "60vw" }}
       >
         Good to see you again
       </p>
@@ -97,7 +97,7 @@ export default function Login() {
       {error && (
         <div
           className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+          style={{ top: "31vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
         >
           {error}
         </div>
@@ -110,7 +110,7 @@ export default function Login() {
         onChange={e => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "36vh",
+          top: "34vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -126,7 +126,7 @@ export default function Login() {
         onChange={e => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "45vh",
+          top: "43vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -138,14 +138,14 @@ export default function Login() {
         src={showPassword ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "46.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "44.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "54vh",
+          top: "52vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -160,7 +160,7 @@ export default function Login() {
 
       <p
         className="absolute font-bold text-black cursor-pointer text-center"
-        style={{ top: "63vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
+        style={{ top: "61vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
         onClick={() => navigate("/forgot")}
       >
         Forgot password?
@@ -168,7 +168,7 @@ export default function Login() {
 
       <p
         className="absolute text-black text-center"
-        style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}
+        style={{ top: "84vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}
       >
         Don't have an account yet?{" "}
         <span

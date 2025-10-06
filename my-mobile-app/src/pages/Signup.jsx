@@ -36,9 +36,7 @@ export default function Signup() {
     if (!password) return "Password is required";
     if (password.length < 8 || password.length > 16) return "Password must be 8-16 characters";
     if (password !== confirmPassword) return "Passwords do not match";
-    if (!studentId.trim()) return "Student ID is required";
-    if (!contact.trim()) return "Contact number is required";
-    
+
     return null;
   };
 
@@ -76,20 +74,20 @@ export default function Signup() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
+        style={{ left: "3vw", top: "4vh", width: "6vw", height: "6vw" }}
         onClick={() => navigate("/")}
       />
 
-      <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "12vh", fontSize: "8vw", width: "80vw" }}>
+      <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "10vh", fontSize: "8vw", width: "80vw" }}>
         Create an account
       </h1>
 
-      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "18vh", fontSize: "3.8vw", width: "70vw" }}>
+      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "16vh", fontSize: "3.8vw", width: "70vw" }}>
         Please enter your details
       </p>
 
       {error && (
-        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "22vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
+        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "20vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
           {error}
         </div>
       )}
@@ -100,7 +98,7 @@ export default function Signup() {
         value={formData.fullName}
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "25vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "23vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
 
       <input
@@ -109,18 +107,18 @@ export default function Signup() {
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "33vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "31vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
 
       <input
-        type="text"
+        type="tel"
         placeholder="Student ID"
         value={formData.studentId}
         onChange={(e) => handleInputChange("studentId", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "41vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "39vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
-      <p className="absolute text-gray-500" style={{ right: "10vw", top: "42.5vh", fontSize: "3vw" }}>optional</p>
+      <p className="absolute text-gray-500" style={{ right: "10vw", top: "40.5vh", fontSize: "3vw" }}>optional</p>
 
       <input
         type="tel"
@@ -128,9 +126,9 @@ export default function Signup() {
         value={formData.contact}
         onChange={(e) => handleInputChange("contact", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "49vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "47vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
-      <p className="absolute text-gray-500" style={{ right: "10vw", top: "50.5vh", fontSize: "3vw" }}>optional</p>
+      <p className="absolute text-gray-500" style={{ right: "10vw", top: "48.5vh", fontSize: "3vw" }}>optional</p>
 
       <input
         type={showPassword ? "text" : "password"}
@@ -138,16 +136,16 @@ export default function Signup() {
         value={formData.password}
         onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "57vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
       <img
         src={showPassword ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "58.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "56.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
-      <p className="absolute text-gray-600" style={{ left: "8vw", top: "64vh", fontSize: "2.8vw", width: "70vw" }}>
+      <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw", width: "70vw" }}>
         Password must be 8-16 characters
       </p>
 
@@ -157,26 +155,26 @@ export default function Signup() {
         value={formData.confirmPassword}
         onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "67vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
       <img
         src={showConfirm ? showIcon : hideIcon}
         alt="Toggle Confirm Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "68.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "66.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "76vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ top: "74vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
         onClick={handleSignup}
         disabled={loading}
       >
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      <p className="absolute text-black text-center" style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "84vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>
           Log in here.
