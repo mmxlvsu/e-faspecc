@@ -1,5 +1,5 @@
 // API configuration and utility functions
-const API_BASE_URL = 'https://cafeteria-backend-eosin.vercel.app';
+const API_BASE_URL = 'http://localhost:4000';
 
 // API utility function
 export const apiCall = async (endpoint, options = {}) => {
@@ -70,7 +70,15 @@ export const authAPI = {
 
   // Get current user
   getCurrentUser: async () => {
-    return apiCall('/auth/me');
+    return apiCall('/auth/user');
+  },
+
+  // Update user
+  updateUser: async (updatedData) => {
+    return apiCall('/auth/update', {
+      method: 'PUT',
+      body: JSON.stringify(updatedData),
+    });
   },
 
   // Forgot password
