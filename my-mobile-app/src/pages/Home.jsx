@@ -16,13 +16,7 @@ export default function BottomBarPage() {
   const scrollContainerRef = useRef(null);
 
   const items = [
-    {
-      icon: homeIcon,
-      onClick: () => navigate("/home"),
-      iconSize: "6vw",
-      filter:
-        "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)",
-    },
+    { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
     { icon: cartIcon, onClick: () => navigate("/cart"), iconSize: "6vw", filter: "invert(0%) brightness(0%)" },
     { icon: orderIcon, onClick: () => navigate("/orders"), iconSize: "6vw", filter: "invert(0%)" },
     { icon: personIcon, onClick: () => navigate("/profile"), iconSize: "6vw", filter: "invert(0%)" },
@@ -30,25 +24,20 @@ export default function BottomBarPage() {
 
   const categories = ["✔ All", "Breakfast", "Lunch", "Dinner"];
 
-  // 👇 Scroll behavior logic
+  // Hide/show bottom bar on scroll
   useEffect(() => {
     const container = scrollContainerRef.current;
-
     const handleScroll = () => {
       const scrollTop = container.scrollTop;
       const scrollHeight = container.scrollHeight;
       const clientHeight = container.clientHeight;
 
-      // detect scroll direction
       if (scrollTop > lastScrollTop.current && scrollTop + clientHeight >= scrollHeight - 5) {
-        // reached bottom → hide
         setShowBottomBar(false);
       } else if (scrollTop < lastScrollTop.current) {
-        // scroll up → show
         setShowBottomBar(true);
       }
-
-      lastScrollTop.current = scrollTop <= 0 ? 0 : scrollTop;
+      lastScrollTop.current = Math.max(scrollTop, 0);
     };
 
     container.addEventListener("scroll", handleScroll);
@@ -65,7 +54,7 @@ export default function BottomBarPage() {
         overflow: "hidden",
       }}
     >
-      {/* 🟩 Green background */}
+      {/* Green Header */}
       <div
         style={{
           position: "absolute",
@@ -93,7 +82,7 @@ export default function BottomBarPage() {
         />
       </div>
 
-      {/* 🔔 Notification */}
+      {/* Notification Icon */}
       <div
         style={{
           position: "absolute",
@@ -109,11 +98,7 @@ export default function BottomBarPage() {
         <img
           src={notifIcon}
           alt="notification"
-          style={{
-            width: "100%",
-            height: "100%",
-            filter: "invert(100%) brightness(200%)",
-          }}
+          style={{ width: "100%", height: "100%", filter: "invert(100%) brightness(200%)" }}
         />
         <div
           style={{
@@ -136,7 +121,7 @@ export default function BottomBarPage() {
         </div>
       </div>
 
-      {/* 📍 Location */}
+      {/* Location */}
       <img
         src={locIcon}
         alt="location"
@@ -178,7 +163,7 @@ export default function BottomBarPage() {
         USTP-CDO Campus Cafeteria
       </span>
 
-      {/* 🔍 Search bar */}
+      {/* Search Bar */}
       <div
         style={{
           position: "absolute",
@@ -220,7 +205,7 @@ export default function BottomBarPage() {
         />
       </div>
 
-      {/* 👋 Welcome */}
+      {/* Welcome Text */}
       <div
         style={{
           position: "absolute",
@@ -231,21 +216,17 @@ export default function BottomBarPage() {
           width: "90vw",
         }}
       >
-        <h2 style={{ fontSize: "5.5vw", margin: "0", fontWeight: "800" }}>
-          Welcome Back!
-        </h2>
-        <p style={{ fontSize: "2.3vw", color: "white" }}>
-          See what’s available today &gt;
-        </p>
+        <h2 style={{ fontSize: "5.5vw", margin: 0, fontWeight: "800" }}>Welcome Back!</h2>
+        <p style={{ fontSize: "2.3vw", color: "white" }}>See what’s available today &gt;</p>
       </div>
 
-      {/* ⚪ White container (scrollable) */}
+      {/* Scrollable Container */}
       <div
         ref={scrollContainerRef}
         style={{
           position: "absolute",
           top: "32vh",
-          left: "0",
+          left: 0,
           width: "100%",
           bottom: "15px",
           backgroundColor: "#F3F3F3",
@@ -256,14 +237,8 @@ export default function BottomBarPage() {
           zIndex: 700,
         }}
       >
-        {/* 🍱 Categories */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "-3vh",
-          }}
-        >
+        {/* Categories */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "-3vh" }}>
           <div
             style={{
               display: "flex",
@@ -294,53 +269,88 @@ export default function BottomBarPage() {
           </div>
         </div>
 
-        {/* 🍽️ Placeholders */}
+        {/* Product Placeholders */}
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             gap: "5vw",
-            padding: "1vw 5vw 1vw 5vw",
+            padding: "1vw 5vw",
           }}
         >
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                backgroundColor: "#F3F3F3",
-                borderRadius: "4vw",
-                padding: "1vw",
-                height: "35vw",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                animation: "pulse 1.5s infinite",
-              }}
-            >
+          {Array.from({ length: 20 }).map((_, i) => {
+            const statuses = ["Available", "Low Stock", "Unavailable"];
+            const status = statuses[i % statuses.length];
+            const statusStyles = {
+              Available: { backgroundColor: "#4CAF50", textColor: "white" },
+              "Low Stock": { backgroundColor: "#FFC107", textColor: "#333" },
+              Unavailable: { backgroundColor: "#F44336", textColor: "white" },
+            };
+            const { backgroundColor, textColor } = statusStyles[status];
+
+            return (
               <div
+                key={i}
                 style={{
-                  width: "100%",
-                  height: "150%",
-                  backgroundColor: "#ddd",
+                  position: "relative",
+                  backgroundColor: "white",
                   borderRadius: "2vw",
-                  marginBottom: "3vw",
+                  padding: "1vw",
+                  height: "35vw",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  animation: "pulse 1.5s infinite",
                 }}
-              ></div>
-              <div
-                style={{
-                  width: "80%",
-                  height: "10%",
-                  backgroundColor: "#ddd",
-                  borderRadius: "1vw",
-                }}
-              ></div>
-            </div>
-          ))}
+              >
+                {/* Status Banner */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "4vw",
+                    right: "4vw",
+                    backgroundColor,
+                    color: textColor,
+                    fontSize: "1.5vw",
+                    fontWeight: "400",
+                    padding: "0.5vw 2vw",
+                    borderRadius: "2vw",
+                    boxShadow: "0 0.3vw 0.8vw rgba(0,0,0,0.2)",
+                  }}
+                >
+                  {status}
+                </div>
+
+                {/* Image Placeholder */}
+                <div
+                  style={{
+                    width: "95%",
+                    height: "95%",
+                    backgroundColor: "#ddd",
+                    borderRadius: "2vw",
+                    marginTop: "1vw",
+                    marginBottom: "2vw",
+                  }}
+                ></div>
+
+                {/* Title Placeholder */}
+                <div
+                  style={{
+                    width: "80%",
+                    height: "10%",
+                    backgroundColor: "#ddd",
+                    borderRadius: "1vw",
+                    marginBottom: "1vw",
+                  }}
+                ></div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* 💫 Pulse animation */}
+      {/* Pulse Animation */}
       <style>
         {`
           @keyframes pulse {
@@ -351,13 +361,13 @@ export default function BottomBarPage() {
         `}
       </style>
 
-      {/* 🧭 Bottom bar (appears/disappears) */}
+      {/* Bottom Bar */}
       <div
         style={{
           position: "fixed",
           bottom: showBottomBar ? "0px" : "-80px",
-          left: "0px",
-          right: "0px",
+          left: 0,
+          right: 0,
           height: "67px",
           borderTop: "0.8px solid #CECECE",
           backgroundColor: "#fff",
