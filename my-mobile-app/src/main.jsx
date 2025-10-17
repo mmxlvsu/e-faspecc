@@ -11,6 +11,8 @@ import Verify from "./pages/Verify";
 import Order from "./pages/Order";
 import Profile from "./pages/Profile";
 import Item from "./pages/Item";
+import Cart from "./pages/Cart";
+import Payment from "./pages/Payment";
 
 import "./index.css";
 
@@ -28,6 +30,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/order" element={<Order />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/item" element={<Item />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/payment" element={<Payment />} />
 
       </Routes>
     </Router>
