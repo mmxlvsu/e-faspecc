@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import homeIcon from "../assets/home.png";
-import menuIcon from "../assets/menu.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png";
@@ -15,7 +14,6 @@ export default function BottomBarPage() {
 
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(0%) brightness(0%)" },
-    { icon: menuIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(0%)" },
     { icon: cartIcon, onClick: () => navigate("/cart"), iconSize: "6vw", filter: "invert(0%) brightness(0%)" },
     { icon: orderIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(0%)" },
     { icon: personIcon, onClick: () => navigate("/profile"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },

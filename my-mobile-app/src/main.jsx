@@ -8,8 +8,7 @@ import Signup from "./pages/Signup";
 import Forgot from "./pages/Forgot";
 import Reset from "./pages/Reset";
 import Verify from "./pages/Verify";
-import Cart from "./pages/Cart";
-import Payment from "./pages/Payment";
+import Order from "./pages/Order";
 import Profile from "./pages/Profile";
 import "./index.css";
 
@@ -24,8 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/reset/:token" element={<Reset />} />
         <Route path="/verify" element={<Verify />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/payment" element={<Payment />} />
+        <Route path="/order" element={<Order />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
