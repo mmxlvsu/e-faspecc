@@ -76,7 +76,7 @@ export default function Login() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ left: "3vw", top: "4vh", width: "6vw", height: "6vw" }}
+        style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }}
         onClick={() => navigate("/")}
       />
 

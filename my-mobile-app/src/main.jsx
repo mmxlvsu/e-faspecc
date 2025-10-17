@@ -10,6 +10,8 @@ import Reset from "./pages/Reset";
 import Verify from "./pages/Verify";
 import Order from "./pages/Order";
 import Profile from "./pages/Profile";
+import Item from "./pages/Item";
+
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -25,6 +27,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/verify" element={<Verify />} />
         <Route path="/order" element={<Order />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/item" element={<Item />} />
+
       </Routes>
     </Router>
   </React.StrictMode>
