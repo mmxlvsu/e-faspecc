@@ -8,12 +8,41 @@ import notifIcon from "../assets/noti.png";
 import locIcon from "../assets/location.png";
 import searchIcon from "../assets/search.png";
 import foodIcon from "../assets/food.png";
+import { menuAPI, authAPI, storage } from "../lib/api";
 
 export default function BottomBarPage() {
+
+    const [firstName, setFirstName] = useState("Guest");
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          // Try local user first
+          const localUser = storage.getUser();
+          if (localUser?.fullName) {
+            const first = localUser.fullName.split(" ")[0];
+            setFirstName(first);
+          }
+
+          // Then try fetching the most recent user data from backend
+          const user = await authAPI.getCurrentUser();
+          if (user?.fullName) {
+            const first = user.fullName.split(" ")[0];
+            setFirstName(first);
+            storage.setUser(user); // refresh stored user data
+          }
+        } catch (err) {
+          console.warn("Failed to fetch user info:", err);
+        }
+      };
+
+      fetchUser();
+    }, []);
+
   const navigate = useNavigate();
   const [showBottomBar, setShowBottomBar] = useState(true);
   const lastScrollTop = useRef(0);
-  const scrollContainerRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
@@ -22,11 +51,112 @@ export default function BottomBarPage() {
     { icon: personIcon, onClick: () => navigate("/profile"), iconSize: "6vw", filter: "invert(0%)" },
   ];
 
-  const categories = ["✔ All", "Breakfast", "Lunch", "Dinner"];
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      setCartCount(totalItems);
+    };
+
+    updateCount();
+    window.addEventListener("storage", updateCount);
+    return () => window.removeEventListener("storage", updateCount);
+  }, []);
+
+  const [categories, setCategories] = useState(["✔ All"]);
+  const [selectedCategory, setSelectedCategory] = useState("✔ All");
+  const [todayItems, setTodayItems] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoryData, itemData] = await Promise.all([
+          menuAPI.getCategories(),
+          menuAPI.getAllItems(),
+        ]);
+
+        // Assuming your backend returns something like:
+        // [ { name: "Breakfast" }, { name: "Lunch" }, { name: "Dinner" } ]
+        const formattedCategories = [
+          "✔ All",
+          ...categoryData.map((cat) => cat.name || cat.categoryName),
+        ];
+
+        setCategories(formattedCategories);
+        setTodayItems(itemData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredItems = todayItems.filter((item) => {
+    // Handle possible variations in category data
+    const categoryName =
+      typeof item.category === "string"
+        ? item.category
+        : item.category?.name || item.categoryName || "";
+
+    const matchesCategory =
+      selectedCategory === "✔ All" ||
+      categoryName.toLowerCase() === selectedCategory.toLowerCase();
+
+    const matchesSearch =
+      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
+  const [selectedItem, setSelectedItem] = useState(null); // 🔹 for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 🔹 Add to cart (stored in localStorage for now)
+  const handleAddToCart = (item) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Normalize item structure
+    const itemId = item.id || item._id || Math.random().toString(36).substr(2, 9);
+    const image = item.image || item.imageUrl || "";
+
+    // Check if already exists
+    const existingItem = cart.find((i) => i.id === itemId || i._id === itemId);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: itemId,
+        name: item.name || "Unnamed Item",
+        description: item.description || "",
+        price: Number(item.price) || 0,
+        image,
+        quantity: 1,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // ✅ Optional: trigger a storage event for Cart page to update live
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  const [quantity, setQuantity] = useState(1);
+    const openItemModal = (item) => {
+    setSelectedItem(item);
+    setQuantity(1); // reset quantity each time
+    setIsModalOpen(true);
+  };
 
   // Hide/show bottom bar on scroll
   useEffect(() => {
-    const container = scrollContainerRef.current;
+    const container = scrollRef.current;
     const handleScroll = () => {
       const scrollTop = container.scrollTop;
       const scrollHeight = container.scrollHeight;
@@ -194,6 +324,8 @@ export default function BottomBarPage() {
         <input
           type="text"
           placeholder="What’s on your mind?"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           style={{
             border: "none",
             outline: "none",
@@ -216,13 +348,13 @@ export default function BottomBarPage() {
           width: "90vw",
         }}
       >
-        <h2 style={{ fontSize: "5.5vw", margin: 0, fontWeight: "800" }}>Welcome Back!</h2>
+        <h2 style={{ fontSize: "5.5vw", margin: 0, fontWeight: "800" }}>Hello there, {firstName}!</h2>
         <p style={{ fontSize: "2.3vw", color: "white" }}>See what’s available today &gt;</p>
       </div>
 
       {/* Scrollable Container */}
       <div
-        ref={scrollContainerRef}
+        ref={scrollRef}
         style={{
           position: "absolute",
           top: "32vh",
@@ -238,34 +370,46 @@ export default function BottomBarPage() {
         }}
       >
         {/* Categories */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "-3vh" }}>
+        <div
+          style={{
+            overflowX: "auto", // ✅ Allow horizontal scroll
+            whiteSpace: "nowrap",
+            marginTop: "-3vh",
+            padding: "2vh 5vw",
+            scrollbarWidth: "none", // Hide scrollbar (Firefox)
+          }}
+        >
           <div
             style={{
               display: "flex",
-              overflowX: "auto",
               gap: "3vw",
-              padding: "2vh 0",
-              scrollbarWidth: "none",
+              width: "max-content", // ✅ Ensures inner div expands beyond screen width
             }}
           >
-            {categories.map((cat, index) => (
-              <div
-                key={index}
-                style={{
-                  flex: "0 0 auto",
-                  backgroundColor: index === 0 ? "#36570A" : "white",
-                  color: index === 0 ? "white" : "#333",
-                  padding: "2vw 5vw",
-                  borderRadius: "3vw",
-                  fontSize: "2.2vw",
-                  fontWeight: "500",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {cat}
-              </div>
-            ))}
+            {categories.map((cat, index) => {
+              const isSelected = cat === selectedCategory;
+              return (
+                <div
+                  key={index}
+                  onClick={() => setSelectedCategory(cat)}
+                  style={{
+                    flex: "0 0 auto",
+                    backgroundColor: isSelected ? "#36570A" : "white",
+                    color: isSelected ? "white" : "#333",
+                    padding: "2vw 5vw",
+                    borderRadius: "3vw",
+                    fontSize: "2.2vw",
+                    fontWeight: "500",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    border: isSelected ? "1px solid #36570A" : "1px solid #ddd",
+                    transition: "all 0.2s ease",
+                  }}
+                >
+                  {cat}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -278,77 +422,248 @@ export default function BottomBarPage() {
             padding: "1vw 5vw",
           }}
         >
-          {Array.from({ length: 20 }).map((_, i) => {
-            const statuses = ["Available", "Low Stock", "Unavailable"];
-            const status = statuses[i % statuses.length];
-            const statusStyles = {
-              Available: { backgroundColor: "#4CAF50", textColor: "white" },
-              "Low Stock": { backgroundColor: "#FFC107", textColor: "#333" },
-              Unavailable: { backgroundColor: "#F44336", textColor: "white" },
-            };
-            const { backgroundColor, textColor } = statusStyles[status];
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => {
+              // Default values for missing data
+              const status = item.status || "Available";
+              const statusStyles = {
+                Available: { backgroundColor: "#4CAF50", textColor: "white" },
+                "Low Stock": { backgroundColor: "#FFC107", textColor: "#333" },
+                Unavailable: { backgroundColor: "#F44336", textColor: "white" },
+              };
+              const { backgroundColor, textColor } = statusStyles[status] || statusStyles["Available"];
 
-            return (
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    position: "relative",
+                    backgroundColor: "white",
+                    borderRadius: "2vw",
+                    padding: "1vw",
+                    height: "35vw",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Status Banner */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "4vw",
+                      right: "4vw",
+                      backgroundColor,
+                      color: textColor,
+                      fontSize: "1.5vw",
+                      fontWeight: "400",
+                      padding: "0.5vw 2vw",
+                      borderRadius: "2vw",
+                      boxShadow: "0 0.3vw 0.8vw rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    {status}
+                  </div>
+
+                  {/* Product Image */}
+                  <img
+                    src={item.photoUrl || "/placeholder-food.png"}
+                    alt={item.name}
+                    style={{
+                      width: "95%",
+                      height: "75%",
+                      borderRadius: "2vw",
+                      objectFit: "cover",
+                      marginTop: "1vw",
+                      marginBottom: "2vw",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setIsModalOpen(true);
+                      openItemModal(item);
+                    }}
+                  />
+
+                  {/* Title and Price */}
+                  <p
+                    style={{
+                      fontSize: "1.5vw",
+                      fontWeight: "600",
+                      color: "#333",
+                      marginBottom: "0.5vw",
+                    }}
+                  >
+                    {item.name}
+                  </p>
+                  <p style={{ fontSize: "1.3vw", color: "#666" }}>₱{Number(item.price).toFixed(2)}</p>
+                </div>
+              );
+            })
+          ) : (
+            // Show placeholders while loading
+            Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
                 style={{
-                  position: "relative",
-                  backgroundColor: "white",
+                  backgroundColor: "#eee",
                   borderRadius: "2vw",
-                  padding: "1vw",
                   height: "35vw",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
                   animation: "pulse 1.5s infinite",
                 }}
+              />
+            ))
+          )}
+        </div>
+      </div>
+
+          {isModalOpen && selectedItem && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 9999,
+              }}
+              onClick={() => setIsModalOpen(false)} // close when clicking outside
+            >
+              <div
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "3vw",
+                  width: "85vw",
+                  maxWidth: "400px",
+                  padding: "5vw",
+                  position: "relative",
+                }}
+                onClick={(e) => e.stopPropagation()} // prevent close when clicking inside
               >
-                {/* Status Banner */}
+                {/* Close button */}
                 <div
                   style={{
                     position: "absolute",
-                    top: "4vw",
-                    right: "4vw",
-                    backgroundColor,
-                    color: textColor,
-                    fontSize: "1.5vw",
-                    fontWeight: "400",
-                    padding: "0.5vw 2vw",
-                    borderRadius: "2vw",
-                    boxShadow: "0 0.3vw 0.8vw rgba(0,0,0,0.2)",
+                    top: "2vw",
+                    right: "3vw",
+                    fontSize: "5vw",
+                    fontWeight: "bold",
+                    color: "#888",
+                    cursor: "pointer",
                   }}
+                  onClick={() => setIsModalOpen(false)}
                 >
-                  {status}
+                  ×
                 </div>
 
-                {/* Image Placeholder */}
-                <div
+                {/* Product Image */}
+                <img
+                  src={selectedItem.photoUrl || "/placeholder-food.png"}
+                  alt={selectedItem.name}
                   style={{
-                    width: "95%",
-                    height: "95%",
-                    backgroundColor: "#ddd",
+                    width: "100%",
+                    height: "45vw",
+                    objectFit: "cover",
                     borderRadius: "2vw",
-                    marginTop: "1vw",
-                    marginBottom: "2vw",
+                    marginBottom: "3vw",
                   }}
-                ></div>
+                />
 
-                {/* Title Placeholder */}
+                {/* Product Info */}
+                <h3 style={{ fontSize: "4vw", margin: "1vw 0", color: "#333" }}>
+                  {selectedItem.name}
+                </h3>
+                <p style={{ fontSize: "3vw", color: "#555" }}>
+                  ₱{Number(selectedItem.price).toFixed(2)}
+                </p>
+                <p style={{ fontSize: "2.8vw", color: "#777", marginTop: "2vw" }}>
+                  {selectedItem.description || "No description available."}
+                </p>
+
+                {/* Quantity Selector */}
                 <div
                   style={{
-                    width: "80%",
-                    height: "10%",
-                    backgroundColor: "#ddd",
-                    borderRadius: "1vw",
-                    marginBottom: "1vw",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "5vw",
+                    marginTop: "5vw",
                   }}
-                ></div>
+                >
+                  <button
+                    onClick={() =>
+                      setQuantity((prev) => (prev > 1 ? prev - 1 : 1))
+                    }
+                    style={{
+                      width: "8vw",
+                      height: "8vw",
+                      borderRadius: "50%",
+                      border: "1px solid #ccc",
+                      fontSize: "5vw",
+                      backgroundColor: "white",
+                      cursor: "pointer",
+                    }}
+                  >
+                    −
+                  </button>
+
+                  <span
+                    style={{
+                      fontSize: "4vw",
+                      fontWeight: "bold",
+                      color: "#333",
+                      minWidth: "10vw",
+                      textAlign: "center",
+                    }}
+                  >
+                    {quantity}
+                  </span>
+
+                  <button
+                    onClick={() => setQuantity((prev) => prev + 1)}
+                    style={{
+                      width: "8vw",
+                      height: "8vw",
+                      borderRadius: "50%",
+                      border: "1px solid #ccc",
+                      fontSize: "5vw",
+                      backgroundColor: "white",
+                      cursor: "pointer",
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Add to Cart button */}
+                <button
+                  onClick={() => {
+                    handleAddToCart({ ...selectedItem, quantity });
+                    setIsModalOpen(false);
+                  }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#36570A",
+                    color: "white",
+                    fontSize: "3.5vw",
+                    fontWeight: "600",
+                    padding: "2.5vw 0",
+                    borderRadius: "3vw",
+                    border: "none",
+                    cursor: "pointer",
+                    marginTop: "6vw",
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </div>
+          )}
 
       {/* Pulse Animation */}
       <style>
@@ -378,20 +693,47 @@ export default function BottomBarPage() {
           transition: "bottom 0.3s ease-in-out",
         }}
       >
-        {items.map((item, index) => (
-          <img
-            key={index}
-            src={item.icon}
-            alt={`icon-${index}`}
-            onClick={item.onClick}
-            style={{
-              width: item.iconSize,
-              height: item.iconSize,
-              filter: item.filter,
-              cursor: "pointer",
-            }}
-          />
-        ))}
+        {items.map((item, index) => {
+          const isCartIcon = item.icon === cartIcon; // 🛒 Check if this item is the cart
+          return (
+            <div key={index} style={{ position: "relative" }}>
+              <img
+                src={item.icon}
+                alt={`icon-${index}`}
+                onClick={item.onClick}
+                style={{
+                  width: item.iconSize,
+                  height: item.iconSize,
+                  filter: item.filter,
+                  cursor: "pointer",
+                }}
+              />
+
+              {/* 🔴 Cart Badge */}
+              {isCartIcon && cartCount > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-5px",
+                    right: "-8px",
+                    background: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: "18px",
+                    height: "18px",
+                    fontSize: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "600",
+                  }}
+                >
+                  {cartCount}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

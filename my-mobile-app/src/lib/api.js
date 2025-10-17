@@ -70,7 +70,15 @@ export const authAPI = {
 
   // Get current user
   getCurrentUser: async () => {
-    return apiCall('/auth/me');
+    return apiCall('/auth/user');
+  },
+
+  // Update user
+  updateUser: async (updatedData) => {
+    return apiCall('/auth/update', {
+      method: 'PUT',
+      body: JSON.stringify(updatedData),
+    });
   },
 
   // Forgot password
@@ -131,3 +139,41 @@ export const logout = (navigate) => {
   // Navigate to splash page
   navigate("/");
 };
+
+// Menu API functions (Customer Side)
+export const menuAPI = {
+  // Fetch all available menu items
+  getAllItems: async () => {
+    return apiCall('/menu', {
+      method: 'GET',
+    });
+  },
+
+  // Fetch all categories with their items
+  getCategories: async () => {
+    return apiCall('/menu/categories', {
+      method: 'GET',
+    });
+  },
+
+  // Get a single menu item by ID (for popup details, etc.)
+  getItemById: async (id) => {
+    return apiCall(`/menu/${id}`, {
+      method: 'GET',
+    });
+  },
+};
+
+export const orderAPI = {
+  createOrder: async (orderData) => {
+    return apiCall('/orders', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  getOrders: async () => {
+    return apiCall('/orders', { method: 'GET' });
+  },
+};
+
