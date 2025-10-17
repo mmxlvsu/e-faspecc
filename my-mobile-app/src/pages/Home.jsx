@@ -30,8 +30,39 @@ import dish5 from "../assets/dish5.png";
 import rice from "../assets/rice.png";
 import vegetable from "../assets/vegetable.png";
 import drink from "../assets/drink.png";
+import axios from "axios";
+import { menuAPI, authAPI, storage } from "../lib/api";
+
 
 export default function BottomBar() {
+
+  const [firstName, setFirstName] = useState("Guest");
+
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          // Try local user first
+          const localUser = storage.getUser();
+          if (localUser?.fullName) {
+            const first = localUser.fullName.split(" ")[0];
+            setFirstName(first);
+          }
+
+          // Then try fetching the most recent user data from backend
+          const user = await authAPI.getCurrentUser();
+          if (user?.fullName) {
+            const first = user.fullName.split(" ")[0];
+            setFirstName(first);
+            storage.setUser(user); // refresh stored user data
+          }
+        } catch (err) {
+          console.warn("Failed to fetch user info:", err);
+        }
+      };
+
+      fetchUser();
+    }, []);
+
   const navigate = useNavigate();
   const [notificationCount] = useState(3);
   const [heartCount] = useState(5);
@@ -63,21 +94,54 @@ export default function BottomBar() {
     { icon: personIcon, onClick: () => navigate("/profile"), filter: "invert(0%) brightness(0%)", iconSize: "6vw" },
   ];
 
-  const todayItems = [todayPic1, todayPic2, todayPic3, todayPic4, todayPic5, todayPic6];
+  const [todayItems, setTodayItems] = useState([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const items = await menuAPI.getAllItems();
+        setTodayItems(items);
+      } catch (err) {
+        console.error("Failed to fetch menu items:", err);
+      }
+    };
+    fetchItems();
+  }, []);
+
   const valueMeals = [
     { name: "VM 1", price: "Php 55" },
     { name: "VM 2", price: "Php 70" },
     { name: "VM 3", price: "Php 70" },
     { name: "VM 4", price: "Php 85" },
   ];
-  const categories = [
-    { label: "Budget\nSnacks", icon: cat1 },
+  const [dbCategories, setDbCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesFromDB = await menuAPI.getCategories();
+        setDbCategories(categoriesFromDB);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const iconCategories = [
+    { label: "Budget Snacks", icon: cat1 },
     { label: "Snacks", icon: cat2 },
-    { label: "Value\nMeals", icon: cat3 },
-    { label: "Packed\nMeals", icon: cat4 },
-    { label: "Short\nOrders", icon: cat5 },
+    { label: "Value Meals", icon: cat3 },
+    { label: "Packed Meals", icon: cat4 },
+    { label: "Short Orders", icon: cat5 },
     { label: "Buffet", icon: cat6 },
   ];
+
+  // Merge icons with backend data (matching by name or index)
+  const mergedCategories = dbCategories.map((cat, idx) => ({
+    ...cat,
+    icon: iconCategories[idx]?.icon || "/default-icon.png",
+  }));
 
   const toggleDishSelection = (dishIndex) => {
     if (popupMealIndex === 0 || popupMealIndex === 1) {
@@ -113,6 +177,49 @@ export default function BottomBar() {
     : selectAllSelected.every(Boolean)
   );
 
+  const [selectedItem, setSelectedItem] = useState(null); // 🔹 for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const items = await menuAPI.getAllItems();
+        setTodayItems(items);
+      } catch (err) {
+        console.error("Failed to fetch menu items:", err);
+      }
+    };
+    fetchItems();
+  }, []);
+
+  // 🔹 Add to cart (stored in localStorage for now)
+  const handleAddToCart = (item) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Normalize ID and image field
+    const itemId = item.id || item._id;
+    const image = item.image || item.imageUrl || "";
+
+    // Check if item already exists in cart
+    const existingItem = cart.find(
+      (i) => i.id === itemId || i._id === itemId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += item.quantity || 1;
+    } else {
+      cart.push({
+        ...item,
+        id: itemId, // ensure consistent key
+        image,      // ensure correct image field
+        quantity: item.quantity || 1,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setIsModalOpen(false);
+    alert(`${item.name} has been added to your cart!`);
+  };
+
   return (
     <div style={{ position: "relative", width: "100%", minHeight: "100vh" }}>
       <style>
@@ -132,7 +239,7 @@ export default function BottomBar() {
       />
 
       <div style={{ position: "fixed", top: "20vh", left: "6%", right: "5%", display: "flex", flexDirection: "column", zIndex: 9999 }}>
-        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello there, Jennie!</p>
+        <p style={{ fontSize: "24px", fontFamily: "Poppins, sans-serif", fontWeight: "800", color: "#FFFFFF", marginBottom: "-3px" }}>Hello there, {firstName}!</p>
         <p style={{ fontSize: "11px", fontFamily: "Poppins, sans-serif", fontWeight: "600", color: "#FFFFFF", marginTop: "-1px" }}>Let's find a best food match for you</p>
       </div>
 
@@ -150,13 +257,141 @@ export default function BottomBar() {
           <p style={{ fontSize:"13px", fontWeight:"400", color:"#36570A", margin:0, cursor:"pointer", textDecoration:"underline" }} onClick={()=>alert("See All Today’s Specials")}>See More</p>
         </div>
         <div style={{ display:"flex", overflowX:"auto", gap:"15px", paddingBottom:"20px" }} className="hide-scrollbar">
-          {todayItems.map((img,index)=>(
-            <div key={index} style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
-              <img src={img} alt={`Today ${index+1}`} style={{ width:"140px", height:"140px", borderRadius:"12px", cursor:"pointer" }} onClick={()=>alert(`Clicked item ${index+1}`)} />
-              <p style={{ marginTop:"5px", fontSize:"12px", fontWeight:"500", color:"#000" }}>Food {index+1}</p>
-            </div>
-          ))}
+          {todayItems.length > 0 ? ( todayItems.map((item) => (
+              <div key={item.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0, }}>
+                <img src={item.photoUrl || "/placeholder-food.png"} // fallback if no photo
+                  alt={item.name} style={{ width: "140px", height: "140px", borderRadius: "12px", objectFit: "cover", cursor: "pointer", }} onClick={() => { setSelectedItem(item); setIsModalOpen(true); }} />
+                <p style={{ marginTop: "5px", fontSize: "12px", fontWeight: "500", color: "#000", }}> {item.name} </p>
+                <p style={{ fontSize: "11px", color: "#555" }}> ₱{Number(item.price)} </p>
+              </div>
+            ))) : ( <p style={{ color: "#999" }}>No items available today.</p> )}
         </div>
+
+        {isModalOpen && selectedItem && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 99999,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                borderRadius: "12px",
+                width: "80%",
+                maxWidth: "350px",
+                padding: "20px",
+                textAlign: "center",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              }}
+            >
+              <img
+                src={selectedItem.photoUrl || "/placeholder-food.png"}
+                alt={selectedItem.name}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  borderRadius: "8px",
+                  objectFit: "cover",
+                  marginBottom: "15px",
+                }}
+              />
+              <h3 style={{ fontSize: "18px", marginBottom: "5px" }}>
+                {selectedItem.name}
+              </h3>
+              <p style={{ fontSize: "14px", color: "#666", marginBottom: "10px" }}>
+                ₱{Number(selectedItem.price).toFixed(2)}
+              </p>
+              {/* Quantity Selector */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: "15px",
+                }}
+              >
+                <button
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    border: "1px solid #36570A",
+                    backgroundColor: "transparent",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                >
+                  −
+                </button>
+                <span
+                  style={{
+                    margin: "0 12px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity((q) => q + 1)}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    border: "1px solid #36570A",
+                    backgroundColor: "transparent",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                >
+                  +
+                </button>
+              </div>
+              {/* Modal Buttons */}
+              <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  style={{
+                    flex: 1,
+                    padding: "8px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleAddToCart({ ...selectedItem, quantity })}
+                  style={{
+                    flex: 1,
+                    padding: "8px",
+                    backgroundColor: "#36570A",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontWeight: "600",
+                  }}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Value Meals */}
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"15px", marginTop:"10px" }}>
@@ -186,7 +421,7 @@ export default function BottomBar() {
             <p style={{ fontSize:"13px", fontWeight:"400", color:"#36570A", margin:0, cursor:"pointer", textDecoration:"underline" }} onClick={()=>alert("See All Categories")}>See More</p>
           </div>
           <div style={{ display:"flex", overflowX:"auto", gap:"13px", paddingBottom:"20px" }} className="hide-scrollbar">
-            {categories.map((item,index)=>(
+            {mergedCategories.map((item, index) => (
               <div key={index} style={{ display:"flex", flexDirection:"column", alignItems:"center", flexShrink:0 }}>
                 <div style={{ width:"90px", height:"90px", backgroundColor:"#F3F3F3", borderRadius:"10px", cursor:"pointer", display:"flex", justifyContent:"center", alignItems:"center" }} onClick={()=>alert(`Clicked ${item.label}`)}>
                   <img src={item.icon} alt={item.label} style={{ width:"40px", height:"40px" }} />
@@ -806,5 +1041,7 @@ export default function BottomBar() {
         </div>
       )}
     </div>
+
+    
   );
 }
