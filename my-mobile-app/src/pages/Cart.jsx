@@ -1,481 +1,315 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import trash from "../assets/trash.png";
+import backIcon from "../assets/back.png";
 
-// Checkbox SVG
-const CheckIconSVG = ({ isChecked, style }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={isChecked ? "#36570A" : "#CECECE"}
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ ...style, cursor: "pointer", transition: "all 0.1s" }}
-  >
-    <rect x="3.5" y="2" width="20" height="20" rx="2" ry="2"></rect>
-    {isChecked && <polyline points="9 11 12 14 20 6" stroke="#36570A" fill="none" />}
-  </svg>
-);
-
-// Back arrow SVG
-const BackIconSVG = ({ style, onClick }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ ...style }}
-    onClick={onClick}
-  >
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-);
-
-export default function Cart() {
+export default function Cart({ cartItems = [], onRemoveItem }) {
   const navigate = useNavigate();
-  const cartContentRef = useRef(null);
-  const [isBottomBarVisible, setIsBottomBarVisible] = useState(true);
-  const [specialInstructions, setSpecialInstructions] = useState("");
-  const [cartItems, setCartItems] = useState([]);
 
-  // ✅ Load cart from localStorage
+  const [placeholderQuantities, setPlaceholderQuantities] = useState(
+    Array.from({ length: 10 }, () => 1)
+  );
+
+  const scrollRef = useRef(null);
+  const [showCheckout, setShowCheckout] = useState(true);
+
+  const handleQuantityChange = (index, delta) => {
+    setPlaceholderQuantities((prev) =>
+      prev.map((q, i) => (i === index ? Math.max(1, q + delta) : q))
+    );
+  };
+
+  const handleRemove = (index) => {
+    if (window.confirm("Are you sure you want to remove this item?")) {
+      setPlaceholderQuantities((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
+
   useEffect(() => {
-    const loadCart = () => {
-      try {
-        const storedCart = JSON.parse(localStorage.getItem("cart"));
-        if (storedCart && Array.isArray(storedCart)) {
-          console.log("🧾 Loaded cart from localStorage:", storedCart);
-          setCartItems(storedCart);
-        } else {
-          console.log("⚠️ No valid cart data found.");
-          setCartItems([]);
-        }
-      } catch (error) {
-        console.error("Error loading cart:", error);
-        setCartItems([]);
+    const handleScroll = () => {
+      const el = scrollRef.current;
+      if (!el) return;
+
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight) {
+        setShowCheckout(false);
+      } else {
+        setShowCheckout(true);
       }
     };
 
-    loadCart();
-
-    // ✅ Listen for cart changes from other pages
-    window.addEventListener("storage", loadCart);
-
-    return () => {
-      window.removeEventListener("storage", loadCart);
-    };
+    const el = scrollRef.current;
+    if (el) el.addEventListener("scroll", handleScroll);
+    return () => el && el.removeEventListener("scroll", handleScroll);
   }, []);
-  
-  // ✅ Keep localStorage synced with cart state
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
 
-  // ✅ Handle remove (supports id or _id)
-  const handleRemove = (id) => {
-    const updated = cartItems.filter(
-      (item) => item.id !== id && item._id !== id
-    );
-    setCartItems(updated);
+  // Customizable styles for Add-ons container
+  const addOnsContainerStyle = {
+    marginTop: "2vw",
+    padding: "3vw",
+    backgroundColor: "#ffffff", // Change background color here
+    borderRadius: "3vw",
+    width: "90%", // Adjust width here
+    position: "relative", // Can adjust top/left
+    left: "5%", // Adjust horizontal position
+    top: "0", // Adjust vertical position
   };
 
-  // ✅ Quantity change (supports id or _id)
-  const handleQuantityChange = (id, delta) => {
-    const updatedCart = cartItems.map((item) => {
-      if (item.id === id || item._id === id) {
-        return { ...item, quantity: Math.max(1, item.quantity + delta) };
-      }
-      return item;
-    });
-    setCartItems(updatedCart);
+  // Customizable styles for each Add-on item
+  const addOnItemStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "2vw 0",
+    borderBottom: "1px solid #eee",
+    backgroundColor: "#f8f8f8", // Change background color per item
+    borderRadius: "1.5vw",
+    paddingLeft: "2vw",
+    paddingRight: "2vw",
+    marginBottom: "2vw",
   };
-
-  // ✅ Add-ons
-  const [addOns, setAddOns] = useState([
-    { id: 1, name: "Extra Sauce", price: 10, isChecked: false },
-    { id: 2, name: "Extra Toppings", price: 49, isChecked: true },
-    { id: 3, name: "Disposable Cutlery", price: 0, isChecked: false },
-  ]);
-
-  const handleToggleAddOn = (id) =>
-    setAddOns((prev) =>
-      prev.map((addOn) =>
-        addOn.id === id ? { ...addOn, isChecked: !addOn.isChecked } : addOn
-      )
-    );
-
-  const selectedAddOnsTotal = addOns.reduce(
-    (sum, addOn) => sum + (addOn.isChecked ? addOn.price : 0),
-    0
-  );
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + (item.price * item.quantity || 0),
-    0
-  );
-  const grandTotal = subtotal + selectedAddOnsTotal;
-
-  // ✅ Hide bottom bar when scrolled to bottom
-  const handleScroll = () => {
-    const el = cartContentRef.current;
-    if (!el) return;
-    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight <= 1;
-    setIsBottomBarVisible(!isAtBottom);
-  };
-
-  const vw = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
-  const vh = (pixels) => `${(pixels / 9).toFixed(1)}vh`;
-  const responsiveText = (pixels) => `${(pixels / 4.14).toFixed(1)}vw`;
 
   return (
-    <div style={{ width: "100%", minHeight: "100vh", position: "relative" }}>
+    <div className="w-screen h-screen relative bg-white">
       {/* Header */}
-      <BackIconSVG
-        onClick={() => navigate("/home")}
-        style={{
-          position: "absolute",
-          left: vw(12),
-          top: vh(30),
-          width: vw(24),
-          height: vw(24),
-          cursor: "pointer",
-          zIndex: 3,
-          color: "#000",
-        }}
-      />
-      <p
-        style={{
-          position: "absolute",
-          left: vw(43),
-          top: vh(32),
-          fontSize: responsiveText(14),
-          fontWeight: 600,
-          fontFamily: "Poppins, sans-serif",
-          color: "#000",
-          zIndex: 3,
-        }}
-      >
-        Cart
-      </p>
-
-      {/* Progress Steps */}
       <div
+        className="fixed top-0 left-0 right-0 flex items-center"
         style={{
-          position: "absolute",
-          top: vh(90),
-          left: 0,
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: vw(90),
-          zIndex: 2,
+          height: "15vw",
+          padding: "0 4vw",
+          boxShadow: "0 0.2vw 0.5vw rgba(0,0,0,0.1)",
+          zIndex: 9999,
+          position: "relative",
         }}
       >
-        {[{ num: 1, label: "Menu" }, { num: 2, label: "Cart" }, { num: 3, label: "Checkout" }].map(
-          (step, index) => (
-            <div
-              key={index}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-            >
-              <div
-                style={{
-                  width: vw(28),
-                  height: vw(28),
-                  borderRadius: "50%",
-                  backgroundColor: step.num < 3 ? "#000" : "#CCC",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "#fff",
-                  fontWeight: 300,
-                  fontSize: responsiveText(12),
-                }}
-              >
-                {step.num}
-              </div>
-              <span
-                style={{
-                  marginTop: vw(4),
-                  fontSize: responsiveText(10),
-                  color: step.num < 3 ? "#000" : "#8C8C8C",
-                  fontFamily: "Poppins, sans-serif",
-                }}
-              >
-                {step.label}
-              </span>
-            </div>
-          )
-        )}
+        <img
+          src={backIcon}
+          alt="Back"
+          className="cursor-pointer"
+          style={{ width: "5vw", height: "5vw" }}
+          onClick={() => navigate("/home")}
+        />
+        <h1
+          className="flex-1 text-center font-bold"
+          style={{ fontSize: "4vw", color: "black" }}
+        >
+          Cart
+        </h1>
       </div>
 
-      {/* Cart Items */}
+      {/* Scrollable container */}
       <div
-        ref={cartContentRef}
-        onScroll={handleScroll}
-        style={{
-          position: "absolute",
-          top: vh(150),
-          left: 0,
-          width: "100%",
-          maxHeight: `calc(100vh - ${vh(70)})`,
-          overflowY: "auto",
-          zIndex: 4,
-        }}
+        ref={scrollRef}
+        className="absolute top-[15vw] bottom-0 left-0 right-0 overflow-y-auto px-4vw"
+        style={{ backgroundColor: "#F3F3F3", paddingTop: "4vw" }}
       >
-        <div
-          style={{
-            width: "100%",
-            padding: `${vh(20)} ${vw(18)}`,
-            boxSizing: "border-box",
-            backgroundColor: "white",
-            borderBottom: "2px solid #CECECE",
-          }}
-        >
-          {cartItems.length === 0 ? (
-            <p
+        {/* Cart Items */}
+        {(cartItems.length === 0
+          ? Array.from({ length: placeholderQuantities.length })
+          : cartItems
+        ).map((item, i) => {
+          const quantity =
+            cartItems.length === 0 ? placeholderQuantities[i] : item.quantity;
+
+          return (
+            <div
+              key={i}
               style={{
-                fontFamily: "Poppins, sans-serif",
-                textAlign: "center",
-                fontSize: responsiveText(12),
-                color: "#888",
+                position: "relative",
+                backgroundColor: "white",
+                borderRadius: "3vw",
+                padding: "2vw",
+                height: "25vw",
+                width: "90%",
+                margin: "0 auto 4vw auto",
+                display: "flex",
+                flexDirection: "column",
+                animation:
+                  cartItems.length === 0 ? "pulse 1.5s infinite" : "none",
               }}
             >
-              Your cart is empty 😔
-            </p>
-          ) : (
-            cartItems.map((item) => {
-              const itemId = item.id || item._id;
-              return (
-                <div
-                  key={itemId}
+              {/* Image placeholder */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "2.5vw",
+                  left: "3vw",
+                  width: "25%",
+                  height: "80%",
+                  backgroundColor: "#ddd",
+                  borderRadius: "2vw",
+                }}
+              />
+              {/* Title placeholder */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "20%",
+                  left: "30vw",
+                  width: "40%",
+                  height: "10%",
+                  backgroundColor: "#ddd",
+                  borderRadius: "1vw",
+                }}
+              />
+              {/* X Remove Button */}
+              <button
+                onClick={() => handleRemove(i)}
+                style={{
+                  position: "absolute",
+                  top: "1vw",
+                  right: "3vw",
+                  fontSize: "5vw",
+                  fontWeight: "bold",
+                  background: "none",
+                  border: "none",
+                  color: "black",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+              {/* Quantity Controls */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "16vw",
+                  right: "3vw",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1vw",
+                }}
+              >
+                <button
+                  onClick={() =>
+                    cartItems.length === 0 && handleQuantityChange(i, -1)
+                  }
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: vh(20),
-                    gap: vw(12),
+                    width: "5vw",
+                    height: "5vw",
+                    borderRadius: "50%",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    fontSize: "3vw",
+                    cursor: "pointer",
                   }}
                 >
-                  <img
-                    src={item.image || item.imageUrl}
-                    alt={item.name}
-                    style={{
-                      width: vw(48),
-                      height: vw(48),
-                      objectFit: "cover",
-                      borderRadius: vw(6),
-                      marginTop: vh(-31),
-                    }}
-                  />
-                  <div style={{ flex: 1, marginLeft: vw(5) }}>
-                    <p
-                      style={{
-                        fontFamily: "Poppins,sans-serif",
-                        fontSize: responsiveText(16),
-                        fontWeight: 700,
-                        margin: 0,
-                        color: "#000",
-                      }}
-                    >
-                      {item.name}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily: "Poppins,sans-serif",
-                        fontSize: responsiveText(12),
-                        fontWeight: 400,
-                        margin: 0,
-                        marginTop: vh(4),
-                        color: "#555",
-                      }}
-                    >
-                      {item.description || ""}
-                    </p>
-
-                    {/* Quantity & Delete */}
-                    <div
-                      style={{
-                        marginTop: vh(10),
-                        width: vw(100),
-                        height: vh(32),
-                        backgroundColor: "#fff",
-                        border: "0.5px solid #CECECE",
-                        borderRadius: vw(10),
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: `0 ${vw(15)}`,
-                        gap: vw(10),
-                      }}
-                    >
-                      <img
-                        src={trash}
-                        alt="Remove"
-                        style={{ width: vw(18), height: vw(18), cursor: "pointer" }}
-                        onClick={() => handleRemove(itemId)}
-                      />
-                      <div style={{ display: "flex", alignItems: "center", gap: vw(8) }}>
-                        <button
-                          onClick={() => handleQuantityChange(itemId, -1)}
-                          style={{
-                            border: "none",
-                            background: "none",
-                            fontSize: responsiveText(16),
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            color: "#36570A",
-                          }}
-                        >
-                          –
-                        </button>
-                        <span
-                          style={{
-                            fontSize: responsiveText(14),
-                            fontFamily: "Poppins,sans-serif",
-                            fontWeight: 500,
-                            color: "#000",
-                          }}
-                        >
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => handleQuantityChange(itemId, 1)}
-                          style={{
-                            border: "none",
-                            background: "none",
-                            fontSize: responsiveText(16),
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            color: "#36570A",
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: "Poppins,sans-serif",
-                      fontSize: responsiveText(12),
-                      fontWeight: 300,
-                      marginTop: vh(68),
-                      marginBottom: 0,
-                    }}
-                  >
-                    ₱{(item.price * item.quantity).toFixed(2)}
-                  </p>
+                  -
+                </button>
+                <div
+                  style={{
+                    width: "8vw",
+                    textAlign: "center",
+                    fontSize: "4vw",
+                    fontWeight: "500",
+                  }}
+                >
+                  {quantity}
                 </div>
-              );
-            })
-          )}
-
-          {/* Subtotal */}
-          {cartItems.length > 0 && (
-            <div style={{ marginTop: vh(15), display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  fontFamily: "Poppins,sans-serif",
-                  fontSize: responsiveText(14),
-                  fontWeight: 400,
-                }}
-              >
-                Subtotal
-              </span>
-              <span
-                style={{
-                  fontFamily: "Poppins,sans-serif",
-                  fontSize: responsiveText(14),
-                  fontWeight: 500,
-                  color: "#000",
-                }}
-              >
-                ₱{subtotal.toFixed(2)}
-              </span>
+                <button
+                  onClick={() =>
+                    cartItems.length === 0 && handleQuantityChange(i, 1)
+                  }
+                  style={{
+                    width: "5vw",
+                    height: "5vw",
+                    borderRadius: "50%",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    fontSize: "3vw",
+                    cursor: "pointer",
+                  }}
+                >
+                  +
+                </button>
+              </div>
             </div>
-          )}
+          );
+        })}
+
+        {/* Add-ons Placeholder Container */}
+        <div style={addOnsContainerStyle}>
+          <h2 style={{ fontSize: "3vw", fontWeight: "600", marginBottom: "2vw" }}>
+            Add-ons
+          </h2>
+          {Array.from({ length: 3 }).map((_, idx) => (
+            <div key={idx} style={addOnItemStyle}>
+              {/* Food Title Placeholder */}
+              <div
+                style={{
+                  width: "50%",
+                  height: "5vw",
+                  backgroundColor: "#ddd",
+                  borderRadius: "1vw",
+                }}
+              />
+              {/* Price Placeholder */}
+              <div
+                style={{
+                  width: "15%",
+                  height: "5vw",
+                  backgroundColor: "#ddd",
+                  borderRadius: "1vw",
+                }}
+              />
+              {/* Checkbox Placeholder */}
+              <div
+                style={{
+                  width: "5vw",
+                  height: "5vw",
+                  backgroundColor: "#ddd",
+                  borderRadius: "1vw",
+                }}
+              />
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div
-        style={{
-          position: "fixed",
-          left: 0,
-          bottom: 0,
-          width: "100%",
-          height: vh(140),
-          backgroundColor: "#fff",
-          borderTop: "0.5px solid #CECECE",
-          boxShadow: "0 -2px 5px rgba(0,0,0,0.05)",
-          zIndex: 5,
-          transform: isBottomBarVisible
-            ? "translateY(0)"
-            : `translateY(${vh(140)})`,
-          transition: "transform 0.3s ease-out",
-        }}
-      >
-        <p
-          style={{
-            position: "absolute",
-            left: vw(19),
-            top: vh(13),
-            fontSize: responsiveText(14),
-            fontFamily: "Poppins,sans-serif",
-            fontWeight: 900,
-            color: "#000",
-          }}
-        >
-          Total
-        </p>
-        <p
-          style={{
-            position: "absolute",
-            right: vw(19),
-            top: vh(13),
-            fontSize: responsiveText(14),
-            fontFamily: "Poppins,sans-serif",
-            fontWeight: 900,
-            color: "#36570A",
-          }}
-        >
-          ₱{grandTotal.toFixed(2)}
-        </p>
+      {/* Pulse animation */}
+      <style>
+        {`
+          @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+          }
+        `}
+      </style>
+
+      {/* Checkout Button */}
+      {showCheckout && (
         <div
+          className="fixed left-0 right-0 flex justify-center"
           style={{
-            position: "absolute",
-            left: vw(18),
-            right: vw(18),
-            bottom: vw(35),
-            width: `calc(100% - ${vw(36)})`,
-            height: vw(42),
-            backgroundColor: "#36570A",
-            borderRadius: vw(6),
-            zIndex: 6,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "pointer",
+            bottom: 0,
+            height: "20vh",
+            backgroundColor: "white",
+            borderTopLeftRadius: "5vw",
+            borderTopRightRadius: "5vw",
+            boxShadow: "0 -0.5vw 1vw rgba(0,0,0,0.15)",
           }}
-          onClick={() => navigate("/payment")}
         >
-          <span
+          <button
+            onClick={() => alert("Proceed to checkout")}
             style={{
-              color: "#fff",
-              fontSize: responsiveText(15),
-              fontFamily: "Poppins,sans-serif",
-              fontWeight: 600,
+              position: "absolute",
+              bottom: "8vw",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "80vw",
+              height: "12vw",
+              backgroundColor: "#36570A",
+              color: "white",
+              border: "none",
+              borderRadius: "2.5vw",
+              fontSize: "4vw",
+              fontWeight: "600",
+              cursor: "pointer",
             }}
           >
-            Review Payment
-          </span>
+            Checkout
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

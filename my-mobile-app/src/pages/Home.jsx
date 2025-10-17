@@ -551,7 +551,7 @@ export default function BottomBarPage() {
                     position: "absolute",
                     top: "2vw",
                     right: "3vw",
-                    fontSize: "5vw",
+                    fontSize: "6.5vw",
                     fontWeight: "bold",
                     color: "#888",
                     cursor: "pointer",
@@ -570,20 +570,48 @@ export default function BottomBarPage() {
                     height: "45vw",
                     objectFit: "cover",
                     borderRadius: "2vw",
+                    marginTop: "7vw",
                     marginBottom: "3vw",
                   }}
                 />
 
                 {/* Product Info */}
-                <h3 style={{ fontSize: "4vw", margin: "1vw 0", color: "#333" }}>
-                  {selectedItem.name}
-                </h3>
-                <p style={{ fontSize: "3vw", color: "#555" }}>
-                  ₱{Number(selectedItem.price).toFixed(2)}
-                </p>
-                <p style={{ fontSize: "2.8vw", color: "#777", marginTop: "2vw" }}>
-                  {selectedItem.description || "No description available."}
-                </p>
+<h3
+  style={{
+    fontSize: "5vw",       // 🔹 Adjust title font size
+    margin: "1vw 0",
+    color: "#1a1a1a",       // 🔹 Adjust title color
+    fontWeight: "700",
+  }}
+>
+  {selectedItem.name}
+</h3>
+
+<p
+  style={{
+    position: "absolute",    // 🔹 Enables top/left/bottom/right control
+    top: "61.5vw",             // 🔹 Adjust distance from top
+    right: "8vw",             // 🔹 Adjust distance from left
+    fontSize: "4vw",       // 🔹 Adjust font size
+    color: "#2e7d32",        // 🔹 Adjust color
+    fontWeight: "600",
+    margin: 0,               // 🔹 Remove default margin
+  }}
+>
+  ₱{Number(selectedItem.price).toFixed(2)}
+</p>
+
+<p
+  style={{
+    fontSize: "3vw",          // 🔹 Adjust description font size
+    color: "#555555",         // 🔹 Adjust description color
+    marginTop: "2vw",
+    lineHeight: "1.4",
+  }}
+>
+  {selectedItem.description || "No description available."}
+</p>
+
 
                 {/* Quantity Selector */}
                 <div
@@ -591,7 +619,7 @@ export default function BottomBarPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "5vw",
+                    gap: "1vw",
                     marginTop: "5vw",
                   }}
                 >
