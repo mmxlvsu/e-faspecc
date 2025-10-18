@@ -418,8 +418,8 @@ export default function BottomBarPage() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "5vw",
-            padding: "1vw 5vw",
+            gap: "3vw",
+            padding: "1vw 1vw",
           }}
         >
           {filteredItems.length > 0 ? (
@@ -441,7 +441,7 @@ export default function BottomBarPage() {
                     backgroundColor: "white",
                     borderRadius: "2vw",
                     padding: "1vw",
-                    height: "35vw",
+                    height: "40vw",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -456,7 +456,7 @@ export default function BottomBarPage() {
                       right: "4vw",
                       backgroundColor,
                       color: textColor,
-                      fontSize: "1.5vw",
+                      fontSize: "2vw",
                       fontWeight: "400",
                       padding: "0.5vw 2vw",
                       borderRadius: "2vw",
@@ -489,7 +489,7 @@ export default function BottomBarPage() {
                   {/* Title and Price */}
                   <p
                     style={{
-                      fontSize: "1.5vw",
+                      fontSize: "2.5vw",
                       fontWeight: "600",
                       color: "#333",
                       marginBottom: "0.5vw",
@@ -497,7 +497,7 @@ export default function BottomBarPage() {
                   >
                     {item.name}
                   </p>
-                  <p style={{ fontSize: "1.3vw", color: "#666" }}>₱{Number(item.price).toFixed(2)}</p>
+                  <p style={{ fontSize: "2.5vw", color: "#666" }}>₱{Number(item.price).toFixed(2)}</p>
                 </div>
               );
             })
