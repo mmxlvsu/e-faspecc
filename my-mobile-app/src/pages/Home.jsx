@@ -375,7 +375,7 @@ export default function BottomBarPage() {
             overflowX: "auto", // ✅ Allow horizontal scroll
             whiteSpace: "nowrap",
             marginTop: "-3vh",
-            padding: "2vh 5vw",
+            padding: "2vh 3vw",
             scrollbarWidth: "none", // Hide scrollbar (Firefox)
           }}
         >
@@ -398,7 +398,7 @@ export default function BottomBarPage() {
                     color: isSelected ? "white" : "#333",
                     padding: "2vw 5vw",
                     borderRadius: "3vw",
-                    fontSize: "2.2vw",
+                    fontSize: "2.5vw",
                     fontWeight: "500",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
