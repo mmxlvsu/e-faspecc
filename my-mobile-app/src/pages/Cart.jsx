@@ -262,22 +262,20 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
       {/* Checkout */}
       {showCheckout && cartItems.length > 0 && (
         <div
-          style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "18vh",
-            backgroundColor: "white",
-            borderTopLeftRadius: "5vw",
-            borderTopRightRadius: "5vw",
-            boxShadow: "0 -0.5vw 1vw rgba(0,0,0,0.15)",
-            zIndex: 9999,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            paddingTop: "2vw",
+        style={{
+          position: "fixed",
+          bottom: "0vw",
+          left: "0vw",
+          right: "0vw",
+          height: "18vh",
+          backgroundColor: "white",
+          boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
+          zIndex: 9999,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          padding: "2vw",            
           }}
         >
           <div style={{ position: "absolute", top: "5vw", left: "5vw", fontSize: "5vw", fontWeight: "400", color: "#333" }}>
