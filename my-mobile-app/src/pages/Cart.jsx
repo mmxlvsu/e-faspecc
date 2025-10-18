@@ -6,7 +6,7 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
   const navigate = useNavigate();
 
   const [placeholderQuantities, setPlaceholderQuantities] = useState(
-    Array.from({ length: 10 }, () => 1)
+    Array.from({ length: 5 }, () => 1)
   );
 
   const scrollRef = useRef(null);
@@ -28,12 +28,7 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
     const handleScroll = () => {
       const el = scrollRef.current;
       if (!el) return;
-
-      if (el.scrollTop + el.clientHeight >= el.scrollHeight) {
-        setShowCheckout(false);
-      } else {
-        setShowCheckout(true);
-      }
+      setShowCheckout(el.scrollTop + el.clientHeight < el.scrollHeight);
     };
 
     const el = scrollRef.current;
@@ -41,31 +36,38 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
     return () => el && el.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Customizable styles for Add-ons container
   const addOnsContainerStyle = {
     marginTop: "2vw",
+    marginBottom: "12vw",
     padding: "3vw",
-    backgroundColor: "#ffffff", // Change background color here
+    backgroundColor: "#ffffff",
     borderRadius: "3vw",
-    width: "90%", // Adjust width here
-    position: "relative", // Can adjust top/left
-    left: "5%", // Adjust horizontal position
-    top: "0", // Adjust vertical position
+    width: "90%",
+    position: "relative",
+    left: "5%",
+    top: "0",
   };
 
-  // Customizable styles for each Add-on item
   const addOnItemStyle = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2vw 0",
     borderBottom: "1px solid #eee",
-    backgroundColor: "#f8f8f8", // Change background color per item
+    backgroundColor: "#f8f8f8",
     borderRadius: "1.5vw",
     paddingLeft: "2vw",
     paddingRight: "2vw",
     marginBottom: "2vw",
   };
+
+  const totalAmount =
+    cartItems.length > 0
+      ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      : placeholderQuantities.reduce(
+          (sum, q, i) => sum + (cartItems[i]?.price || 50) * q,
+          0
+        );
 
   return (
     <div className="w-screen h-screen relative bg-white">
@@ -101,7 +103,6 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
         className="absolute top-[15vw] bottom-0 left-0 right-0 overflow-y-auto px-4vw"
         style={{ backgroundColor: "#F3F3F3", paddingTop: "4vw" }}
       >
-        {/* Cart Items */}
         {(cartItems.length === 0
           ? Array.from({ length: placeholderQuantities.length })
           : cartItems
@@ -138,18 +139,63 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
                   borderRadius: "2vw",
                 }}
               />
+
               {/* Title placeholder */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "20%",
-                  left: "30vw",
-                  width: "40%",
-                  height: "10%",
-                  backgroundColor: "#ddd",
-                  borderRadius: "1vw",
-                }}
-              />
+              {cartItems.length === 0 ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "3vw",
+                    left: "30vw",
+                    width: "40%",
+                    height: "4vw",
+                    backgroundColor: "#ddd",
+                    borderRadius: "1vw",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "3vw",
+                    left: "30vw",
+                    fontSize: "3vw",
+                    fontWeight: "600",
+                    color: "#333",
+                  }}
+                >
+                  {item.name}
+                </div>
+              )}
+
+              {/* Price placeholder / real price */}
+              {cartItems.length === 0 ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "8vw",
+                    left: "30vw",
+                    width: "20%",
+                    height: "3vw",
+                    backgroundColor: "#ccc",
+                    borderRadius: "1vw",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "8vw",
+                    left: "30vw",
+                    fontSize: "2.8vw",
+                    color: "#2e7d32",
+                    fontWeight: "500",
+                  }}
+                >
+                  ₱{Number(item.price).toFixed(2)}
+                </div>
+              )}
+
               {/* X Remove Button */}
               <button
                 onClick={() => handleRemove(i)}
@@ -167,6 +213,7 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
               >
                 ×
               </button>
+
               {/* Quantity Controls */}
               <div
                 style={{
@@ -275,19 +322,56 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
         `}
       </style>
 
-      {/* Checkout Button */}
+      {/* Checkout Container */}
       {showCheckout && (
         <div
-          className="fixed left-0 right-0 flex justify-center"
-          style={{
-            bottom: 0,
-            height: "20vh",
-            backgroundColor: "white",
-            borderTopLeftRadius: "5vw",
-            borderTopRightRadius: "5vw",
-            boxShadow: "0 -0.5vw 1vw rgba(0,0,0,0.15)",
-          }}
+    style={{
+      position: "fixed",  // 🔹 fixed to viewport
+      bottom: 0,          // 🔹 always at bottom
+      left: 0,
+      right: 0,
+      height: "18vh",
+      backgroundColor: "white",
+      borderTopLeftRadius: "5vw",
+      borderTopRightRadius: "5vw",
+      boxShadow: "0 -0.5vw 1vw rgba(0,0,0,0.15)",
+      zIndex: 9999,       // 🔹 stays above scrollable content
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      paddingTop: "2vw",
+    }}
         >
+          {/* Total Label */}
+          <div
+            style={{
+              position: "absolute",
+              top: "5vw",
+              left: "5vw",
+              fontSize: "5vw",
+              fontWeight: "400",
+              color: "#333",
+            }}
+          >
+            Total:
+          </div>
+
+          {/* Total Amount */}
+          <div
+            style={{
+              position: "absolute",
+              top: "5vw",
+              right: "5vw",
+              fontSize: "5vw",
+              fontWeight: "600",
+              color: "#36570A",
+            }}
+          >
+            ₱{totalAmount.toFixed(2)}
+          </div>
+
+          {/* Checkout Button */}
           <button
             onClick={() => alert("Proceed to checkout")}
             style={{

@@ -65,8 +65,8 @@ export default function BottomBarPage() {
     return () => window.removeEventListener("storage", updateCount);
   }, []);
 
-  const [categories, setCategories] = useState(["✔ All"]);
-  const [selectedCategory, setSelectedCategory] = useState("✔ All");
+  const [categories, setCategories] = useState(["All"]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [todayItems, setTodayItems] = useState([]);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function BottomBarPage() {
         // Assuming your backend returns something like:
         // [ { name: "Breakfast" }, { name: "Lunch" }, { name: "Dinner" } ]
         const formattedCategories = [
-          "✔ All",
+          "All",
           ...categoryData.map((cat) => cat.name || cat.categoryName),
         ];
 
@@ -104,7 +104,7 @@ export default function BottomBarPage() {
         : item.category?.name || item.categoryName || "";
 
     const matchesCategory =
-      selectedCategory === "✔ All" ||
+      selectedCategory === "All" ||
       categoryName.toLowerCase() === selectedCategory.toLowerCase();
 
     const matchesSearch =
