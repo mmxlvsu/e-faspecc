@@ -360,7 +360,7 @@ export default function BottomBarPage() {
           top: "32vh",
           left: 0,
           width: "100%",
-          bottom: "15px",
+          bottom: "35px",
           backgroundColor: "#F3F3F3",
           borderTopLeftRadius: "5vw",
           borderTopRightRadius: "5vw",
