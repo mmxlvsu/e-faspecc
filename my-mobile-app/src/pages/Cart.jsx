@@ -100,7 +100,7 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
               style={{
                 position: "absolute",
                 top: "50vw",
-                left: "43vw",
+                left: "42vw",
                 width: "20vw",
                 height: "20vw",
               }}
