@@ -81,7 +81,10 @@ export default function BottomBarPage() {
         // [ { name: "Breakfast" }, { name: "Lunch" }, { name: "Dinner" } ]
         const formattedCategories = [
           "All",
-          ...categoryData.map((cat) => cat.name || cat.categoryName),
+          ...categoryData
+            .map((cat) => cat.name || cat.categoryName)
+            .filter(Boolean) // removes any undefined/null
+            .sort((a, b) => a.localeCompare(b)), // ✅ sort alphabetically
         ];
 
         setCategories(formattedCategories);
@@ -121,11 +124,16 @@ export default function BottomBarPage() {
   const handleAddToCart = (item) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Normalize item structure
     const itemId = item.id || item._id || Math.random().toString(36).substr(2, 9);
-    const image = item.image || item.imageUrl || "";
 
-    // Check if already exists
+    // ✅ include Supabase field photoUrl
+    const image =
+      item.photoUrl || // <-- your database field
+      item.image ||
+      item.imageUrl ||
+      item.img ||
+      "";
+
     const existingItem = cart.find((i) => i.id === itemId || i._id === itemId);
 
     if (existingItem) {
@@ -142,8 +150,6 @@ export default function BottomBarPage() {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-
-    // ✅ Optional: trigger a storage event for Cart page to update live
     window.dispatchEvent(new Event("storage"));
   };
 

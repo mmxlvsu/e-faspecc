@@ -1,25 +1,43 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/back.png";
 import cartempty from "../assets/empty.png";
+import { menuAPI } from "../lib/api";
 
-export default function Cart({ cartItems = [], onRemoveItem }) {
+export default function Cart() {
   const navigate = useNavigate();
-  const [placeholderQuantities, setPlaceholderQuantities] = useState(
-    Array.from({ length: 5 }, () => 1)
-  );
+  const [cartItems, setCartItems] = useState([]);
   const scrollRef = useRef(null);
   const [showCheckout, setShowCheckout] = useState(true);
 
-  const handleQuantityChange = (index, delta) => {
-    setPlaceholderQuantities(prev =>
-      prev.map((q, i) => (i === index ? Math.max(1, q + delta) : q))
-    );
+  // 🔹 Load cart from localStorage on mount
+  useEffect(() => {
+    const loadCart = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartItems(storedCart);
+    };
+
+    loadCart();
+    window.addEventListener("storage", loadCart);
+    return () => window.removeEventListener("storage", loadCart);
+  }, []);
+
+  const updateCart = (newCart) => {
+    setCartItems(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    window.dispatchEvent(new Event("storage")); // update other pages
   };
 
-  const handleRemove = index => {
+  const handleQuantityChange = (index, delta) => {
+    const updatedCart = [...cartItems];
+    updatedCart[index].quantity = Math.max(1, updatedCart[index].quantity + delta);
+    updateCart(updatedCart);
+  };
+
+  const handleRemove = (index) => {
     if (window.confirm("Are you sure you want to remove this item?")) {
-      setPlaceholderQuantities(prev => prev.filter((_, i) => i !== index));
+      const updatedCart = cartItems.filter((_, i) => i !== index);
+      updateCart(updatedCart);
     }
   };
 
@@ -60,6 +78,68 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
     cartItems.length > 0
       ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
       : 0;
+
+    const handleCheckout = () => {
+      if (cartItems.length === 0) return;
+      navigate("/payment", { state: { totalAmount, cartItems } });
+    };
+
+  const [addOns, setAddOns] = useState([]);
+    useEffect(() => {
+      const fetchAddOns = async () => {
+        try {
+          const categories = await menuAPI.getCategories();
+          const addOnsCategory = categories.find(
+            (cat) => cat.id === "4e26ef2e-f46a-43ed-8538-cdde3e372af4"
+          );
+
+          if (addOnsCategory && addOnsCategory.items) {
+            setAddOns(addOnsCategory.items);
+          } else {
+            console.warn("Add-ons category not found or empty");
+          }
+        } catch (err) {
+          console.error("Error fetching add-ons:", err);
+        }
+      };
+
+      fetchAddOns();
+    }, []);
+
+    const handleAddToCart = (item) => {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const itemId = item.id || item._id || Math.random().toString(36).substr(2, 9);
+
+      const image =
+        item.photoUrl ||
+        item.image ||
+        item.imageUrl ||
+        item.img ||
+        "";
+
+      const existingItem = cart.find((i) => i.id === itemId || i._id === itemId);
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          id: itemId,
+          name: item.name || "Unnamed Item",
+          description: item.description || "",
+          price: Number(item.price) || 0,
+          image,
+          quantity: 1,
+        });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      // ✅ update local state so total updates instantly
+      setCartItems(cart);
+
+      // still trigger global update for other pages
+      window.dispatchEvent(new Event("storage"));
+    };
 
   return (
     <div className="w-screen h-screen relative bg-white">
@@ -135,17 +215,35 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
                   flexDirection: "column",
                 }}
               >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "2.5vw",
-                    left: "3vw",
-                    width: "25%",
-                    height: "80%",
-                    backgroundColor: "#ddd",
-                    borderRadius: "2vw",
-                  }}
-                />
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{
+                      position: "absolute",
+                      top: "2.5vw",
+                      left: "3vw",
+                      width: "25%",
+                      height: "80%",
+                      objectFit: "cover",
+                      borderRadius: "2vw",
+                      backgroundColor: "#f0f0f0",
+                    }}
+                    onError={(e) => (e.target.style.display = "none")}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "2.5vw",
+                      left: "3vw",
+                      width: "25%",
+                      height: "80%",
+                      backgroundColor: "#ddd",
+                      borderRadius: "2vw",
+                    }}
+                  />
+                )}
                 <div
                   style={{
                     position: "absolute",
@@ -236,14 +334,76 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
         )}
 
         {/* Add-ons */}
-        {cartItems.length > 0 && (
+        {cartItems.length > 0 && addOns.length > 0 && (
           <div style={addOnsContainerStyle}>
-            <h2 style={{ fontSize: "3vw", fontWeight: "600", marginBottom: "2vw" }}>Add-ons</h2>
-            {Array.from({ length: 3 }).map((_, idx) => (
-              <div key={idx} style={addOnItemStyle}>
-                <div style={{ width: "50%", height: "5vw", backgroundColor: "#ddd", borderRadius: "1vw" }} />
-                <div style={{ width: "15%", height: "5vw", backgroundColor: "#ddd", borderRadius: "1vw" }} />
-                <div style={{ width: "5vw", height: "5vw", backgroundColor: "#ddd", borderRadius: "1vw" }} />
+            <h2
+              style={{
+                fontSize: "3vw",
+                fontWeight: "600",
+                marginBottom: "2vw",
+              }}
+            >
+              Add-ons
+            </h2>
+
+            {addOns.map((addOn) => (
+              <div key={addOn.id} style={addOnItemStyle}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "2vw",
+                    flex: 1,
+                  }}
+                >
+                  <img
+                    src={addOn.photoUrl}
+                    alt={addOn.name}
+                    style={{
+                      width: "10vw",
+                      height: "10vw",
+                      objectFit: "cover",
+                      borderRadius: "1vw",
+                      backgroundColor: "#f0f0f0",
+                    }}
+                    onError={(e) => (e.target.style.display = "none")}
+                  />
+                  <span
+                    style={{
+                      fontSize: "3vw",
+                      fontWeight: "500",
+                      color: "#333",
+                    }}
+                  >
+                    {addOn.name}
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    fontSize: "2.8vw",
+                    color: "#2e7d32",
+                    fontWeight: "600",
+                    marginRight: "3vw",
+                  }}
+                >
+                  ₱{Number(addOn.price).toFixed(2)}
+                </div>
+
+                <button
+                   onClick={() => handleAddToCart(addOn)}
+                  style={{
+                    backgroundColor: "#36570A",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "2vw",
+                    padding: "1vw 3vw",
+                    fontSize: "3vw",
+                    cursor: "pointer",
+                  }}
+                >
+                  +
+                </button>
               </div>
             ))}
           </div>
@@ -285,7 +445,7 @@ export default function Cart({ cartItems = [], onRemoveItem }) {
             ₱{totalAmount.toFixed(2)}
           </div>
           <button
-            onClick={() => { if (cartItems.length > 0) alert("Proceed to checkout"); }}
+            onClick={handleCheckout}
             style={{
               position: "absolute",
               bottom: "8vw",

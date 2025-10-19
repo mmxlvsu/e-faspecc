@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import backIcon from "../assets/back.png";
+import { supabase } from "../supabaseClient";
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -8,6 +9,83 @@ export default function Payment() {
   const totalAmount = location.state?.totalAmount || 0;
   const [paymentMethod, setPaymentMethod] = useState("");
   const [instruction, setInstruction] = useState("");
+
+  const cartItems =
+    location.state?.cartItems || JSON.parse(localStorage.getItem("cart")) || [];
+
+  async function handleConfirmOrder() {
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+
+      // ✅ Get logged-in user
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (error || !session) {
+        alert("Please log in to place an order.");
+        return;
+      }
+
+      const user = session.user;
+      console.log("User:", user);
+
+      const userId = userData.user.id;
+      const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      // ✅ Create the Order
+      const { data: newOrder, error: orderError } = await supabase
+        .from("Order")
+        .insert([
+          {
+            userId,
+            status: "pending", // Prisma enum OrderStatus
+            pickupType: "take_out", // default; or let user choose
+            totalPrice,
+            paymentStatus:
+              paymentMethod === "cash" ? "cash_on_pickup" : "pending", // Prisma enum PaymentStatus
+          },
+        ])
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // ✅ Add Order Items
+      const orderItems = cart.map((item) => ({
+        orderId: newOrder.id,
+        itemId: item.id,
+        quantity: item.quantity,
+        priceAtOrder: item.price,
+      }));
+
+      const { error: itemsError } = await supabase.from("OrderItem").insert(orderItems);
+      if (itemsError) throw itemsError;
+
+      // ✅ Optionally send a notification
+      await supabase.from("Notification").insert([
+        {
+          userId,
+          orderId: newOrder.id,
+          message: "Your order has been placed successfully!",
+          status: "unread",
+        },
+      ]);
+
+      // ✅ Clear cart and redirect
+      localStorage.removeItem("cart");
+      alert("✅ Order placed successfully!");
+      navigate("/order");
+    } catch (err) {
+      console.error("Order error:", err);
+      alert("❌ Failed to place order: " + err.message);
+    }
+  }
 
   return (
     <div className="w-screen h-screen relative bg-white">
@@ -172,7 +250,7 @@ export default function Payment() {
             marginBottom: "3vw",
           }}
         >
-          {Array.from({ length: 10 }).map((_, i) => (
+          {cartItems.map((item, i) => (
             <div
               key={i}
               style={{
@@ -189,45 +267,28 @@ export default function Payment() {
                   gap: "2vw",
                 }}
               >
-                {/* Quantity Placeholder */}
-                <div
-                  style={{
-                    width: "6vw",
-                    height: "4vw",
-                    backgroundColor: "#ddd",
-                    borderRadius: "1vw",
-                    animation: "pulse 1.5s infinite",
-                  }}
-                ></div>
-
-                {/* Menu Title Placeholder */}
-                <div
-                  style={{
-                    width: "30vw",
-                    height: "4vw",
-                    backgroundColor: "#eee",
-                    borderRadius: "1vw",
-                    animation: "pulse 1.5s infinite",
-                  }}
-                ></div>
+                <div style={{ fontSize: "3vw", color: "#333" }}>
+                  {item.quantity}x
+                </div>
+                <div style={{ fontSize: "3vw", color: "#333" }}>
+                  {item.name}
+                </div>
               </div>
 
-              {/* Price Placeholder */}
               <div
                 style={{
-                  width: "15vw",
-                  height: "4vw",
-                  backgroundColor: "#eee",
-                  borderRadius: "1vw",
-                  animation: "pulse 1.5s infinite",
+                  fontSize: "3vw",
+                  color: "#2e7d32",
+                  fontWeight: "500",
                 }}
-              ></div>
+              >
+                ₱{(item.price * item.quantity).toFixed(2)}
+              </div>
             </div>
           ))}
 
           <hr style={{ border: "0.1vw solid #ccc", margin: "3vw 0" }} />
 
-          {/* Placeholder for Total */}
           <div
             style={{
               display: "flex",
@@ -235,24 +296,12 @@ export default function Payment() {
               alignItems: "center",
             }}
           >
-            <div
-              style={{
-                width: "25vw",
-                height: "4.5vw",
-                backgroundColor: "#eee",
-                borderRadius: "1vw",
-                animation: "pulse 1.5s infinite",
-              }}
-            ></div>
-            <div
-              style={{
-                width: "20vw",
-                height: "4.5vw",
-                backgroundColor: "#eee",
-                borderRadius: "1vw",
-                animation: "pulse 1.5s infinite",
-              }}
-            ></div>
+            <span style={{ fontSize: "3vw", fontWeight: "600", color: "#333" }}>
+              Total
+            </span>
+            <span style={{ fontSize: "3.2vw", fontWeight: "700", color: "#36570A" }}>
+              ₱{totalAmount.toFixed(2)}
+            </span>
           </div>
         </div>
 
@@ -397,13 +446,7 @@ export default function Payment() {
           </button>
 
           <button
-            onClick={() =>
-              alert(
-                `Proceed to payment with ${
-                  paymentMethod || "no method"
-                } and instruction: ${instruction || "none"}`
-              )
-            }
+            onClick={handleConfirmOrder}
             style={{
               width: "40vw",
               height: "12vw",
