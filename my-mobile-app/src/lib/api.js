@@ -1,5 +1,5 @@
 // API configuration and utility functions
-const API_BASE_URL = 'http://localhost:4000';
+const API_BASE_URL = 'https://cafeteria-backend-eosin.vercel.app';
 
 // API utility function
 export const apiCall = async (endpoint, options = {}) => {
