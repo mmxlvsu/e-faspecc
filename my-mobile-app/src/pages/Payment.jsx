@@ -1,85 +1,56 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import backIcon from "../assets/back.png";
-import { supabase } from "../supabaseClient";
+import { orderAPI } from "../lib/api"; // ✅ import your API helper
 
 export default function Payment() {
   const navigate = useNavigate();
   const location = useLocation();
   const totalAmount = location.state?.totalAmount || 0;
+
   const [paymentMethod, setPaymentMethod] = useState("");
   const [instruction, setInstruction] = useState("");
 
+  // ✅ Retrieve cart items from navigation state or localStorage
   const cartItems =
     location.state?.cartItems || JSON.parse(localStorage.getItem("cart")) || [];
 
   async function handleConfirmOrder() {
     try {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      if (cart.length === 0) {
+      // ✅ Check if cart is empty
+      if (cartItems.length === 0) {
         alert("Your cart is empty!");
         return;
       }
 
-      // ✅ Get logged-in user
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-
-      if (error || !session) {
+      // ✅ Check if logged in
+      const token = localStorage.getItem("authToken");
+      if (!token) {
         alert("Please log in to place an order.");
+        navigate("/login");
         return;
       }
 
-      const user = session.user;
-      console.log("User:", user);
+      // ✅ Prepare order payload
+      const orderData = {
+        items: cartItems.map((item) => ({
+          menuId: item.id, // backend expects menuId
+          quantity: item.quantity,
+        })),
+        pickupType: "take_out", // you can make this dynamic later
+        pickupTime: null, // optional
+      };
 
-      const userId = userData.user.id;
-      const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      // ✅ Create order via backend
+      const newOrder = await orderAPI.createOrder(orderData);
 
-      // ✅ Create the Order
-      const { data: newOrder, error: orderError } = await supabase
-        .from("Order")
-        .insert([
-          {
-            userId,
-            status: "pending", // Prisma enum OrderStatus
-            pickupType: "take_out", // default; or let user choose
-            totalPrice,
-            paymentStatus:
-              paymentMethod === "cash" ? "cash_on_pickup" : "pending", // Prisma enum PaymentStatus
-          },
-        ])
-        .select()
-        .single();
+      console.log("✅ Order created:", newOrder);
+      alert("Order placed successfully!");
 
-      if (orderError) throw orderError;
-
-      // ✅ Add Order Items
-      const orderItems = cart.map((item) => ({
-        orderId: newOrder.id,
-        itemId: item.id,
-        quantity: item.quantity,
-        priceAtOrder: item.price,
-      }));
-
-      const { error: itemsError } = await supabase.from("OrderItem").insert(orderItems);
-      if (itemsError) throw itemsError;
-
-      // ✅ Optionally send a notification
-      await supabase.from("Notification").insert([
-        {
-          userId,
-          orderId: newOrder.id,
-          message: "Your order has been placed successfully!",
-          status: "unread",
-        },
-      ]);
-
-      // ✅ Clear cart and redirect
+      // ✅ Clear cart
       localStorage.removeItem("cart");
-      alert("✅ Order placed successfully!");
+
+      // ✅ Redirect to order page
       navigate("/order");
     } catch (err) {
       console.error("Order error:", err);
