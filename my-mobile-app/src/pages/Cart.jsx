@@ -56,21 +56,19 @@ export default function Cart() {
     marginTop: "2vw",
     marginBottom: "12vw",
     padding: "3vw",
-    backgroundColor: "#fff",
-    borderRadius: "3vw",
+    borderRadius: "1vw",
     width: "90%",
     left: "5%",
     position: "relative",
+    border: "0.4vw solid #ccc",
   };
 
   const addOnItemStyle = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "2vw 2vw",
-    borderBottom: "1px solid #eee",
-    backgroundColor: "#f8f8f8",
-    borderRadius: "1.5vw",
+    padding: "3vw 2vw",
+    borderRadius: "1vw",
     marginBottom: "2vw",
   };
 
@@ -170,7 +168,7 @@ export default function Cart() {
       <div
         ref={scrollRef}
         className="absolute top-[15vw] bottom-0 left-0 right-0 overflow-y-auto px-4vw"
-        style={{ backgroundColor: "#F3F3F3", paddingTop: "4vw" }}
+        style={{ backgroundColor: "white", paddingTop: "4vw" }}
       >
         {cartItems.length === 0 ? (
           <div style={{ position: "relative", width: "100%", height: "100%" }}>
@@ -206,7 +204,8 @@ export default function Cart() {
                 style={{
                   position: "relative",
                   backgroundColor: "white",
-                  borderRadius: "3vw",
+                  borderRadius: "1vw",
+                  border: "0.2vw solid #36570A",
                   padding: "2vw",
                   height: "25vw",
                   width: "90%",
@@ -249,7 +248,7 @@ export default function Cart() {
                     position: "absolute",
                     top: "3vw",
                     left: "30vw",
-                    fontSize: "3vw",
+                    fontSize: "3.5vw",
                     fontWeight: "600",
                     color: "#333",
                   }}
@@ -261,7 +260,7 @@ export default function Cart() {
                     position: "absolute",
                     top: "8vw",
                     left: "30vw",
-                    fontSize: "2.8vw",
+                    fontSize: "3.2vw",
                     color: "#2e7d32",
                     fontWeight: "500",
                   }}
@@ -310,7 +309,7 @@ export default function Cart() {
                   >
                     -
                   </button>
-                  <div style={{ width: "8vw", textAlign: "center", fontSize: "4vw", fontWeight: "500" }}>
+                  <div style={{ width: "8vw", textAlign: "center", fontSize: "4vw", fontWeight: "600" }}>
                     {quantity}
                   </div>
                   <button
@@ -338,7 +337,8 @@ export default function Cart() {
           <div style={addOnsContainerStyle}>
             <h2
               style={{
-                fontSize: "3vw",
+                fontSize: "4vw",
+                color: "#36570A",
                 fontWeight: "600",
                 marginBottom: "2vw",
               }}
@@ -360,8 +360,8 @@ export default function Cart() {
                     src={addOn.photoUrl}
                     alt={addOn.name}
                     style={{
-                      width: "10vw",
-                      height: "10vw",
+                      width: "12vw",
+                      height: "12vw",
                       objectFit: "cover",
                       borderRadius: "1vw",
                       backgroundColor: "#f0f0f0",
@@ -370,7 +370,7 @@ export default function Cart() {
                   />
                   <span
                     style={{
-                      fontSize: "3vw",
+                      fontSize: "3.2vw",
                       fontWeight: "500",
                       color: "#333",
                     }}
@@ -381,9 +381,9 @@ export default function Cart() {
 
                 <div
                   style={{
-                    fontSize: "2.8vw",
-                    color: "#2e7d32",
-                    fontWeight: "600",
+                    fontSize: "3.2vw",
+                    color: "#333",
+                    fontWeight: "400",
                     marginRight: "3vw",
                   }}
                 >
@@ -393,13 +393,13 @@ export default function Cart() {
                 <button
                    onClick={() => handleAddToCart(addOn)}
                   style={{
-                    backgroundColor: "#36570A",
-                    color: "white",
+                    color: "black",
                     border: "none",
                     borderRadius: "2vw",
-                    padding: "1vw 3vw",
-                    fontSize: "3vw",
+                    padding: "1vw 2vw",
+                    fontSize: "4vw",
                     cursor: "pointer",
+                    border: "0.4vw solid #36570A",
                   }}
                 >
                   +
@@ -438,17 +438,17 @@ export default function Cart() {
           padding: "2vw",            
           }}
         >
-          <div style={{ position: "absolute", top: "5vw", left: "5vw", fontSize: "5vw", fontWeight: "400", color: "#333" }}>
+          <div style={{ position: "absolute", top: "6.3vw", left: "7.7vw", fontSize: "5vw", fontWeight: "400", color: "#333" }}>
             Total:
           </div>
-          <div style={{ position: "absolute", top: "5vw", right: "5vw", fontSize: "5vw", fontWeight: "600", color: "#36570A" }}>
+          <div style={{ position: "absolute", top: "6.3vw", right: "7.7vw", fontSize: "5vw", fontWeight: "600", color: "#36570A" }}>
             ₱{totalAmount.toFixed(2)}
           </div>
           <button
             onClick={handleCheckout}
             style={{
               position: "absolute",
-              bottom: "8vw",
+              bottom: "6.2vw",
               left: "50%",
               transform: "translateX(-50%)",
               width: "80vw",
@@ -456,7 +456,7 @@ export default function Cart() {
               backgroundColor: "#36570A",
               color: "white",
               border: "none",
-              borderRadius: "2.5vw",
+              borderRadius: "1.5vw",
               fontSize: "4vw",
               fontWeight: "600",
               cursor: cartItems.length > 0 ? "pointer" : "not-allowed",

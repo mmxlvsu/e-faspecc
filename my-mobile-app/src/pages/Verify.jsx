@@ -91,13 +91,13 @@ export default function VerificationCode() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ top: "7vh", left: "3vw", width: "6vw", height: "6vw" }}
+        style={{ top: "4vh", left: "4vw", width: "5vw", height: "5vw" }}
         onClick={() => navigate("/login")}
       />
 
       <h1
         className="absolute font-extrabold text-black"
-        style={{ top: "17vh", left: "7vw", width: "86vw", fontSize: "8vw" }}
+        style={{ top: "17vh", left: "7vw", width: "80vw", fontSize: "8vw" }}
       >
         Verification Code
       </h1>

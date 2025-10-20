@@ -15,15 +15,14 @@ export default function Payment() {
   const cartItems =
     location.state?.cartItems || JSON.parse(localStorage.getItem("cart")) || [];
 
+  // ✅ Confirm Order Function
   async function handleConfirmOrder() {
     try {
-      // ✅ Check if cart is empty
       if (cartItems.length === 0) {
         alert("Your cart is empty!");
         return;
       }
 
-      // ✅ Check if logged in
       const token = localStorage.getItem("authToken");
       if (!token) {
         alert("Please log in to place an order.");
@@ -31,26 +30,22 @@ export default function Payment() {
         return;
       }
 
-      // ✅ Prepare order payload
       const orderData = {
         items: cartItems.map((item) => ({
-          menuId: item.id, // backend expects menuId
+          menuId: item.id,
           quantity: item.quantity,
         })),
-        pickupType: "take_out", // you can make this dynamic later
-        pickupTime: null, // optional
+        pickupType: "take_out",
+        pickupTime: null,
+        paymentMethod,
+        instruction,
       };
 
-      // ✅ Create order via backend
       const newOrder = await orderAPI.createOrder(orderData);
-
       console.log("✅ Order created:", newOrder);
       alert("Order placed successfully!");
 
-      // ✅ Clear cart
       localStorage.removeItem("cart");
-
-      // ✅ Redirect to order page
       navigate("/order");
     } catch (err) {
       console.error("Order error:", err);
@@ -64,47 +59,53 @@ export default function Payment() {
       <div
         className="fixed flex items-center"
         style={{
-          top: "0vw",
-          left: "0vw",
-          right: "0vw",
+          top: "0",
+          left: "0",
+          right: "0",
           height: "15vw",
           padding: "0 4vw",
           boxShadow: "0 0.2vw 0.5vw rgba(0,0,0,0.1)",
           zIndex: 9999,
-          position: "relative",
         }}
       >
+        <img
+          src={backIcon}
+          alt="Back"
+          style={{
+            width: "6vw",
+            height: "6vw",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(-1)}
+        />
         <h1
           className="flex-1 text-center font-bold"
           style={{
             fontSize: "4vw",
             color: "black",
-            top: "0vw",
-            left: "0vw",
-            position: "relative",
           }}
         >
           Checkout
         </h1>
       </div>
 
-      {/* Scrollable Container */}
+      {/* Scrollable Content */}
       <div
         style={{
           position: "absolute",
           top: "15vw",
-          left: "0vw",
-          right: "0vw",
-          bottom: "15vh",
+          left: "0",
+          right: "0",
+          bottom: "18vh",
           overflowY: "auto",
           padding: "4vw",
           backgroundColor: "white",
         }}
       >
-        {/* Payment Method Section */}
+        {/* Payment Method */}
         <span
           style={{
-            fontSize: "3.5vw",
+            fontSize: "4vw",
             fontWeight: "600",
             color: "#36570A",
           }}
@@ -114,8 +115,7 @@ export default function Payment() {
 
         <div
           style={{
-            backgroundColor: "white",
-            border: "0.9px solid black",
+            border: "0.2px solid #36570A",
             borderRadius: "1vw",
             padding: "4vw",
             display: "flex",
@@ -143,11 +143,7 @@ export default function Payment() {
               value="cash"
               checked={paymentMethod === "cash"}
               onChange={() => setPaymentMethod("cash")}
-              style={{
-                width: "5vw",
-                height: "5vw",
-                accentColor: "#36570A",
-              }}
+              style={{ width: "5vw", height: "5vw", accentColor: "#36570A" }}
             />
           </label>
 
@@ -169,15 +165,10 @@ export default function Payment() {
               value="gcash"
               checked={paymentMethod === "gcash"}
               onChange={() => setPaymentMethod("gcash")}
-              style={{
-                width: "5vw",
-                height: "5vw",
-                accentColor: "#36570A",
-              }}
+              style={{ width: "5vw", height: "5vw", accentColor: "#36570A" }}
             />
           </label>
 
-          {/* Note */}
           <div
             style={{
               display: "flex",
@@ -190,16 +181,16 @@ export default function Payment() {
           >
             <span>💡</span>
             <span>
-              For Cash payments, please prepare the exact amount if possible.
-              For GCash payments, ensure your app is ready for the transaction.
+              For Cash payments, please prepare the exact amount if possible. For
+              GCash payments, ensure your app is ready for the transaction.
             </span>
           </div>
         </div>
 
-        {/* Order Summary Section */}
+        {/* Order Summary */}
         <span
           style={{
-            fontSize: "3.5vw",
+            fontSize: "4vw",
             fontWeight: "600",
             color: "#36570A",
           }}
@@ -207,17 +198,13 @@ export default function Payment() {
           Order Summary
         </span>
 
-        {/* Order Summary Placeholder */}
         <div
           style={{
-            position: "relative",
-            width: "100%",
-            left: "0%",
             marginTop: "2vw",
             backgroundColor: "white",
-            borderRadius: "2vw",
+            borderRadius: "1vw",
+            border: "0.4vw solid #ccc",
             padding: "4vw",
-            boxShadow: "0 0.3vw 0.8vw rgba(0,0,0,0.1)",
             marginBottom: "3vw",
           }}
         >
@@ -231,34 +218,23 @@ export default function Payment() {
                 marginBottom: "2.5vw",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "2vw",
-                }}
-              >
-                <div style={{ fontSize: "3vw", color: "#333" }}>
-                  {item.quantity}x
-                </div>
-                <div style={{ fontSize: "3vw", color: "#333" }}>
-                  {item.name}
-                </div>
+              <div style={{ display: "flex", gap: "2vw", alignItems: "center" }}>
+                <span style={{ fontSize: "3.2vw" }}>{item.quantity}x</span>
+                <span style={{ fontSize: "3.2vw" }}>{item.name}</span>
               </div>
-
-              <div
+              <span
                 style={{
-                  fontSize: "3vw",
-                  color: "#2e7d32",
+                  fontSize: "3.2vw",
+                  color: "black",
                   fontWeight: "500",
                 }}
               >
                 ₱{(item.price * item.quantity).toFixed(2)}
-              </div>
+              </span>
             </div>
           ))}
 
-          <hr style={{ border: "0.1vw solid #ccc", margin: "3vw 0" }} />
+          <hr style={{ border: "0.2vw solid #ccc", margin: "3vw 0" }} />
 
           <div
             style={{
@@ -267,29 +243,25 @@ export default function Payment() {
               alignItems: "center",
             }}
           >
-            <span style={{ fontSize: "3vw", fontWeight: "600", color: "#333" }}>
-              Total
-            </span>
-            <span style={{ fontSize: "3.2vw", fontWeight: "700", color: "#36570A" }}>
+            <span style={{ fontSize: "4vw", fontWeight: "600" }}>Total</span>
+            <span
+              style={{
+                fontSize: "4vw",
+                fontWeight: "700",
+                color: "#36570A",
+              }}
+            >
               ₱{totalAmount.toFixed(2)}
             </span>
           </div>
         </div>
 
-        <style>{`
-          @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-          }
-        `}</style>
-
-        {/* Special Instruction Section */}
+        {/* Special Instruction */}
         <div style={{ marginTop: "4vw", marginBottom: "6vw" }}>
           <span
             style={{
               display: "block",
-              fontSize: "3.5vw",
+              fontSize: "4vw",
               fontWeight: "600",
               color: "#36570A",
               marginBottom: "1.5vw",
@@ -298,142 +270,114 @@ export default function Payment() {
             Special Instruction
           </span>
 
+          <textarea
+            maxLength={500}
+            placeholder="Type your special request here"
+            style={{
+              width: "100%",
+              minHeight: "25vw",
+              fontSize: "2.8vw",
+              padding: "3vw",
+              borderRadius: "1.5vw",
+              border: "0.9px solid #ccc",
+              resize: "vertical",
+              outline: "none",
+            }}
+            value={instruction}
+            onChange={(e) => setInstruction(e.target.value)}
+          ></textarea>
+
           <span
             style={{
               display: "block",
-              fontSize: "2.3vw",
-              fontWeight: "400",
-              color: "#555",
-              lineHeight: "1.4",
-              marginBottom: "2vw",
+              textAlign: "right",
+              fontSize: "2.5vw",
+              color: "#888",
+              marginTop: "1vw",
             }}
           >
-            💬 Got any special requests for your food? You can place them here —
-            like “no peanuts,” “less spicy,” “extra rice,” or anything you’d like
-            us to take note of when preparing your order. We’ll do our best to
-            follow your instructions so your meal comes out just the way you
-            want it!
+            {instruction.length}/500
           </span>
-
-          {/* Textarea + Counter */}
-          <div style={{ position: "relative" }}>
-            <textarea
-              maxLength={500}
-              placeholder="Type your special instructions here..."
-              style={{
-                width: "100%",
-                minHeight: "25vw",
-                fontSize: "2.8vw",
-                padding: "3vw",
-                borderRadius: "1.5vw",
-                border: "0.9px solid #ccc",
-                resize: "vertical",
-                outline: "none",
-              }}
-              value={instruction}
-              onChange={(e) => setInstruction(e.target.value)}
-            ></textarea>
-
-            <span
-              style={{
-                position: "absolute",
-                bottom: "3vw",
-                right: "3vw",
-                fontSize: "2.5vw",
-                color: "#888",
-              }}
-            >
-              {instruction.length}/500
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* Bottom Container */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          minHeight: "18vh",
-          backgroundColor: "white",
-          boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
-          zIndex: 9999,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "2vw",
-          gap: "2vw",
-        }}
-      >
-        {/* Total Row */}
+      {/* Bottom Checkout Bar */}
+      {cartItems.length > 0 && (
         <div
           style={{
-            width: "88%",
+            position: "fixed",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            minHeight: "18vh",
+            backgroundColor: "white",
+            boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
+            zIndex: 9999,
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
+            padding: "2vw",
+            gap: "2vw",
           }}
         >
-          <span
+          {/* Total Row */}
+          <div
             style={{
-              fontSize: "clamp(16px, 4vw, 24px)",
-              fontWeight: "400",
-              color: "#333",
+              width: "88%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            Total:
-          </span>
-          <span
-            style={{
-              fontSize: "clamp(16px, 4vw, 24px)",
-              fontWeight: "600",
-              color: "#36570A",
-            }}
-          >
-            ₱ {totalAmount.toFixed(2)}
-          </span>
-        </div>
+            <span
+              style={{
+                fontSize: "clamp(16px, 4vw, 24px)",
+                fontWeight: "400",
+                color: "#333",
+              }}
+            >
+              Total:
+            </span>
+            <span
+              style={{
+                fontSize: "clamp(16px, 4vw, 24px)",
+                fontWeight: "600",
+                color: "#36570A",
+              }}
+            >
+              ₱{totalAmount.toFixed(2)}
+            </span>
+          </div>
 
-        {/* Buttons Row */}
-        <div style={{ display: "flex", gap: "4vw", marginTop: "0vw" }}>
-          <button
-            onClick={() => navigate(-1)}
+          {/* Button Row */}
+          <div
             style={{
-              width: "40vw",
-              height: "12vw",
-              backgroundColor: "white",
-              border: "1px solid #36570A",
-              color: "#333",
-              borderRadius: "1.5vw",
-              fontSize: "4vw",
-              fontWeight: "600",
-              cursor: "pointer",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "0vw",
             }}
           >
-            Back to Cart
-          </button>
-
-          <button
-            onClick={handleConfirmOrder}
-            style={{
-              width: "40vw",
-              height: "12vw",
-              backgroundColor: "#36570A",
-              color: "white",
-              border: "none",
-              borderRadius: "1.5vw",
-              fontSize: "4vw",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
-          >
-            Confirm Order
-          </button>
+            <button
+              onClick={handleConfirmOrder}
+              style={{
+                width: "80vw",
+                height: "12vw",
+                backgroundColor: "#36570A",
+                color: "white",
+                border: "none",
+                borderRadius: "1.5vw",
+                fontSize: "4vw",
+                fontWeight: "600",
+                cursor: cartItems.length > 0 ? "pointer" : "not-allowed",
+                opacity: cartItems.length > 0 ? 1 : 0.5,
+              }}
+            >
+              Confirm Order
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
