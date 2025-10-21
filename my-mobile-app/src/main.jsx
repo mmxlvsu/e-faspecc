@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import Splash from "./pages/Splash";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -34,6 +35,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/payment" element={<Payment />} />
 
       </Routes>
+      
+      <Toaster position="top-center" />
     </Router>
   </React.StrictMode>
 );

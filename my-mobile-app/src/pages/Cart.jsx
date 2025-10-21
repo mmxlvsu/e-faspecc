@@ -394,7 +394,6 @@ export default function Cart() {
                    onClick={() => handleAddToCart(addOn)}
                   style={{
                     color: "black",
-                    border: "none",
                     borderRadius: "2vw",
                     padding: "1vw 2vw",
                     fontSize: "4vw",

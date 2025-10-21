@@ -115,7 +115,8 @@ export default function BottomBarPage() {
       item.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
-  });
+  })
+  .sort((a, b) => a.name.localeCompare(b.name)); // ✅ sort alphabetically
 
   const [selectedItem, setSelectedItem] = useState(null); // 🔹 for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -179,6 +180,26 @@ export default function BottomBarPage() {
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const getStockStatus = (item) => {
+    // If not available, consider it sold out
+    if (!item.availability) {
+      return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white" };
+    }
+
+    // Check stockLimit if it exists
+    if (item.stockLimit !== null) {
+      if (item.stockLimit === 0) {
+        return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white" };
+      } 
+      if (item.stockLimit <= 5) {
+        return { label: "Low Stock", backgroundColor: "#FFC107", textColor: "#333" };
+      }
+    }
+
+    // Otherwise, available
+    return { label: "Available", backgroundColor: "#4CAF50", textColor: "white" };
+  };
 
   return (
     <div
@@ -431,7 +452,7 @@ export default function BottomBarPage() {
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => {
               // Default values for missing data
-              const status = item.status || "Available";
+              const status = getStockStatus(item);
               const statusStyles = {
                 Available: { backgroundColor: "#4CAF50", textColor: "white" },
                 "Low Stock": { backgroundColor: "#FFC107", textColor: "#333" },
@@ -460,7 +481,7 @@ export default function BottomBarPage() {
                       position: "absolute",
                       top: "4vw",
                       right: "4vw",
-                      backgroundColor,
+                      backgroundColor: status.backgroundColor,
                       color: textColor,
                       fontSize: "2vw",
                       fontWeight: "400",
@@ -469,7 +490,7 @@ export default function BottomBarPage() {
                       boxShadow: "0 0.3vw 0.8vw rgba(0,0,0,0.2)",
                     }}
                   >
-                    {status}
+                    {status.label}
                   </div>
 
                   {/* Product Image */}

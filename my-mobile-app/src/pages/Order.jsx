@@ -4,7 +4,10 @@ import homeIcon from "../assets/home.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png";
-import { orderAPI } from "../lib/api"; // ✅ import your backend API helper
+import { orderAPI } from "../lib/api";
+import { toast } from "react-hot-toast"; // ✅ for quick toast messages
+import { motion, AnimatePresence } from "framer-motion";
+
 
 export default function BottomBarPage() {
   const navigate = useNavigate();
@@ -18,8 +21,9 @@ export default function BottomBarPage() {
 
   const tabs = ["Pending", "Preparing", "Ready", "Completed", "Cancelled"];
   const [activeTab, setActiveTab] = useState("Pending");
-  const [orders, setOrders] = useState([]); // ✅ list of orders
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirming, setConfirming] = useState({}); // track loading per order
 
   // Hide/show bottom bar on scroll
   const [showBottomBar, setShowBottomBar] = useState(true);
@@ -30,33 +34,60 @@ export default function BottomBarPage() {
     const container = scrollContainerRef.current || window;
     const handleScroll = () => {
       const scrollTop = container.scrollTop ?? window.scrollY;
-      setShowBottomBar(scrollTop <= lastScrollTop.current ? true : false);
+      setShowBottomBar(scrollTop <= lastScrollTop.current);
       lastScrollTop.current = scrollTop <= 0 ? 0 : scrollTop;
     };
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Fetch user orders on mount
+  // ✅ Fetch orders
+  const fetchOrders = async () => {
+    try {
+      const data = await orderAPI.getOrders();
+      setOrders(data);
+    } catch (err) {
+      console.error("Failed to fetch orders:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const data = await orderAPI.getOrders();
-        setOrders(data);
-      } catch (err) {
-        console.error("Failed to fetch orders:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchOrders();
   }, []);
 
+  // ✅ Confirm payment API call
+  const confirmPayment = async (orderId) => {
+    try {
+      setConfirming((prev) => ({ ...prev, [orderId]: true }));
+      await orderAPI.confirmPayment(orderId); // ✅ FIXED
+      toast.success("Payment confirmed! Please proceed to the counter.");
+
+      await fetchOrders();
+    } catch (err) {
+      console.error("Confirm payment failed:", err);
+      toast.error(err.response?.data?.error || "Failed to confirm payment");
+    } finally {
+      setConfirming((prev) => ({ ...prev, [orderId]: false }));
+    }
+  };
+
+  const mapStatusToTab = (status) => {
+    switch (status) {
+      case "pending": return "Pending";
+      case "preparing": return "Preparing";
+      case "ready": return "Ready";
+      case "picked_up": return "Completed";
+      case "rejected": return "Cancelled";
+      default: return status;
+    }
+  };
+
   // ✅ Filter orders based on tab
-  const filteredOrders = orders.filter((order) => {
-    const status = order.status?.toLowerCase() || "";
-    return status === activeTab.toLowerCase();
-  });
+  const filteredOrders = orders.filter(
+    (order) => mapStatusToTab(order.status) === activeTab
+  );
 
   return (
     <div
@@ -70,7 +101,6 @@ export default function BottomBarPage() {
         overflowY: "auto",
       }}
     >
-      {/* Title */}
       <h1
         style={{
           position: "absolute",
@@ -176,12 +206,65 @@ export default function BottomBarPage() {
                   </div>
                 ))}
               </div>
+
+              {/* ✅ Pay at Counter Button */}
+              <AnimatePresence>
+                {order.status === "ready" && !order.paymentConfirmed && (
+                  <motion.button
+                    key={`pay-${order.id}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    onClick={() => confirmPayment(order.id)}
+                    disabled={confirming[order.id]}
+                    style={{
+                      marginTop: "3vw",
+                      width: "100%",
+                      backgroundColor: "#36570A",
+                      color: "white",
+                      padding: "2.5vw",
+                      border: "none",
+                      borderRadius: "2vw",
+                      fontSize: "3.2vw",
+                      fontWeight: "600",
+                      cursor: confirming[order.id] ? "not-allowed" : "pointer",
+                      opacity: confirming[order.id] ? 0.6 : 1,
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    {confirming[order.id] ? "Confirming..." : "Pay at the Counter"}
+                  </motion.button>
+                )}
+              </AnimatePresence>
+
+              {/* ✅ Show confirmation state if already confirmed */}
+              <AnimatePresence>
+                {order.status === "ready" && order.paymentConfirmed && (
+                  <motion.p
+                    key={`confirmed-${order.id}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    style={{
+                      marginTop: "3vw",
+                      textAlign: "center",
+                      color: "#4CAF50",
+                      fontWeight: "600",
+                      fontSize: "3vw",
+                    }}
+                  >
+                    ✅ Payment confirmed. Please proceed to the counter.
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
           ))
         )}
       </div>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Nav */}
       <div
         style={{
           position: "fixed",
