@@ -152,7 +152,7 @@ export default function Signup() {
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      <p className="absolute text-black text-center" style={{ top: "90vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>
           Log in here.

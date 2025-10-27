@@ -183,7 +183,7 @@ export default function Login() {
 
       <p
         className="absolute text-black text-center"
-        style={{ top: "90vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}
+        style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}
       >
         Don't have an account yet?{" "}
         <span
