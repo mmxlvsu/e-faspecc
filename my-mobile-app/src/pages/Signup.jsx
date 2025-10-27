@@ -4,6 +4,7 @@ import { authAPI, storage } from "../lib/api";
 import backIcon from "../assets/back.png"; 
 import hideIcon from "../assets/hide.png"; 
 import showIcon from "../assets/show.png"; 
+import logo from "../assets/logo.png";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -76,11 +77,25 @@ export default function Signup() {
         onClick={() => navigate("/")}
       />
 
-      <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "10vh", fontSize: "8vw", width: "80vw" }}>
+{/* Logo Image */}
+      <img
+        src={logo}
+        alt="Logo"
+        className="absolute"
+        style={{
+          top: "7vh",       
+          left: "50%",       
+          transform: "translateX(-50%)",
+          width: "57vw",     
+          height: "auto",    
+        }}
+      />
+
+      <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw", width: "80vw" }}>
         Create an account
       </h1>
 
-      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "16vh", fontSize: "3.8vw", width: "70vw" }}>
+      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw", width: "70vw" }}>
         Please enter your details
       </p>
 
@@ -152,7 +167,7 @@ export default function Signup() {
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      <p className="absolute text-black text-center" style={{ top: "87vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "85vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>
           Log in here.
