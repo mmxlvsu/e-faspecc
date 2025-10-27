@@ -81,7 +81,7 @@ export default function Login() {
         onClick={() => navigate("/")}
       />
 
-{/* Logo Image */}
+      {/* Logo Image */}
       <img
         src={logo}
         alt="Logo"
@@ -112,7 +112,7 @@ export default function Login() {
       {error && (
         <div
           className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "29vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+          style={{ top: "42vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
         >
           {error}
         </div>
@@ -125,7 +125,7 @@ export default function Login() {
         onChange={e => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "44vh",
+          top: "45.5vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -141,7 +141,7 @@ export default function Login() {
         onChange={e => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "52vh",
+          top: "53.5vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -153,7 +153,7 @@ export default function Login() {
         src={showPassword ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "53.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "55vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 

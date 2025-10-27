@@ -4,6 +4,7 @@ import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
 import hideIcon from "../assets/hide.png";
 import showIcon from "../assets/show.png";
+import logo from "../assets/logo.png";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -60,23 +61,36 @@ export default function ResetPassword() {
         style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }}
         onClick={() => navigate("/login")}
       />
+{/* Logo Image */}
+      <img
+        src={logo}
+        alt="Logo"
+        className="absolute"
+        style={{
+          top: "7vh",       
+          left: "50%",       
+          transform: "translateX(-50%)",
+          width: "57vw",     
+          height: "auto",    
+        }}
+      />
 
-      <h1 className="absolute font-bold text-black" style={{ left: "8vw", top: "22vh", width: "80vw", fontSize: "8vw" }}>
+      <h1 className="absolute font-bold text-black" style={{ left: "8vw", top: "30vh", width: "80vw", fontSize: "7vw" }}>
         Reset Password
       </h1>
 
-      <p className="absolute text-[#36570A]" style={{ left: "8.5vw", top: "28vh", width: "86vw", fontSize: "3.2vw" }}>
+      <p className="absolute text-[#36570A]" style={{ left: "8.5vw", top: "34.3vh", width: "86vw", fontSize: "3.2vw" }}>
         Enter a new password below to reset password
       </p>
 
       {error && (
-        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
+        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38.9vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
           {error}
         </div>
       )}
 
       {success && (
-        <div className="absolute text-green-600 font-semibold text-center" style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw", lineHeight: "4.5vw" }}>
+        <div className="absolute text-green-600 font-semibold text-center" style={{ top: "38.9vh", left: "7vw", width: "86vw", fontSize: "3vw", lineHeight: "4.5vw" }}>
           {success}
         </div>
       )}
@@ -90,17 +104,17 @@ export default function ResetPassword() {
           if (error) setError("");
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ left: "7vw", top: "37vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ left: "7vw", top: "42vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
       <img
         src={showNew ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "38.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "43.5vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowNew(!showNew)}
       />
 
-      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "44vh", fontSize: "2.8vw" }}>
+      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "48.5vh", fontSize: "2.8vw" }}>
         Password must be 8-16 characters
       </p>
 
@@ -113,23 +127,23 @@ export default function ResetPassword() {
           if (error) setError("");
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ left: "7vw", top: "47vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ left: "7vw", top: "51.5vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
       <img
         src={showConfirm ? showIcon : hideIcon}
         alt="Toggle Confirm Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "48.5vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "53vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowConfirm(!showConfirm)}
       />
 
-      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "54vh", fontSize: "2.8vw" }}>
+      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "58vh", fontSize: "2.8vw" }}>
         Password must match
       </p>
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ left: "7vw", top: "59vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ left: "7vw", top: "63vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
         onClick={handleResetPassword}
         disabled={loading}
       >

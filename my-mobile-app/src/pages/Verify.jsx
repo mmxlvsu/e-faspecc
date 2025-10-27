@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
+import logo from "../assets/logo.png";
+
 
 export default function VerificationCode() {
   const navigate = useNavigate();
@@ -95,16 +97,30 @@ export default function VerificationCode() {
         onClick={() => navigate("/login")}
       />
 
+{/* Logo Image */}
+      <img
+        src={logo}
+        alt="Logo"
+        className="absolute"
+        style={{
+          top: "7vh",       
+          left: "50%",       
+          transform: "translateX(-50%)",
+          width: "57vw",     
+          height: "auto",    
+        }}
+      />
+
       <h1
         className="absolute font-extrabold text-black"
-        style={{ top: "17vh", left: "7vw", width: "80vw", fontSize: "8vw" }}
+        style={{ top: "30vh", left: "7vw", width: "80vw", fontSize: "7vw" }}
       >
         Verification Code
       </h1>
 
       <p
         className="absolute text-black"
-        style={{ top: "23vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}
+        style={{ top: "35vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}
       >
         We have sent the code verification to
       </p>
@@ -112,7 +128,7 @@ export default function VerificationCode() {
       {error && (
         <div
           className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+          style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
         >
           {error}
         </div>
@@ -121,13 +137,13 @@ export default function VerificationCode() {
       {success && (
         <div
           className="absolute text-green-600 font-semibold text-center"
-          style={{ top: "33vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+          style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
         >
           {success}
         </div>
       )}
 
-      <div className="absolute flex items-center justify-start" style={{ top: "27vh", left: "8vw", width: "85vw", gap: "2vw" }}>
+      <div className="absolute flex items-center justify-start" style={{ top: "37.5vh", left: "8vw", width: "85vw", gap: "2vw" }}>
         <input
           type="email"
           value={email}
@@ -153,7 +169,7 @@ export default function VerificationCode() {
         </p>
       </div>
 
-      <div className="absolute flex justify-between" style={{ top: "37vh", left: "7vw", width: "86vw" }}>
+      <div className="absolute flex justify-between" style={{ top: "46.5vh", left: "7vw", width: "86vw" }}>
         {[input1, input2, input3, input4].map((ref, idx) => {
           const prevInput = idx > 0 ? [input1, input2, input3][idx - 1] : null;
           const nextInput = idx < 3 ? [input2, input3, input4][idx] : null;
@@ -174,13 +190,13 @@ export default function VerificationCode() {
         })}
       </div>
 
-      <div className="absolute text-black" style={{ top: "49vh", left: "35vw", fontSize: "3vw" }}>
+      <div className="absolute text-black" style={{ top: "56.5vh", left: "35vw", fontSize: "3vw" }}>
         Resend code after: <span className="font-bold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
       </div>
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ top: "61vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
         onClick={handleVerify}
         disabled={loading}
       >
@@ -190,7 +206,7 @@ export default function VerificationCode() {
       <button
         className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
         style={{
-          top: "63vh",
+          top: "68.5vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",

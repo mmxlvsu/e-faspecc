@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path="/reset/:token" element={<Reset />} />
+        <Route path="/reset" element={<Reset />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/order" element={<Order />} />
         <Route path="/profile" element={<Profile />} />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
+import logo from "../assets/logo.png";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -51,14 +52,27 @@ export default function ForgotPassword() {
         src={backIcon}
         alt="Back"
         className="absolute cursor-pointer"
-        style={{ left: "3vw", top: "7vh", width: "6vw", height: "6vw" }}
+        style={{ left: "4vw", top: "4vh", width: "5w", height: "5vw" }}
         onClick={() => navigate("/login")}
+      />
+{/* Logo Image */}
+      <img
+        src={logo}
+        alt="Logo"
+        className="absolute"
+        style={{
+          top: "7vh",       
+          left: "50%",       
+          transform: "translateX(-50%)",
+          width: "57vw",     
+          height: "auto",    
+        }}
       />
 
       {/* "Forgot Password?" text */}
       <h1
         className="absolute font-extrabold text-black"
-        style={{ left: "7vw", top: "20vh", width: "80vw", fontSize: "8vw" }}
+        style={{ left: "7vw", top: "31vh", width: "80vw", fontSize: "7vw" }}
       >
         Forgot Password?
       </h1>
@@ -68,9 +82,9 @@ export default function ForgotPassword() {
         className="absolute"
         style={{
           left: "7vw",
-          top: "27vh",
+          top: "37vh",
           width: "85vw",
-          fontSize: "3.5vw",
+          fontSize: "3.0vw",
           lineHeight: "5vw",
           color: "#36570A",
         }}
@@ -84,7 +98,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "39.5vh", 
+            top: "43.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw" 
@@ -99,7 +113,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-green-600 font-semibold text-center"
           style={{ 
-            top: "39.5vh", 
+            top: "43.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw",
@@ -121,7 +135,7 @@ export default function ForgotPassword() {
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "43vh",
+          top: "46.8vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -135,7 +149,7 @@ export default function ForgotPassword() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "52vh",
+          top: "54.8vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",

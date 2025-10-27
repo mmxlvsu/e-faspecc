@@ -100,7 +100,7 @@ export default function Signup() {
       </p>
 
       {error && (
-        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "20vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
+        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
           {error}
         </div>
       )}
@@ -111,7 +111,7 @@ export default function Signup() {
         value={formData.fullName}
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "39vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
 
       <input
@@ -120,7 +120,7 @@ export default function Signup() {
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "47vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
 
       <input
