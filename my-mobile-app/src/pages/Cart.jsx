@@ -140,7 +140,7 @@ export default function Cart() {
     };
 
   return (
-    <div className="w-screen h-screen relative bg-white">
+    <div className="w-screen h-screen relative bg-[#36570A]">
       {/* Header */}
       <div
         className="fixed top-0 left-0 right-0 flex items-center"
@@ -156,10 +156,10 @@ export default function Cart() {
           src={backIcon}
           alt="Back"
           className="cursor-pointer"
-          style={{ width: "5vw", height: "5vw" }}
+          style={{ width: "5vw", height: "5vw", filter: "brightness(0) invert(1)" }}
           onClick={() => navigate("/home")}
         />
-        <h1 className="flex-1 text-center font-bold" style={{ fontSize: "4vw", color: "black" }}>
+        <h1 className="flex-1 text-center font-bold" style={{ fontSize: "4vw", color: "white" }}>
           Cart
         </h1>
       </div>

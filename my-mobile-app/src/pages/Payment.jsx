@@ -54,7 +54,7 @@ export default function Payment() {
   }
 
   return (
-    <div className="w-screen h-screen relative bg-white">
+    <div className="w-screen h-screen relative bg-[#36570A]">
       {/* Header */}
       <div
         className="fixed flex items-center"
@@ -75,14 +75,15 @@ export default function Payment() {
             width: "6vw",
             height: "6vw",
             cursor: "pointer",
-          }}
+            filter: "brightness(0) invert(1)" }}
+
           onClick={() => navigate(-1)}
         />
         <h1
           className="flex-1 text-center font-bold"
           style={{
             fontSize: "4vw",
-            color: "black",
+            color: "white",
           }}
         >
           Checkout
