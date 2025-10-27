@@ -17,8 +17,6 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    studentId: "",
-    contact: "",
   });
 
   const handleInputChange = (field, value) => {
@@ -98,7 +96,7 @@ export default function Signup() {
         value={formData.fullName}
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "23vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "39vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
 
       <input
@@ -107,28 +105,8 @@ export default function Signup() {
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "31vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
-      />
-
-      <input
-        type="tel"
-        placeholder="Student ID"
-        value={formData.studentId}
-        onChange={(e) => handleInputChange("studentId", e.target.value)}
-        className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "39vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
-      />
-      <p className="absolute text-gray-500" style={{ right: "10vw", top: "40.5vh", fontSize: "3vw" }}>optional</p>
-
-      <input
-        type="tel"
-        placeholder="Contact Number"
-        value={formData.contact}
-        onChange={(e) => handleInputChange("contact", e.target.value)}
-        className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{ top: "47vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
       />
-      <p className="absolute text-gray-500" style={{ right: "10vw", top: "48.5vh", fontSize: "3vw" }}>optional</p>
 
       <input
         type={showPassword ? "text" : "password"}
@@ -174,7 +152,7 @@ export default function Signup() {
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      <p className="absolute text-black text-center" style={{ top: "84vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "90vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>
           Log in here.
