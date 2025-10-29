@@ -90,21 +90,21 @@ export default function Login() {
           top: "9vh",       
           left: "50%",       
           transform: "translateX(-50%)",
-          width: "40vw",     
+          width: "45vw",     
           height: "auto",    
         }}
       />
 
       <h1
         className="absolute font-extrabold text-black leading-tight"
-        style={{ left: "8vw", top: "33vh", fontSize: "7vw", width: "80vw" }}
+        style={{ left: "8vw", top: "30vh", fontSize: "7vw", width: "80vw" }}
       >
         Welcome Back!
       </h1>
 
       <p
         className="absolute font-semibold text-[#36570A]"
-        style={{ left: "8.5vw", top: "37vh", fontSize: "3.5vw", width: "60vw" }}
+        style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw", width: "60vw" }}
       >
         Good to see you again
       </p>
@@ -112,7 +112,7 @@ export default function Login() {
       {error && (
         <div
           className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "42vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
+          style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
         >
           {error}
         </div>
@@ -125,11 +125,11 @@ export default function Login() {
         onChange={e => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "45.5vh",
+          top: "40.8vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          backgroundColor: "rgba(54, 87, 10, 0.1)",
           fontSize: "3.8vw"
         }}
       />
@@ -141,11 +141,11 @@ export default function Login() {
         onChange={e => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "53.5vh",
+          top: "47.8vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          backgroundColor: "rgba(54, 87, 10, 0.1)",
           fontSize: "3.8vw"
         }}
       />
@@ -153,14 +153,14 @@ export default function Login() {
         src={showPassword ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "55vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "48.8vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "63vh",
+          top: "56.8vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
@@ -175,7 +175,7 @@ export default function Login() {
 
       <p
         className="absolute font-bold text-black cursor-pointer text-center"
-        style={{ top: "72vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
+        style={{ top: "65vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
         onClick={() => navigate("/forgot")}
       >
         Forgot password?

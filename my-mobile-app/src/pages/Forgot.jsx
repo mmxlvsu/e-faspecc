@@ -61,10 +61,10 @@ export default function ForgotPassword() {
         alt="Logo"
         className="absolute"
         style={{
-          top: "7vh",       
+          top: "9vh",       
           left: "50%",       
           transform: "translateX(-50%)",
-          width: "57vw",     
+          width: "45vw",     
           height: "auto",    
         }}
       />
@@ -72,7 +72,7 @@ export default function ForgotPassword() {
       {/* "Forgot Password?" text */}
       <h1
         className="absolute font-extrabold text-black"
-        style={{ left: "7vw", top: "31vh", width: "80vw", fontSize: "7vw" }}
+        style={{ left: "7vw", top: "30vh", width: "80vw", fontSize: "7vw" }}
       >
         Forgot Password?
       </h1>
@@ -82,7 +82,7 @@ export default function ForgotPassword() {
         className="absolute"
         style={{
           left: "7vw",
-          top: "37vh",
+          top: "35vh",
           width: "85vw",
           fontSize: "3.0vw",
           lineHeight: "5vw",
@@ -98,7 +98,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-red-600 font-semibold text-center"
           style={{ 
-            top: "43.5vh", 
+            top: "41.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw" 
@@ -113,7 +113,7 @@ export default function ForgotPassword() {
         <div
           className="absolute text-green-600 font-semibold text-center"
           style={{ 
-            top: "43.5vh", 
+            top: "41.5vh", 
             left: "7vw", 
             width: "86vw", 
             fontSize: "3.2vw",
@@ -135,11 +135,11 @@ export default function ForgotPassword() {
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
         style={{
-          top: "46.8vh",
+          top: "45vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.2)",
+          backgroundColor: "rgba(54, 87, 10, 0.1)",
           color: "#36570A",
           fontSize: "3.8vw",
         }}
@@ -149,7 +149,7 @@ export default function ForgotPassword() {
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "54.8vh",
+          top: "54vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",

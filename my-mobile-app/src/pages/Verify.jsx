@@ -103,10 +103,10 @@ export default function VerificationCode() {
         alt="Logo"
         className="absolute"
         style={{
-          top: "7vh",       
+          top: "9vh",       
           left: "50%",       
           transform: "translateX(-50%)",
-          width: "57vw",     
+          width: "45vw",     
           height: "auto",    
         }}
       />
@@ -182,7 +182,7 @@ export default function VerificationCode() {
               maxLength={1}
               ref={ref}
               className="text-center rounded-lg font-bold"
-              style={{ width: "18vw", height: "18vw", fontSize: "6vw", backgroundColor: "rgba(54,87,10,0.3)" }}
+              style={{ width: "18vw", height: "18vw", fontSize: "6vw", backgroundColor: "rgba(54,87,10,0.1)" }}
               onChange={e => handleChange(e, nextInput)}
               onKeyDown={e => handleKeyDown(e, prevInput)}
             />
@@ -196,7 +196,7 @@ export default function VerificationCode() {
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "61vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ top: "62vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
         onClick={handleVerify}
         disabled={loading}
       >
@@ -206,11 +206,11 @@ export default function VerificationCode() {
       <button
         className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
         style={{
-          top: "68.5vh",
+          top: "69.5vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54,87,10,0.3)",
+          backgroundColor: "rgba(54,87,10,0.4)",
           fontSize: "4vw",
           color: "black",
           opacity: timer > 0 ? 0.5 : 1,

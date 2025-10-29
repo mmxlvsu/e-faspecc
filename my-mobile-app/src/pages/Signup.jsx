@@ -83,10 +83,10 @@ export default function Signup() {
         alt="Logo"
         className="absolute"
         style={{
-          top: "7vh",       
+          top: "9vh",       
           left: "50%",       
           transform: "translateX(-50%)",
-          width: "57vw",     
+          width: "45vw",     
           height: "auto",    
         }}
       />
@@ -111,7 +111,7 @@ export default function Signup() {
         value={formData.fullName}
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
       />
 
       <input
@@ -120,7 +120,7 @@ export default function Signup() {
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
       />
 
       <input
@@ -129,7 +129,7 @@ export default function Signup() {
         value={formData.password}
         onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
       />
       <img
         src={showPassword ? showIcon : hideIcon}
@@ -148,7 +148,7 @@ export default function Signup() {
         value={formData.confirmPassword}
         onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.2)", fontSize: "3.8vw" }}
+        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
       />
       <img
         src={showConfirm ? showIcon : hideIcon}
