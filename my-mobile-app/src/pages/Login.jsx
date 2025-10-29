@@ -87,10 +87,10 @@ export default function Login() {
         alt="Logo"
         className="absolute"
         style={{
-          top: "7vh",       
+          top: "9vh",       
           left: "50%",       
           transform: "translateX(-50%)",
-          width: "57vw",     
+          width: "40vw",     
           height: "auto",    
         }}
       />
