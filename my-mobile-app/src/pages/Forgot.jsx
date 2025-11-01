@@ -55,7 +55,7 @@ export default function ForgotPassword() {
         style={{ left: "4vw", top: "4vh", width: "5w", height: "5vw" }}
         onClick={() => navigate("/login")}
       />
-{/* Logo Image */}
+      {/* Logo Image */}
       <img
         src={logo}
         alt="Logo"

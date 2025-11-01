@@ -97,7 +97,7 @@ export default function VerificationCode() {
         onClick={() => navigate("/login")}
       />
 
-{/* Logo Image */}
+      {/* Logo Image */}
       <img
         src={logo}
         alt="Logo"

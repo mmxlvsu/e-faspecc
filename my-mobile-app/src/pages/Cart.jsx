@@ -300,7 +300,7 @@ export default function Cart() {
                     style={{
                       width: "6vw",
                       height: "6vw",
-                      borderRadius: "50%",
+                      borderRadius: "20%",
                       border: "1px solid #ccc",
                       backgroundColor: "#fff",
                       fontSize: "4vw",
@@ -309,7 +309,7 @@ export default function Cart() {
                   >
                     -
                   </button>
-                  <div style={{ width: "8vw", textAlign: "center", fontSize: "4vw", fontWeight: "600" }}>
+                  <div style={{ width: "5vw", textAlign: "center", fontSize: "3vw", fontWeight: "500" }}>
                     {quantity}
                   </div>
                   <button
@@ -317,7 +317,7 @@ export default function Cart() {
                     style={{
                       width: "6vw",
                       height: "6vw",
-                      borderRadius: "50%",
+                      borderRadius: "20%",
                       border: "1px solid #ccc",
                       backgroundColor: "#fff",
                       fontSize: "4vw",

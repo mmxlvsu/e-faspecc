@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import backIcon from "../assets/back.png";
-import { orderAPI } from "../lib/api"; // ✅ import your API helper
+import { orderAPI } from "../lib/api";
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -11,11 +11,11 @@ export default function Payment() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [instruction, setInstruction] = useState("");
 
-  // ✅ Retrieve cart items from navigation state or localStorage
+  // Retrieve cart items from navigation state or localStorage
   const cartItems =
     location.state?.cartItems || JSON.parse(localStorage.getItem("cart")) || [];
 
-  // ✅ Confirm Order Function
+  // Confirm Order Function
   async function handleConfirmOrder() {
     try {
       if (cartItems.length === 0) {
@@ -49,7 +49,7 @@ export default function Payment() {
       navigate("/order");
     } catch (err) {
       console.error("Order error:", err);
-      alert("❌ Failed to place order: " + err.message);
+      alert("Failed to place order: " + err.message);
     }
   }
 
@@ -332,21 +332,28 @@ export default function Payment() {
             }}
           >
             <button
-              onClick={handleConfirmOrder}
-              style={{
-                width: "80vw",
-                height: "12vw",
-                backgroundColor: "#36570A",
-                color: "white",
-                border: "none",
-                borderRadius: "1.5vw",
-                fontSize: "4vw",
-                fontWeight: "600",
-                cursor: cartItems.length > 0 ? "pointer" : "not-allowed",
-                opacity: cartItems.length > 0 ? 1 : 0.5,
-              }}
-            >
-              Confirm Order
+              onClick={() => {
+          if (!paymentMethod) {
+            alert("Please select a payment method before checking out.");
+            return;
+          }
+          handleConfirmOrder();
+        }}
+        style={{
+          width: "80vw",
+          height: "12vw",
+          backgroundColor: "#36570A",
+          color: "white",
+          border: "none",
+          borderRadius: "1.5vw",
+          fontSize: "4vw",
+          fontWeight: "600",
+          cursor: paymentMethod ? "pointer" : "not-allowed",
+          opacity: paymentMethod ? 1 : 0.3,
+          transition: "opacity 0.2s ease",
+        }}
+      >
+        Confirm Order
             </button>
           </div>
         </div>

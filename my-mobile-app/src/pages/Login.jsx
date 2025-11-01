@@ -61,7 +61,7 @@ export default function Login() {
       if (response.user.role === "student") {
         navigate("/home");
       } else {
-        navigate("/home"); // You can customize this for different roles
+        navigate("/home");
       }
       
     } catch (err) {

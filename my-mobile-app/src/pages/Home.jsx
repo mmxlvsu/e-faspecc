@@ -17,19 +17,17 @@ export default function BottomBarPage() {
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          // Try local user first
           const localUser = storage.getUser();
           if (localUser?.fullName) {
             const first = localUser.fullName.split(" ")[0];
             setFirstName(first);
           }
 
-          // Then try fetching the most recent user data from backend
           const user = await authAPI.getCurrentUser();
           if (user?.fullName) {
             const first = user.fullName.split(" ")[0];
             setFirstName(first);
-            storage.setUser(user); // refresh stored user data
+            storage.setUser(user);
           }
         } catch (err) {
           console.warn("Failed to fetch user info:", err);
@@ -76,15 +74,12 @@ export default function BottomBarPage() {
           menuAPI.getCategories(),
           menuAPI.getAllItems(),
         ]);
-
-        // Assuming your backend returns something like:
-        // [ { name: "Breakfast" }, { name: "Lunch" }, { name: "Dinner" } ]
         const formattedCategories = [
           "All",
           ...categoryData
             .map((cat) => cat.name || cat.categoryName)
-            .filter(Boolean) // removes any undefined/null
-            .sort((a, b) => a.localeCompare(b)), // ✅ sort alphabetically
+            .filter(Boolean)
+            .sort((a, b) => a.localeCompare(b)),
         ];
 
         setCategories(formattedCategories);
@@ -398,18 +393,18 @@ export default function BottomBarPage() {
         {/* Categories */}
         <div
           style={{
-            overflowX: "auto", // ✅ Allow horizontal scroll
+            overflowX: "auto", 
             whiteSpace: "nowrap",
             marginTop: "-3vh",
             padding: "2vh 3vw",
-            scrollbarWidth: "none", // Hide scrollbar (Firefox)
+            scrollbarWidth: "none",
           }}
         >
           <div
             style={{
               display: "flex",
               gap: "4vw",
-              width: "max-content", // ✅ Ensures inner div expands beyond screen width
+              width: "max-content",
             }}
           >
             {categories.map((cat, index) => {
@@ -558,7 +553,7 @@ export default function BottomBarPage() {
                 alignItems: "center",
                 zIndex: 9999,
               }}
-              onClick={() => setIsModalOpen(false)} // close when clicking outside
+              onClick={() => setIsModalOpen(false)}
             >
               <div
                 style={{
@@ -569,7 +564,7 @@ export default function BottomBarPage() {
                   padding: "5vw",
                   position: "relative",
                 }}
-                onClick={(e) => e.stopPropagation()} // prevent close when clicking inside
+                onClick={(e) => e.stopPropagation()}
               >
                 {/* Close button */}
                 <div
@@ -602,41 +597,41 @@ export default function BottomBarPage() {
                 />
 
                 {/* Product Info */}
-<h3
-  style={{
-    fontSize: "5vw",       // 🔹 Adjust title font size
-    margin: "1vw 0",
-    color: "#1a1a1a",       // 🔹 Adjust title color
-    fontWeight: "700",
-  }}
->
-  {selectedItem.name}
-</h3>
+                <h3
+                  style={{
+                    fontSize: "5vw",      
+                    margin: "1vw 0",
+                    color: "#1a1a1a",      
+                    fontWeight: "700",
+                  }}
+                >
+                  {selectedItem.name}
+                </h3>
 
-<p
-  style={{
-    position: "absolute",    // 🔹 Enables top/left/bottom/right control
-    top: "61.5vw",             // 🔹 Adjust distance from top
-    right: "5vw",             // 🔹 Adjust distance from left
-    fontSize: "4vw",       // 🔹 Adjust font size
-    color: "#2e7d32",        // 🔹 Adjust color
-    fontWeight: "600",
-    margin: 0,               // 🔹 Remove default margin
-  }}
->
-  ₱{Number(selectedItem.price).toFixed(2)}
-</p>
+                <p
+                  style={{
+                    position: "absolute",   
+                    top: "61.5vw",             
+                    right: "5vw",             
+                    fontSize: "4vw",       
+                    color: "#2e7d32",        
+                    fontWeight: "600",
+                    margin: 0,              
+                  }}
+                >
+                  ₱{Number(selectedItem.price).toFixed(2)}
+                </p>
 
-<p
-  style={{
-    fontSize: "3vw",          // 🔹 Adjust description font size
-    color: "#555555",         // 🔹 Adjust description color
-    marginTop: "2vw",
-    lineHeight: "1.4",
-  }}
->
-  {selectedItem.description || "No description available."}
-</p>
+                <p
+                  style={{
+                    fontSize: "3vw",          
+                    color: "#555555",         
+                    marginTop: "2vw",
+                    lineHeight: "1.4",
+                  }}
+                >
+                  {selectedItem.description || "No description available."}
+                </p>
 
 
                 {/* Quantity Selector */}
