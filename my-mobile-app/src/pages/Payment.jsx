@@ -97,7 +97,7 @@ export default function Payment() {
           top: "15vw",
           left: "0",
           right: "0",
-          bottom: "18vh",
+          bottom: "0vh",
           overflowY: "auto",
           padding: "4vw",
           backgroundColor: "white",
@@ -310,7 +310,7 @@ export default function Payment() {
             bottom: "0",
             left: "0",
             right: "0",
-            minHeight: "18vh",
+            minHeight: "11vh",
             backgroundColor: "white",
             boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
             zIndex: 9999,
@@ -322,34 +322,6 @@ export default function Payment() {
             gap: "2vw",
           }}
         >
-          {/* Total Row */}
-          <div
-            style={{
-              width: "88%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "clamp(16px, 4vw, 24px)",
-                fontWeight: "400",
-                color: "#333",
-              }}
-            >
-              Total:
-            </span>
-            <span
-              style={{
-                fontSize: "clamp(16px, 4vw, 24px)",
-                fontWeight: "600",
-                color: "#36570A",
-              }}
-            >
-              ₱{totalAmount.toFixed(2)}
-            </span>
-          </div>
 
           {/* Button Row */}
           <div

@@ -219,9 +219,8 @@ export default function BottomBarPage() {
           left: "50%",
           transform: "translateX(-50%)",
           width: "100vw",
-          height: "40vh",
+          height: "35vh",
           backgroundColor: "#36570A",
-          borderRadius: "20vw",
           zIndex: 500,
           overflow: "hidden",
         }}
@@ -233,7 +232,7 @@ export default function BottomBarPage() {
             position: "absolute",
             bottom: "-4vh",
             right: "3vw",
-            width: "33vw",
+            width: "30vw",
             height: "auto",
           }}
         />
@@ -324,7 +323,7 @@ export default function BottomBarPage() {
       <div
         style={{
           position: "absolute",
-          top: "10vh",
+          top: "8.5vh",
           left: "50%",
           transform: "translateX(-50%)",
           width: "85vw",
@@ -368,8 +367,8 @@ export default function BottomBarPage() {
       <div
         style={{
           position: "absolute",
-          top: "20vh",
-          left: "10vw",
+          top: "16vh",
+          left: "8vw",
           color: "white",
           zIndex: 900,
           width: "90vw",
@@ -384,7 +383,7 @@ export default function BottomBarPage() {
         ref={scrollRef}
         style={{
           position: "absolute",
-          top: "32vh",
+          top: "28vh",
           left: 0,
           width: "100%",
           bottom: "35px",
@@ -409,7 +408,7 @@ export default function BottomBarPage() {
           <div
             style={{
               display: "flex",
-              gap: "3vw",
+              gap: "4vw",
               width: "max-content", // ✅ Ensures inner div expands beyond screen width
             }}
           >
@@ -425,7 +424,7 @@ export default function BottomBarPage() {
                     color: isSelected ? "white" : "#333",
                     padding: "2vw 5vw",
                     borderRadius: "3vw",
-                    fontSize: "2.5vw",
+                    fontSize: "2.7vw",
                     fontWeight: "500",
                     cursor: "pointer",
                     whiteSpace: "nowrap",
@@ -445,7 +444,7 @@ export default function BottomBarPage() {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: "3vw",
+            gap: "4vw",
             padding: "1vw 1vw",
           }}
         >
@@ -454,9 +453,9 @@ export default function BottomBarPage() {
               // Default values for missing data
               const status = getStockStatus(item);
               const statusStyles = {
-                Available: { backgroundColor: "#4CAF50", textColor: "white" },
-                "Low Stock": { backgroundColor: "#FFC107", textColor: "#333" },
-                Unavailable: { backgroundColor: "#F44336", textColor: "white" },
+                Available: { backgroundColor: "green", textColor: "white" },
+                "Low Stock": { backgroundColor: "yellow", textColor: "white" },
+                Unavailable: { backgroundColor: "red", textColor: "white" },
               };
               const { backgroundColor, textColor } = statusStyles[status] || statusStyles["Available"];
 
@@ -468,7 +467,7 @@ export default function BottomBarPage() {
                     backgroundColor: "white",
                     borderRadius: "2vw",
                     padding: "1vw",
-                    height: "40vw",
+                    height: "45vw",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -483,7 +482,7 @@ export default function BottomBarPage() {
                       right: "4vw",
                       backgroundColor: status.backgroundColor,
                       color: textColor,
-                      fontSize: "2vw",
+                      fontSize: "2.5vw",
                       fontWeight: "400",
                       padding: "0.5vw 2vw",
                       borderRadius: "2vw",
@@ -498,11 +497,11 @@ export default function BottomBarPage() {
                     src={item.photoUrl || "/placeholder-food.png"}
                     alt={item.name}
                     style={{
-                      width: "95%",
+                      width: "90%",
                       height: "75%",
                       borderRadius: "2vw",
                       objectFit: "cover",
-                      marginTop: "1vw",
+                      marginTop: "3vw",
                       marginBottom: "2vw",
                       cursor: "pointer",
                     }}
@@ -516,10 +515,10 @@ export default function BottomBarPage() {
                   {/* Title and Price */}
                   <p
                     style={{
-                      fontSize: "2.5vw",
+                      fontSize: "3vw",
                       fontWeight: "600",
                       color: "#333",
-                      marginBottom: "0.5vw",
+                      marginBottom: "-1vw",
                     }}
                   >
                     {item.name}
@@ -576,9 +575,9 @@ export default function BottomBarPage() {
                 <div
                   style={{
                     position: "absolute",
-                    top: "2vw",
-                    right: "3vw",
-                    fontSize: "6.5vw",
+                    top: "1vw",
+                    right: "4vw",
+                    fontSize: "8vw",
                     fontWeight: "bold",
                     color: "#888",
                     cursor: "pointer",
@@ -618,7 +617,7 @@ export default function BottomBarPage() {
   style={{
     position: "absolute",    // 🔹 Enables top/left/bottom/right control
     top: "61.5vw",             // 🔹 Adjust distance from top
-    right: "8vw",             // 🔹 Adjust distance from left
+    right: "5vw",             // 🔹 Adjust distance from left
     fontSize: "4vw",       // 🔹 Adjust font size
     color: "#2e7d32",        // 🔹 Adjust color
     fontWeight: "600",
@@ -708,7 +707,7 @@ export default function BottomBarPage() {
                     fontSize: "3.5vw",
                     fontWeight: "600",
                     padding: "2.5vw 0",
-                    borderRadius: "3vw",
+                    borderRadius: "1vw",
                     border: "none",
                     cursor: "pointer",
                     marginTop: "6vw",
