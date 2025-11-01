@@ -298,12 +298,12 @@ export default function Cart() {
                   <button
                     onClick={() => handleQuantityChange(i, -1)}
                     style={{
-                      width: "5vw",
-                      height: "5vw",
+                      width: "6vw",
+                      height: "6vw",
                       borderRadius: "50%",
                       border: "1px solid #ccc",
                       backgroundColor: "#fff",
-                      fontSize: "3vw",
+                      fontSize: "4vw",
                       cursor: "pointer",
                     }}
                   >
@@ -315,12 +315,12 @@ export default function Cart() {
                   <button
                     onClick={() => handleQuantityChange(i, 1)}
                     style={{
-                      width: "5vw",
-                      height: "5vw",
+                      width: "6vw",
+                      height: "6vw",
                       borderRadius: "50%",
                       border: "1px solid #ccc",
                       backgroundColor: "#fff",
-                      fontSize: "3vw",
+                      fontSize: "4vw",
                       cursor: "pointer",
                     }}
                   >
@@ -384,7 +384,7 @@ export default function Cart() {
                     fontSize: "3.2vw",
                     color: "#333",
                     fontWeight: "400",
-                    marginRight: "3vw",
+                    marginRight: "4vw",
                   }}
                 >
                   ₱{Number(addOn.price).toFixed(2)}
@@ -394,7 +394,7 @@ export default function Cart() {
                    onClick={() => handleAddToCart(addOn)}
                   style={{
                     color: "black",
-                    borderRadius: "2vw",
+                    borderRadius: "1vw",
                     padding: "1vw 2vw",
                     fontSize: "4vw",
                     cursor: "pointer",
