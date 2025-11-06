@@ -169,6 +169,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
@@ -182,6 +183,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
@@ -227,6 +229,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
@@ -272,6 +275,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
@@ -317,6 +321,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
@@ -330,10 +335,11 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >
-              Rate
+              Rate Us
             </button>
           </div>
         </div>
@@ -375,6 +381,7 @@ export default function BottomBarPage() {
                 borderRadius: "1vw",
                 padding: "2vw 2vw",
                 fontSize: "2.8vw",
+                fontWeight: "500",
                 cursor: "pointer",
               }}
             >

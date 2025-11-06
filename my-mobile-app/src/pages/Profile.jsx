@@ -256,8 +256,25 @@ export default function BottomBarPage() {
   About
   <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
 </div>
+{/* Sign Out Button below the last placeholder */}
+  <div
+    style={{
+      marginTop: "15px",
+      borderRadius: "7px",
+      backgroundColor: "#36570A",
+      padding: "10px",
+      cursor: "pointer",
+      fontFamily: "Poppins, sans-serif",
+      fontSize: "14px",
+      color: "white",
+      textAlign: "center",
+      fontWeight: "bold",
+    }}
+    onClick={handleSignOut}
+  >
+    Sign Out
+  </div>
 </div>
-
 
         {/* Edit Modal */}
         {isEditing && (
@@ -364,30 +381,6 @@ export default function BottomBarPage() {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Sign Out Button */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "240px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          borderRadius: "7px",
-          backgroundColor: "#36570A",
-          padding: "10px 100px",
-          cursor: "pointer",
-          fontFamily: "Poppins, sans-serif",
-          fontSize: "14px",
-          color: "white",
-          textAlign: "center",
-          whiteSpace: "nowrap",
-          zIndex: 10000,
-          fontWeight: "bold",
-        }}
-        onClick={handleSignOut}
-      >
-        Sign Out
       </div>
 
       {/* Bottom Navigation Bar */}
