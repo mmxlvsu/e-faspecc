@@ -32,7 +32,7 @@ export default function ForgotPassword() {
 
     try {
       const response = await authAPI.forgotPassword(email);
-      setSuccess("Password reset email sent! Check your inbox for instructions.");
+      setSuccess("Password reset email sent!");
       
       // Navigate to login after showing success message
       setTimeout(() => {

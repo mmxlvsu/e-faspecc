@@ -251,25 +251,6 @@ export default function BottomBarPage() {
           alt="notification"
           style={{ width: "100%", height: "100%", filter: "invert(100%) brightness(200%)" }}
         />
-        <div
-          style={{
-            position: "absolute",
-            top: "-1vw",
-            right: "-1vw",
-            width: "4vw",
-            height: "4vw",
-            borderRadius: "50%",
-            backgroundColor: "white",
-            color: "black",
-            fontSize: "2.5vw",
-            fontWeight: "600",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          3
-        </div>
       </div>
 
       {/* Location */}
@@ -378,7 +359,7 @@ export default function BottomBarPage() {
         ref={scrollRef}
         style={{
           position: "absolute",
-          top: "28vh",
+          top: "27vh",
           left: 0,
           width: "100%",
           bottom: "35px",
@@ -473,7 +454,7 @@ export default function BottomBarPage() {
                   <div
                     style={{
                       position: "absolute",
-                      top: "4vw",
+                      top: "5vw",
                       right: "4vw",
                       backgroundColor: status.backgroundColor,
                       color: textColor,
