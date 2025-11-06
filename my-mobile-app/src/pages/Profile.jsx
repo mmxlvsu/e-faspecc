@@ -6,6 +6,8 @@ import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png";
 import editIcon from "../assets/edit.png";
+import defaultProfile from "../assets/default-profile.png";
+import profileBack from "../assets/backk.png";
 
 export default function BottomBarPage() {
   const navigate = useNavigate();
@@ -14,7 +16,6 @@ export default function BottomBarPage() {
   const [editValues, setEditValues] = useState({
     fullName: "",
     contact: "",
-    studentId: "",
   });
 
   // Fetch user info from backend
@@ -36,7 +37,6 @@ export default function BottomBarPage() {
       setEditValues({
         fullName: userData.fullName || "",
         contact: userData.contact || "",
-        studentId: userData.studentId || "",
       });
       setIsEditing(true);
     }
@@ -69,52 +69,49 @@ export default function BottomBarPage() {
     { icon: personIcon, onClick: () => navigate("/profile"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
   ];
 
+  
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh", backgroundColor: "#fff" }}>
-      {/* Top Green Header */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "15vh",
-          backgroundColor: "#36570A",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-end",
-          zIndex: 998,
-        }}
-      >
-        <div style={{ width: "90px", height: "90px", marginBottom: "-35px" }}>
-          <div
-            onClick={handleEditClick}
-            style={{
-              position: "absolute",
-              bottom: "4px",
-              right: "calc(50% - 12px)",
-              width: "25px",
-              height: "25px",
-              borderRadius: "50%",
-              backgroundColor: "#FFFFFF",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              zIndex: 1000,
-            }}
-          >
-            <img src={editIcon} alt="Edit" style={{ width: "15px", height: "15px" }} />
-          </div>
-        </div>
-      </div>
+    
+<div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+  <div style={{ position: "relative", width: "80px", height: "80px" }}>
+    <img
+      src={userData.profileImage || defaultProfile}
+      alt="Profile"
+      style={{
+        width: "80px",
+        height: "80px",
+        borderRadius: "50%",
+        objectFit: "cover",
+        border: "1px solid #f3f3f3",
+        cursor: "pointer",
+      }}
+      onClick={handleEditClick} // clicking image triggers edit
+    />
+    <img
+      src={editIcon}
+      alt="Edit"
+      style={{
+        width: "22px",
+        height: "22px",
+        position: "absolute",
+        bottom: "0",
+        right: "0",
+        borderRadius: "50%",
+        backgroundColor: "#fff",
+        padding: "2px",
+        border: "1px solid #ccc",
+        cursor: "pointer",
+      }}
+      onClick={handleEditClick} // clicking icon also triggers edit
+    />
+  </div>
+
 
       {/* User Info Section */}
       <div
         style={{
           position: "absolute",
-          top: "15vh",
+          top: "10vh",
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -124,27 +121,143 @@ export default function BottomBarPage() {
         }}
       >
         <div
+  style={{
+    width: "90%",
+    maxWidth: "400px",
+    marginBottom: "15px",
+    display: "flex",
+    justifyContent: "flex-start",
+  }}
+>
+  <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px",
+    fontWeight: "500", }}>Profile Information</h2>
+</div>
+
+        <div
           style={{
             width: "90%",
             maxWidth: "400px",
-            backgroundColor: "#F8F8F8",
+            backgroundColor: "#f3f3f3",
+            border: "1px solid #ccc",
             borderRadius: "12px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
             padding: "20px",
           }}
         >
-          <h2 style={{ textAlign: "center", color: "#36570A", marginBottom: "15px" }}>
-            Profile Information
-          </h2>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px" }}>
             <div><strong>Full Name:</strong> {userData.fullName}</div>
-            <div><strong>Role:</strong> {userData.role}</div>
             <div><strong>Email:</strong> {userData.email}</div>
             <div><strong>Contact:</strong> {userData.contact}</div>
-            <div><strong>Student ID:</strong> {userData.studentId}</div>
           </div>
         </div>
+
+ <div
+  style={{
+    width: "90%",
+    maxWidth: "400px",
+    marginTop: "20px",
+    display: "flex",
+    justifyContent: "flex-start",
+  }}
+>
+  <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px",
+    fontWeight: "500", }}>Settings</h2>
+</div>
+
+<div
+  style={{
+    width: "100%",
+    maxWidth: "900px",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    padding: "15px 20px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+  }}
+>
+  {/* Example placeholder rows */}
+  <div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between", // make space between text and icon
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/change-password")}
+>
+  Password
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+
+<div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/terms-and-policies")}
+>
+  FastPick Policies
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+
+<div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/help")}
+>
+  Happy with FastPick? Rate us!
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+
+<div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/help")}
+>
+  About
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+</div>
+
 
         {/* Edit Modal */}
         {isEditing && (
@@ -202,20 +315,6 @@ export default function BottomBarPage() {
                     backgroundColor: "#f5f5f5",
                   }}
                 />
-
-                <label>Role</label>
-                <input
-                  value={userData.role}
-                  disabled
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    backgroundColor: "#f5f5f5",
-                  }}
-                />
-
                 <label>Contact</label>
                 <input
                   value={editValues.contact}
@@ -227,19 +326,7 @@ export default function BottomBarPage() {
                     fontSize: "14px",
                   }}
                 />
-
-                <label>Student ID</label>
-                <input
-                  value={editValues.studentId}
-                  onChange={(e) => setEditValues({ ...editValues, studentId: e.target.value })}
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                />
-
+                
                 <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
                   <button
                     onClick={handleSave}
@@ -271,6 +358,7 @@ export default function BottomBarPage() {
                   >
                     Cancel
                   </button>
+                  
                 </div>
               </div>
             </div>
@@ -282,21 +370,20 @@ export default function BottomBarPage() {
       <div
         style={{
           position: "fixed",
-          bottom: "85px",
+          bottom: "240px",
           left: "50%",
           transform: "translateX(-50%)",
-          border: "1px solid #36570A",
-          borderRadius: "8px",
-          backgroundColor: "#FFFFFF",
-          padding: "6px 100px",
+          borderRadius: "7px",
+          backgroundColor: "#36570A",
+          padding: "10px 100px",
           cursor: "pointer",
           fontFamily: "Poppins, sans-serif",
-          fontSize: "12px",
-          fontWeight: 500,
-          color: "black",
+          fontSize: "14px",
+          color: "white",
           textAlign: "center",
           whiteSpace: "nowrap",
           zIndex: 10000,
+          fontWeight: "bold",
         }}
         onClick={handleSignOut}
       >
