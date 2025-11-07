@@ -124,7 +124,7 @@ export default function BottomBarPage() {
   style={{
     width: "90%",
     maxWidth: "400px",
-    marginBottom: "15px",
+    marginBottom: "10px",
     display: "flex",
     justifyContent: "flex-start",
   }}
@@ -213,27 +213,7 @@ export default function BottomBarPage() {
   }}
   onClick={() => navigate("/terms-and-policies")}
 >
-  FastPick Policies
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
-
-<div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/help")}
->
-  Happy with FastPick? Rate us!
+  Terms & Policies
   <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
 </div>
 
@@ -256,6 +236,47 @@ export default function BottomBarPage() {
   About
   <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
 </div>
+
+<div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/help")}
+>
+  Rate Us
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+
+<div
+  style={{
+    height: "45px",
+    borderRadius: "15px",
+    border: "1px solid #ccc",
+    padding: "0 15px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    cursor: "pointer",
+    backgroundColor: "#f3f3f3",
+    fontSize: "14px",
+    fontWeight: "bold",
+  }}
+  onClick={() => navigate("/help")}
+>
+  FAQs
+  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
+</div>
+
 {/* Sign Out Button below the last placeholder */}
   <div
     style={{

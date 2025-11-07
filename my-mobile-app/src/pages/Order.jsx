@@ -84,317 +84,340 @@ export default function BottomBarPage() {
           width: "100%",
         }}
       >
-        {orderTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => {
-              setActiveTab(tab);
-              if (tab === "Completed" && tabRef.current) {
-                tabRef.current.scrollTo({
-                  left: tabRef.current.scrollWidth,
-                  behavior: "smooth",
-                });
-              }
-              if (
-                (tab === "Preparing", "Ready" || tab === "Completed") &&
-                activeTab === "Cancelled" &&
-                tabRef.current
-              ) {
-                tabRef.current.scrollTo({
-                  left: 0,
-                  behavior: "smooth",
-                });
-              }
-            }}
-            style={{
-              fontSize: "3.4vw",
-              fontWeight: activeTab === tab ? "600" : "400",
-              color: activeTab === tab ? "#2e7d32" : "#555",
-              padding: "10px 20px 8px 20px",
-              cursor: "pointer",
-              flexShrink: 0,
-              background: "none",
-              border: "none",
-              borderBottom:
-                activeTab === tab
-                  ? "1px solid #2e7d32"
-                  : "1px solid transparent",
-            }}
-          >
-            {tab}
-          </button>
-        ))}
+        {orderTabs.map((tab, index) => {
+          const circleColors = ["#f3f3f3", "#f3f3f3", "#f3f3f3", "#f3f3f3", "#f3f3f3"];
+          return (
+            <button
+              key={tab}
+              onClick={() => {
+                setActiveTab(tab);
+                if (tab === "Completed" && tabRef.current) {
+                  tabRef.current.scrollTo({
+                    left: tabRef.current.scrollWidth,
+                    behavior: "smooth",
+                  });
+                }
+                if (
+                  (tab === "Preparing", "Ready" || tab === "Completed") &&
+                  activeTab === "Cancelled" &&
+                  tabRef.current
+                ) {
+                  tabRef.current.scrollTo({
+                    left: 0,
+                    behavior: "smooth",
+                  });
+                }
+              }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "2vw",
+                fontSize: "3.4vw",
+                fontWeight: activeTab === tab ? "600" : "400",
+                color: activeTab === tab ? "#2e7d32" : "#555",
+                padding: "10px 20px 8px 20px",
+                cursor: "pointer",
+                flexShrink: 0,
+                background: "none",
+                border: "none",
+                borderBottom:
+                  activeTab === tab
+                    ? "1px solid #2e7d32"
+                    : "1px solid transparent",
+              }}
+            >
+              {/* Circle Placeholder */}
+              <div
+                style={{
+                  width: "5vw",
+                  height: "5vw",
+                  borderRadius: "50%",
+                  backgroundColor: circleColors[index],
+                  color: "black",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "2.8vw",
+                  fontWeight: "600",
+                }}
+              >
+                {index + 1}
+              </div>
+
+              {/* Tab Text */}
+              {tab}
+            </button>
+          );
+        })}
       </div>
 
       {/* Gray Container below Tabs */}
-<div
-  style={{
-    backgroundColor: "#f3f3f3",
-    width: "100%",
-    minHeight: "90vh",
-    padding: "5vw 0",
-  }}
->
-  {/* Pending Tab */}
-  {activeTab === "Pending" && (
-    <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
-      {[1, 2, 3].map((_, index) => (
-        <div
-          key={index}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "2vw",
-            padding: "4vw",
-            width: "90%",
-            margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
-          }}
-        >
-          <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12345</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 2</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱250</p>
+      <div
+        style={{
+          backgroundColor: "#f3f3f3",
+          width: "100%",
+          minHeight: "90vh",
+          padding: "5vw 0",
+        }}
+      >
+        {/* Pending Tab */}
+        {activeTab === "Pending" && (
+          <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "2vw",
+                  padding: "4vw",
+                  width: "90%",
+                  margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
+                }}
+              >
+                <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12345</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 2</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱250</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "3vw",
-              marginTop: "3vw",
-            }}
-          >
-            <button
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #d9d9d9",
-                color: "black",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              Cancel Order
-            </button>
-            <button
-              style={{
-                backgroundColor: "white",
-                color: "#36570A",
-                border: "1px solid #36570A",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              View Details
-            </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "3vw",
+                    marginTop: "3vw",
+                  }}
+                >
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #d9d9d9",
+                      color: "black",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel Order
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "#36570A",
+                      border: "1px solid #36570A",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  )}
+        )}
 
-  {/* Preparing Tab */}
-  {activeTab === "Preparing" && (
-    <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
-      {[1, 2, 3].map((_, index) => (
-        <div
-          key={index}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "2vw",
-            padding: "4vw",
-            width: "90%",
-            margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
-          }}
-        >
-          <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12346</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 1</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱150</p>
+        {/* Preparing Tab */}
+        {activeTab === "Preparing" && (
+          <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "2vw",
+                  padding: "4vw",
+                  width: "90%",
+                  margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
+                }}
+              >
+                <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12346</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 1</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱150</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "3vw",
-              marginTop: "3vw",
-            }}
-          >
-                        <button
-              style={{
-                backgroundColor: "white",
-                color: "#36570A",
-                border: "1px solid #36570A",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              View Order Details
-            </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "3vw",
+                    marginTop: "3vw",
+                  }}
+                >
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "#36570A",
+                      border: "1px solid #36570A",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    View Order Details
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  )}
+        )}
 
-  {/* Ready Tab */}
-  {activeTab === "Ready" && (
-    <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
-      {[1, 2, 3].map((_, index) => (
-        <div
-          key={index}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "2vw",
-            padding: "4vw",
-            width: "90%",
-            margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
-          }}
-        >
-          <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12347</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 3</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱400</p>
+        {/* Ready Tab */}
+        {activeTab === "Ready" && (
+          <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "2vw",
+                  padding: "4vw",
+                  width: "90%",
+                  margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
+                }}
+              >
+                <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12347</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 3</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱400</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "3vw",
-              marginTop: "3vw",
-            }}
-          >
-            <button
-              style={{
-                backgroundColor: "white",
-                color: "#36570A",
-                border: "1px solid #36570A",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              Order Received
-            </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "3vw",
+                    marginTop: "3vw",
+                  }}
+                >
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "#36570A",
+                      border: "1px solid #36570A",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Order Received
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  )}
+        )}
 
-  {/* Completed Tab */}
-  {activeTab === "Completed" && (
-    <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
-      {[1, 2, 3].map((_, index) => (
-        <div
-          key={index}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "2vw",
-            padding: "4vw",
-            width: "90%",
-            margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
-          }}
-        >
-          <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12348</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 4</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱600</p>
+        {/* Completed Tab */}
+        {activeTab === "Completed" && (
+          <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "2vw",
+                  padding: "4vw",
+                  width: "90%",
+                  margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
+                }}
+              >
+                <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12348</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 4</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱600</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "3vw",
-              marginTop: "3vw",
-            }}
-          >
-            <button
-              style={{
-                backgroundColor: "white",
-                border: "1px solid #d9d9d9",
-                color: "black",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              Order Again
-            </button>
-            <button
-              style={{
-                backgroundColor: "white",
-                color: "#36570A",
-                border: "1px solid #36570A",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              Rate Us
-            </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "3vw",
+                    marginTop: "3vw",
+                  }}
+                >
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #d9d9d9",
+                      color: "black",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Order Again
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "#36570A",
+                      border: "1px solid #36570A",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Rate Us
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  )}
+        )}
 
-  {/* Cancelled Tab */}
-  {activeTab === "Cancelled" && (
-    <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
-      {[1, 2, 3].map((_, index) => (
-        <div
-          key={index}
-          style={{
-            backgroundColor: "white",
-            borderRadius: "2vw",
-            padding: "4vw",
-            width: "90%",
-            margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
-          }}
-        >
-          <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12349</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 1</p>
-          <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱100</p>
+        {/* Cancelled Tab */}
+        {activeTab === "Cancelled" && (
+          <div style={{ backgroundColor: "#f3f3f3", width: "100%", padding: "0" }}>
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "2vw",
+                  padding: "4vw",
+                  width: "90%",
+                  margin: index === 0 ? "0 auto" : "3vw auto 0 auto",
+                }}
+              >
+                <p style={{ fontSize: "3.5vw", fontWeight: "600" }}>Order #12349</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Quantity: 1</p>
+                <p style={{ fontSize: "3vw", color: "#666" }}>Price: ₱100</p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "3vw",
-              marginTop: "3vw",
-            }}
-          >
-            <button
-              style={{
-                backgroundColor: "white",
-                color: "#36570A",
-                border: "1px solid #36570A",
-                borderRadius: "1vw",
-                padding: "2vw 2vw",
-                fontSize: "2.8vw",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              Order Again
-            </button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "3vw",
+                    marginTop: "3vw",
+                  }}
+                >
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "#36570A",
+                      border: "1px solid #36570A",
+                      borderRadius: "1vw",
+                      padding: "2vw 2vw",
+                      fontSize: "2.8vw",
+                      fontWeight: "500",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Order Again
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
-
+        )}
+      </div>
 
       {/* Fixed Bottom Navigation */}
       <div
