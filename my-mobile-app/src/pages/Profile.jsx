@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, logout } from "../lib/api";
 import homeIcon from "../assets/home.png";
@@ -20,12 +20,13 @@ export default function BottomBarPage() {
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [showPolicies, setShowPolicies] = useState(false);
-const [showAbout, setShowAbout] = useState(false);
+  const [showBottomBar, setShowBottomBar] = useState(true);
   const [editValues, setEditValues] = useState({
     fullName: "",
     contact: "",
   });
+
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -40,6 +41,24 @@ const [showAbout, setShowAbout] = useState(false);
     fetchUser();
   }, [navigate]);
 
+  // Scroll listener to hide/show bottom bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = scrollContainerRef.current;
+      if (!el) return;
+
+      const atBottom = el.scrollHeight - el.scrollTop === el.clientHeight;
+      setShowBottomBar(!atBottom);
+    };
+
+    const el = scrollContainerRef.current;
+    if (el) el.addEventListener("scroll", handleScroll);
+
+    return () => {
+      if (el) el.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleEditClick = () => {
     if (userData) {
       setEditValues({
@@ -47,16 +66,6 @@ const [showAbout, setShowAbout] = useState(false);
         contact: userData.contact || "",
       });
       setIsEditing(true);
-    }
-  };
-
-  const handleSave = async () => {
-    try {
-      const updatedUser = await authAPI.updateUser(editValues);
-      setUserData(updatedUser);
-      setIsEditing(false);
-    } catch (err) {
-      console.error("Error updating user:", err);
     }
   };
 
@@ -78,7 +87,29 @@ const [showAbout, setShowAbout] = useState(false);
   ];
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", position: "relative" }}>
+    <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
+
+      {/* Scrollable Content */}
+      <div
+        ref={scrollContainerRef}
+        style={{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100vh",
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    fontFamily: "Poppins",
+    paddingTop: "30px",
+    paddingBottom: "80px", // ✅ space for bottom bar
+    boxSizing: "border-box",
+    backgroundColor: "#fff",
+  }}
+      >
+        {/* Profile Picture */}
       <div style={{ position: "relative", width: "80px", height: "80px" }}>
         <img
           src={userData.profileImage || defaultProfile}
@@ -112,20 +143,8 @@ const [showAbout, setShowAbout] = useState(false);
         />
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          top: "10vh",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          paddingTop: "60px",
-          fontFamily: "Poppins",
-        }}
-      >
         {/* Profile Info */}
-        <div style={{ width: "90%", maxWidth: "400px", marginBottom: "10px" }}>
+        <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "10px" }}>
           <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
             Profile Information
           </h2>
@@ -149,7 +168,7 @@ const [showAbout, setShowAbout] = useState(false);
         </div>
 
         {/* Settings */}
-        <div style={{ width: "90%", maxWidth: "400px", marginTop: "20px" }}>
+        <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "-1px" }}>
           <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
             Settings
           </h2>
@@ -167,7 +186,6 @@ const [showAbout, setShowAbout] = useState(false);
             gap: "12px",
           }}
         >
-          {/* Other Settings */}
           {[ 
             { icon: password, text: "Password" },
             { icon: policies, text: "Terms & Policies" },
@@ -240,7 +258,7 @@ const [showAbout, setShowAbout] = useState(false);
         </div>
       </div>
 
-      {/* ✅ POPUP FIXED ABOVE EVERYTHING */}
+      {/* FAQs Popup */}
       {showPopup && (
         <div
           style={{
@@ -259,41 +277,41 @@ const [showAbout, setShowAbout] = useState(false);
           <div
             style={{
               backgroundColor: "#fff",
-              borderRadius: "0",
               width: "100%",
               height: "100vh",
               position: "relative",
               overflowY: "auto",
             }}
           >
-            {/* Back Icon */}
-      <img
-        src={backIcon}
-        alt="Back"
-        onClick={() => setShowPopup(false)}
-        style={{
-          position: "absolute",
-          left: "4vw",
-          top: "4vh",
-          width: "5vw",
-          height: "5vw",
-          cursor: "pointer",
-        }}
-      />
+            <img
+              src={backIcon}
+              alt="Back"
+              onClick={() => setShowPopup(false)}
+              style={{
+                position: "absolute",
+                left: "4vw",
+                top: "4vh",
+                width: "5vw",
+                height: "5vw",
+                cursor: "pointer",
+              }}
+            />
 
-      {/* Popup Content */}
-      <div style={{ marginTop: "12vh", padding: "20px" }}>
-        <h3 style={{ marginTop: "-40px", fontSize: "24px", fontWeight: "bold", color: "#36570A" }}>FAQs</h3>
-      </div>
-    </div>
-  </div>
-)}
+            <div style={{ marginTop: "12vh", padding: "20px" }}>
+              <h3 style={{ fontSize: "24px", fontWeight: "bold", color: "#36570A" }}>FAQs</h3>
+              <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                Here you can display frequently asked questions or help information.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Navigation */}
       <div
         style={{
           position: "fixed",
-          bottom: "0px",
+          bottom: showBottomBar ? "0px" : "-70px",
           left: "0px",
           right: "0px",
           height: "67px",
@@ -302,7 +320,8 @@ const [showAbout, setShowAbout] = useState(false);
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          zIndex: 999, // ⬅️ lowered this so popup stays on top
+          transition: "bottom 0.3s ease-in-out",
+          zIndex: 999,
         }}
       >
         {items.map((item, index) => (

@@ -41,6 +41,7 @@ export default function BottomBarPage() {
   const [showBottomBar, setShowBottomBar] = useState(true);
   const lastScrollTop = useRef(0);
   const scrollRef = useRef(null);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
@@ -253,47 +254,139 @@ export default function BottomBarPage() {
         />
       </div>
 
-      {/* Location */}
-      <img
-        src={locIcon}
-        alt="location"
+      <div
+  style={{
+    position: "absolute",
+    top: "3vh",
+    left: "5vw",
+    width: "6vw",
+    height: "6vw",
+    cursor: "pointer",
+    zIndex: 1000,
+  }}
+  onClick={() => setIsLocationModalOpen(true)}
+>
+  <img
+    src={locIcon}
+    alt="location"
+    style={{ width: "100%", height: "100%", filter: "invert(100%) brightness(200%)" }}
+  />
+</div>
+
+// Also make the text clickable:
+<span
+  style={{
+    position: "absolute",
+    top: "2.7vh",
+    left: "13vw",
+    fontSize: "3vw",
+    color: "white",
+    fontWeight: "700",
+    zIndex: 1000,
+    cursor: "pointer",
+  }}
+  onClick={() => setIsLocationModalOpen(true)}
+>
+  FASPeCC
+</span>
+
+<span
+  style={{
+    position: "absolute",
+    top: "5vh",
+    left: "13vw",
+    fontSize: "2.5vw",
+    color: "white",
+    fontWeight: "200",
+    zIndex: 1000,
+    cursor: "pointer", // Make it look clickable
+  }}
+  onClick={() => setIsLocationModalOpen(true)}
+>
+  USTP-CDO Campus Cafeteria
+</span>
+
+// Location Modal JSX (add it near your other modal code)
+{isLocationModalOpen && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+    onClick={() => setIsLocationModalOpen(false)}
+  >
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "3vw",
+        width: "90vw",
+        maxWidth: "400px",
+        height: "60vh",
+        position: "relative",
+        padding: "2vw",
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close button */}
+      <div
         style={{
           position: "absolute",
-          top: "3vh",
-          left: "5vw",
-          width: "6vw",
-          height: "6vw",
-          filter: "invert(100%) brightness(200%)",
+          top: "1vw",
+          right: "4vw",
+          fontSize: "8vw",
+          fontWeight: "bold",
+          color: "#36570A",
           cursor: "pointer",
-          zIndex: 1000,
         }}
-      />
-      <span
+        onClick={() => setIsLocationModalOpen(false)}
+      >
+        ×
+      </div>
+
+      {/* Google Maps iframe */}
+      <iframe
+        title="Cafeteria Location"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.764973158733!2d124.65425101533143!3d8.485204885183622!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32fff2c235a85809%3A0xa731571a1daeb879!2sFMP4%2B3P8%2C%20Cagayan%20De%20Oro%20City%2C%20Misamis%20Oriental!5e0!3m2!1sen!2sph!4v1700!5m2!1sen!2sph"
+        width="100%"
+        height="100%"
+        style={{ border: 0, borderRadius: "2vw" }}
+        allowFullScreen=""
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      ></iframe>
+
+      {/* Optional button to open Google Maps in new tab */}
+      <button
+        onClick={() => window.open("https://www.google.com/maps/place/FMP4%2B3P8,+Cagayan+De+Oro+City,+Misamis+Oriental/@8.4851782,124.6564407,179m", "_blank")}
         style={{
           position: "absolute",
-          top: "2.7vh",
-          left: "13vw",
-          fontSize: "3vw",
+          bottom: "3vw",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: "#36570A",
           color: "white",
-          fontWeight: "700",
-          zIndex: 1000,
+          border: "none",
+          padding: "2vw 6vw",
+          borderRadius: "1vw",
+          cursor: "pointer",
+          fontSize: "3.5vw",
+          fontWeight: "500",
+          whiteSpace: "nowrap",
         }}
       >
-        FASPeCC
-      </span>
-      <span
-        style={{
-          position: "absolute",
-          top: "4.8vh",
-          left: "13vw",
-          fontSize: "2.5vw",
-          color: "white",
-          fontWeight: "200",
-          zIndex: 1000,
-        }}
-      >
-        USTP-CDO Campus Cafeteria
-      </span>
+        Open in Google Maps
+      </button>
+    </div>
+  </div>
+)}
 
       {/* Search Bar */}
       <div
