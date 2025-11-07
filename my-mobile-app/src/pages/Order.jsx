@@ -85,13 +85,13 @@ export default function BottomBarPage() {
         }}
       >
         {orderTabs.map((tab, index) => {
-          const circleColors = ["#f3f3f3", "#f3f3f3", "#f3f3f3", "#f3f3f3", "#f3f3f3"];
+          const circleColors = ["#36570A", "#36570A", "#36570A", "#36570A", "#36570A"];
           return (
             <button
               key={tab}
               onClick={() => {
                 setActiveTab(tab);
-                if (tab === "Completed" && tabRef.current) {
+                if (tab === "Ready" && tabRef.current) {
                   tabRef.current.scrollTo({
                     left: tabRef.current.scrollWidth,
                     behavior: "smooth",
@@ -133,7 +133,7 @@ export default function BottomBarPage() {
                   height: "5vw",
                   borderRadius: "50%",
                   backgroundColor: circleColors[index],
-                  color: "black",
+                  color: "white",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",

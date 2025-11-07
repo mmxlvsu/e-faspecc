@@ -8,17 +8,25 @@ import personIcon from "../assets/profile.png";
 import editIcon from "../assets/edit.png";
 import defaultProfile from "../assets/default-profile.png";
 import profileBack from "../assets/backk.png";
+import password from "../assets/password.png";
+import policies from "../assets/policies.png";
+import about from "../assets/about.png";
+import rate from "../assets/rate.png";
+import faq from "../assets/faq.png";
+import backIcon from "../assets/back.png";
 
 export default function BottomBarPage() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showPolicies, setShowPolicies] = useState(false);
+const [showAbout, setShowAbout] = useState(false);
   const [editValues, setEditValues] = useState({
     fullName: "",
     contact: "",
   });
 
-  // Fetch user info from backend
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -69,45 +77,41 @@ export default function BottomBarPage() {
     { icon: personIcon, onClick: () => navigate("/profile"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
   ];
 
-  
   return (
-    
-<div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
-  <div style={{ position: "relative", width: "80px", height: "80px" }}>
-    <img
-      src={userData.profileImage || defaultProfile}
-      alt="Profile"
-      style={{
-        width: "80px",
-        height: "80px",
-        borderRadius: "50%",
-        objectFit: "cover",
-        border: "1px solid #f3f3f3",
-        cursor: "pointer",
-      }}
-      onClick={handleEditClick} // clicking image triggers edit
-    />
-    <img
-      src={editIcon}
-      alt="Edit"
-      style={{
-        width: "22px",
-        height: "22px",
-        position: "absolute",
-        bottom: "0",
-        right: "0",
-        borderRadius: "50%",
-        backgroundColor: "#fff",
-        padding: "2px",
-        border: "1px solid #ccc",
-        cursor: "pointer",
-      }}
-      onClick={handleEditClick} // clicking icon also triggers edit
-    />
-  </div>
+    <div style={{ display: "flex", justifyContent: "center", marginTop: "40px", position: "relative" }}>
+      <div style={{ position: "relative", width: "80px", height: "80px" }}>
+        <img
+          src={userData.profileImage || defaultProfile}
+          alt="Profile"
+          style={{
+            width: "80px",
+            height: "80px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "1px solid #f3f3f3",
+            cursor: "pointer",
+          }}
+          onClick={handleEditClick}
+        />
+        <img
+          src={editIcon}
+          alt="Edit"
+          style={{
+            width: "22px",
+            height: "22px",
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+            borderRadius: "50%",
+            backgroundColor: "#fff",
+            padding: "2px",
+            border: "1px solid #ccc",
+            cursor: "pointer",
+          }}
+          onClick={handleEditClick}
+        />
+      </div>
 
-
-      {/* User Info Section */}
       <div
         style={{
           position: "absolute",
@@ -120,18 +124,12 @@ export default function BottomBarPage() {
           fontFamily: "Poppins",
         }}
       >
-        <div
-  style={{
-    width: "90%",
-    maxWidth: "400px",
-    marginBottom: "10px",
-    display: "flex",
-    justifyContent: "flex-start",
-  }}
->
-  <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px",
-    fontWeight: "500", }}>Profile Information</h2>
-</div>
+        {/* Profile Info */}
+        <div style={{ width: "90%", maxWidth: "400px", marginBottom: "10px" }}>
+          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
+            Profile Information
+          </h2>
+        </div>
 
         <div
           style={{
@@ -143,7 +141,6 @@ export default function BottomBarPage() {
             padding: "20px",
           }}
         >
-
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px" }}>
             <div><strong>Full Name:</strong> {userData.fullName}</div>
             <div><strong>Email:</strong> {userData.email}</div>
@@ -151,260 +148,148 @@ export default function BottomBarPage() {
           </div>
         </div>
 
- <div
-  style={{
-    width: "90%",
-    maxWidth: "400px",
-    marginTop: "20px",
-    display: "flex",
-    justifyContent: "flex-start",
-  }}
->
-  <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px",
-    fontWeight: "500", }}>Settings</h2>
-</div>
+        {/* Settings */}
+        <div style={{ width: "90%", maxWidth: "400px", marginTop: "20px" }}>
+          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
+            Settings
+          </h2>
+        </div>
 
-<div
-  style={{
-    width: "100%",
-    maxWidth: "900px",
-    backgroundColor: "white",
-    borderRadius: "12px",
-    padding: "15px 20px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-  }}
->
-  {/* Example placeholder rows */}
-  <div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between", // make space between text and icon
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/change-password")}
->
-  Password
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "900px",
+            backgroundColor: "white",
+            borderRadius: "12px",
+            padding: "15px 20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          {/* Other Settings */}
+          {[ 
+            { icon: password, text: "Password" },
+            { icon: policies, text: "Terms & Policies" },
+            { icon: about, text: "About" },
+            { icon: rate, text: "Rate" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              style={{
+                height: "45px",
+                borderRadius: "15px",
+                border: "1px solid #ccc",
+                padding: "0 15px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                backgroundColor: "#f3f3f3",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/change-password")}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <img src={item.icon} alt={item.text} style={{ width: "18px", height: "18px", objectFit: "contain" }} />
+                <span style={{ fontSize: "14px", fontWeight: "bold" }}>{item.text}</span>
+              </div>
+              <img src={profileBack} alt="Back Icon" style={{ width: "15px", height: "15px" }} />
+            </div>
+          ))}
 
-<div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/terms-and-policies")}
->
-  Terms & Policies
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
-
-<div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/help")}
->
-  About
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
-
-<div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/help")}
->
-  Rate Us
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
-
-<div
-  style={{
-    height: "45px",
-    borderRadius: "15px",
-    border: "1px solid #ccc",
-    padding: "0 15px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    cursor: "pointer",
-    backgroundColor: "#f3f3f3",
-    fontSize: "14px",
-    fontWeight: "bold",
-  }}
-  onClick={() => navigate("/help")}
->
-  FAQs
-  <img src={profileBack} alt="Back" style={{ width: "15px", height: "15px" }} />
-</div>
-
-{/* Sign Out Button below the last placeholder */}
-  <div
-    style={{
-      marginTop: "15px",
-      borderRadius: "7px",
-      backgroundColor: "#36570A",
-      padding: "10px",
-      cursor: "pointer",
-      fontFamily: "Poppins, sans-serif",
-      fontSize: "14px",
-      color: "white",
-      textAlign: "center",
-      fontWeight: "bold",
-    }}
-    onClick={handleSignOut}
-  >
-    Sign Out
-  </div>
-</div>
-
-        {/* Edit Modal */}
-        {isEditing && (
+          {/* FAQs Row */}
           <div
             style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0, 0, 0, 0.4)",
+              height: "45px",
+              borderRadius: "15px",
+              border: "1px solid #ccc",
+              padding: "0 15px",
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
-              zIndex: 20000,
+              justifyContent: "space-between",
+              backgroundColor: "#f3f3f3",
+              cursor: "pointer",
             }}
+            onClick={() => setShowPopup(true)}
           >
-            <div
-              style={{
-                backgroundColor: "#fff",
-                padding: "20px 30px",
-                borderRadius: "12px",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                width: "85%",
-                maxWidth: "400px",
-                fontFamily: "Poppins",
-              }}
-            >
-              <h3 style={{ marginBottom: "15px", textAlign: "center", fontWeight: "600" }}>
-                Edit Profile
-              </h3>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <label>Full Name</label>
-                <input
-                  value={editValues.fullName}
-                  onChange={(e) => setEditValues({ ...editValues, fullName: e.target.value })}
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                />
-
-                <label>Email</label>
-                <input
-                  value={userData.email}
-                  disabled
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    backgroundColor: "#f5f5f5",
-                  }}
-                />
-                <label>Contact</label>
-                <input
-                  value={editValues.contact}
-                  onChange={(e) => setEditValues({ ...editValues, contact: e.target.value })}
-                  style={{
-                    padding: "8px",
-                    border: "1px solid #ccc",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                />
-                
-                <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
-                  <button
-                    onClick={handleSave}
-                    style={{
-                      flex: 1,
-                      marginRight: "10px",
-                      backgroundColor: "#36570A",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      padding: "8px",
-                      cursor: "pointer",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    style={{
-                      flex: 1,
-                      backgroundColor: "#fff",
-                      border: "1px solid #36570A",
-                      borderRadius: "8px",
-                      padding: "8px",
-                      cursor: "pointer",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  
-                </div>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img src={faq} alt="FAQ Icon" style={{ width: "18px", height: "18px", objectFit: "contain" }} />
+              <span style={{ fontSize: "14px", fontWeight: "bold" }}>FAQs</span>
             </div>
+            <img src={profileBack} alt="Back Icon" style={{ width: "15px", height: "15px", objectFit: "contain" }} />
           </div>
-        )}
+
+          {/* Sign Out Button */}
+          <div
+            style={{
+              marginTop: "15px",
+              borderRadius: "7px",
+              backgroundColor: "#36570A",
+              padding: "10px",
+              cursor: "pointer",
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "14px",
+              color: "white",
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </div>
+        </div>
       </div>
 
-      {/* Bottom Navigation Bar */}
+      {/* ✅ POPUP FIXED ABOVE EVERYTHING */}
+      {showPopup && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "0",
+              width: "100%",
+              height: "100vh",
+              position: "relative",
+              overflowY: "auto",
+            }}
+          >
+            {/* Back Icon */}
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => setShowPopup(false)}
+        style={{
+          position: "absolute",
+          left: "4vw",
+          top: "4vh",
+          width: "5vw",
+          height: "5vw",
+          cursor: "pointer",
+        }}
+      />
+
+      {/* Popup Content */}
+      <div style={{ marginTop: "12vh", padding: "20px" }}>
+        <h3 style={{ marginTop: "-40px", fontSize: "24px", fontWeight: "bold", color: "#36570A" }}>FAQs</h3>
+      </div>
+    </div>
+  </div>
+)}
+
+      {/* Bottom Navigation */}
       <div
         style={{
           position: "fixed",
@@ -417,7 +302,7 @@ export default function BottomBarPage() {
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
-          zIndex: 9999,
+          zIndex: 999, // ⬅️ lowered this so popup stays on top
         }}
       >
         {items.map((item, index) => (
