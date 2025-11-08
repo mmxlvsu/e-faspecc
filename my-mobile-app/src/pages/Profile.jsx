@@ -14,10 +14,73 @@ import about from "../assets/about.png";
 import rate from "../assets/rate.png";
 import faq from "../assets/faq.png";
 import backIcon from "../assets/back.png";
+import searchIcon from "../assets/search.png";
+
+const faqsData = [
+  {
+    question: "What is the Cafeteria Pre-Ordering System?",
+    answer:
+      "It’s an online platform that lets students and staff order food in advance from the school cafeteria to avoid long lines and waiting times.",
+  },
+  {
+    question: "How do I place an order?",
+    answer:
+      "Simply log in, choose your food items from the menu, confirm your order, and wait for a notification that your meal is ready for pick-up.",
+  },
+  {
+    question: "Can I cancel my order after placing it?",
+    answer:
+      "Changes can only be made within a short period after ordering. Once the cafeteria starts preparing your food, cancellations may not be accepted.",
+  },
+  {
+    question: "Can I change my order after placing it?",
+    answer:
+      "Changes can only be made within a short period after ordering. Once the cafeteria starts preparing your food, cancellations may not be accepted.",
+  },
+
+  {
+    question: "How will I know when my order is ready?",
+    answer:
+      "You’ll receive a notification or status update in the system once your order is ready for pick-up.",
+  },
+  {
+    question: "Where do I claim my order?",
+    answer:
+      "Go to the designated pick-up counter at the school cafeteria and show your order confirmation.",
+  },
+  {
+    question: "What if I forget to claim my order?",
+    answer:
+      "Unclaimed orders after a set period may be disposed of or re-sold, and payment (if applicable) will not be refunded.",
+  },
+  {
+    question: "Can I order anytime?",
+    answer:
+      "No. Orders can only be placed during cafeteria operating hours, usually before or between class schedules.",
+  },
+  {
+    question: "Do I need to pay online?",
+    answer:
+      "Payment options depend on your school setup. Some may allow online payment; others may require payment upon pick-up.",
+  },
+  {
+    question: "My order didn’t go through. What should I do?",
+    answer:
+      "Check your internet connection first. If the problem continues, contact the cafeteria staff or system admin for assistance.",
+  },
+  {
+    question: "Is my personal information safe?",
+    answer:
+      "Yes. Your details are stored securely and used only for managing cafeteria transactions.",
+  },
+];
 
 export default function BottomBarPage() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [activeTab, setActiveTab] = useState("Terms of Service");
+
+  const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(true);
@@ -25,6 +88,7 @@ export default function BottomBarPage() {
     fullName: "",
     contact: "",
   });
+  const [openIndex, setOpenIndex] = useState(null);
 
   const scrollContainerRef = useRef(null);
 
@@ -71,6 +135,10 @@ export default function BottomBarPage() {
 
   const handleSignOut = () => logout(navigate);
 
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   if (!userData) {
     return (
       <div style={{ textAlign: "center", marginTop: "40vh", fontFamily: "Poppins" }}>
@@ -88,60 +156,59 @@ export default function BottomBarPage() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", position: "relative" }}>
-
       {/* Scrollable Content */}
       <div
         ref={scrollContainerRef}
         style={{
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100vh",
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    fontFamily: "Poppins",
-    paddingTop: "30px",
-    paddingBottom: "80px", // ✅ space for bottom bar
-    boxSizing: "border-box",
-    backgroundColor: "#fff",
-  }}
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          fontFamily: "Poppins",
+          paddingTop: "30px",
+          paddingBottom: "80px",
+          boxSizing: "border-box",
+          backgroundColor: "#fff",
+        }}
       >
         {/* Profile Picture */}
-      <div style={{ position: "relative", width: "80px", height: "80px" }}>
-        <img
-          src={userData.profileImage || defaultProfile}
-          alt="Profile"
-          style={{
-            width: "80px",
-            height: "80px",
-            borderRadius: "50%",
-            objectFit: "cover",
-            border: "1px solid #f3f3f3",
-            cursor: "pointer",
-          }}
-          onClick={handleEditClick}
-        />
-        <img
-          src={editIcon}
-          alt="Edit"
-          style={{
-            width: "22px",
-            height: "22px",
-            position: "absolute",
-            bottom: "0",
-            right: "0",
-            borderRadius: "50%",
-            backgroundColor: "#fff",
-            padding: "2px",
-            border: "1px solid #ccc",
-            cursor: "pointer",
-          }}
-          onClick={handleEditClick}
-        />
-      </div>
+        <div style={{ position: "relative", width: "80px", height: "80px" }}>
+          <img
+            src={userData.profileImage || defaultProfile}
+            alt="Profile"
+            style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "1px solid #f3f3f3",
+              cursor: "pointer",
+            }}
+            onClick={handleEditClick}
+          />
+          <img
+            src={editIcon}
+            alt="Edit"
+            style={{
+              width: "22px",
+              height: "22px",
+              position: "absolute",
+              bottom: "0",
+              right: "0",
+              borderRadius: "50%",
+              backgroundColor: "#fff",
+              padding: "2px",
+              border: "1px solid #ccc",
+              cursor: "pointer",
+            }}
+            onClick={handleEditClick}
+          />
+        </div>
 
         {/* Profile Info */}
         <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "10px" }}>
@@ -149,7 +216,6 @@ export default function BottomBarPage() {
             Profile Information
           </h2>
         </div>
-
         <div
           style={{
             width: "90%",
@@ -169,9 +235,7 @@ export default function BottomBarPage() {
 
         {/* Settings */}
         <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "-1px" }}>
-          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
-            Settings
-          </h2>
+          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>Settings</h2>
         </div>
 
         <div
@@ -186,34 +250,44 @@ export default function BottomBarPage() {
             gap: "12px",
           }}
         >
-          {[ 
-            { icon: password, text: "Password" },
-            { icon: policies, text: "Terms & Policies" },
-            { icon: about, text: "About" },
-            { icon: rate, text: "Rate" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              style={{
-                height: "45px",
-                borderRadius: "15px",
-                border: "1px solid #ccc",
-                padding: "0 15px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                backgroundColor: "#f3f3f3",
-                cursor: "pointer",
-              }}
-              onClick={() => navigate("/change-password")}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <img src={item.icon} alt={item.text} style={{ width: "18px", height: "18px", objectFit: "contain" }} />
-                <span style={{ fontSize: "14px", fontWeight: "bold" }}>{item.text}</span>
-              </div>
-              <img src={profileBack} alt="Back Icon" style={{ width: "15px", height: "15px" }} />
-            </div>
-          ))}
+          {[
+  { icon: password, text: "Password" },
+  { icon: policies, text: "Terms & Policies" },
+  { icon: about, text: "About" },
+  { icon: rate, text: "Rate" },
+].map((item, i) => (
+  <div
+    key={i}
+    style={{
+      height: "45px",
+      borderRadius: "15px",
+      border: "1px solid #ccc",
+      padding: "0 15px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: "#f3f3f3",
+      cursor: "pointer",
+    }}
+    onClick={() => {
+      if(item.text === "Password") {
+        navigate("/change-password");
+      } else if(item.text === "Terms & Policies") {
+        setShowTermsPopup(true); // <-- open terms popup
+      } else if(item.text === "About") {
+        navigate("/about"); // optional
+      } else if(item.text === "Rate") {
+        navigate("/rate"); // optional
+      }
+    }}
+  >
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <img src={item.icon} alt={item.text} style={{ width: "18px", height: "18px", objectFit: "contain" }} />
+      <span style={{ fontSize: "14px", fontWeight: "bold" }}>{item.text}</span>
+    </div>
+    <img src={profileBack} alt="Back Icon" style={{ width: "15px", height: "15px" }} />
+  </div>
+))}
 
           {/* FAQs Row */}
           <div
@@ -265,9 +339,9 @@ export default function BottomBarPage() {
             position: "fixed",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -283,6 +357,7 @@ export default function BottomBarPage() {
               overflowY: "auto",
             }}
           >
+            {/* Back Icon */}
             <img
               src={backIcon}
               alt="Back"
@@ -297,15 +372,211 @@ export default function BottomBarPage() {
               }}
             />
 
-            <div style={{ marginTop: "12vh", padding: "20px" }}>
-              <h3 style={{ fontSize: "24px", fontWeight: "bold", color: "#36570A" }}>FAQs</h3>
-              <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                Here you can display frequently asked questions or help information.
-              </p>
+            {/* FAQ Header */}
+            <div style={{ marginTop: "6vh", padding: "20px" }}>
+              <h3 style={{ fontSize: "26px", fontWeight: "bold" }}>Frequently Asked</h3>
+              <p style={{ fontSize: "26px", fontWeight: "bold", marginTop: "-1px" }}>Questions</p>
+
+              {/* Search Button Below FAQ Header */}
+              <div
+                style={{
+                  marginTop: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "350px",
+                    height: "50px",
+                    gap: "10px",
+                    backgroundColor: "rgba(54, 87, 10, 0.1)",
+                    borderRadius: "12px",
+                    padding: "10px 25px",
+                    cursor: "pointer",
+                    fontSize: "15px",
+                    fontFamily: "Poppins",
+                  }}
+                >
+                  <img
+                    src={searchIcon}
+                    alt="Search"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      filter: "brightness(0)",
+                    }}
+                  />
+                  What's on your mind?
+                </button>
+              </div>
             </div>
+
+            {/* Scrollable FAQ List */}
+<div style={{ padding: "20px", marginTop: "-15px", display: "flex", flexDirection: "column", gap: "10px" }}>
+  {faqsData.map((faqItem, index) => (
+    <div
+      key={index}
+      style={{
+        backgroundColor: "rgba(211, 211, 211, 0.2)", // semi-transparent #365570
+        borderRadius: "12px",
+        padding: "15px",
+        cursor: "pointer",
+      }}
+      onClick={() => setOpenIndex(openIndex === index ? null : index)}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: "13.5px", color: "black" }}>{faqItem.question}</span>
+        <span
+          style={{
+            fontSize: "15px",
+            color: "black",
+            transform: openIndex === index ? "rotate(0deg)" : "rotate(180deg)",
+            transition: "transform 0.3s",
+          }}
+        >
+          ▼
+        </span>
+      </div>
+      {openIndex === index && (
+        <p style={{ marginTop: "6px", textAlign: "justify", fontSize: "12px", fontWeight: "bold", lineHeight: "1.2", color: "black" }}>{faqItem.answer}</p>
+      )}
+    </div>
+  ))}
+</div>
           </div>
         </div>
       )}
+
+{/* Terms & Policies Popup */}
+{showTermsPopup && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        height: "100vh",
+        position: "relative",
+        overflowY: "auto",
+      }}
+    >
+      {/* Back Icon */}
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => setShowTermsPopup(false)}
+        style={{
+          position: "absolute",
+          left: "4vw",
+          top: "4vh",
+          width: "5vw",
+          height: "5vw",
+          cursor: "pointer",
+        }}
+      />
+
+      {/* Tabs Navigator */}
+<div style={{ marginTop: "8vh", padding: "0 20px", position: "relative", display: "flex", width: "100%" }}>
+  {["Terms of Service", "Privacy Policy"].map((tab, index) => (
+    <div
+      key={index}
+      onClick={() => setActiveTab(tab)}
+      style={{
+        flex: 1,
+        textAlign: "center",
+        padding: "10px 0",
+        cursor: "pointer",
+        fontWeight: activeTab === tab ? "bold" : "normal",
+        fontSize: "16px",
+      }}
+    >
+      {tab}
+    </div>
+  ))}
+
+  {/* Sliding green underline */}
+  <div
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: activeTab === "Terms of Service" ? "0%" : "50%",
+      width: "50%",
+      height: "2px",
+      backgroundColor: "#36570A",
+      transition: "left 0.3s ease",
+    }}
+  />
+</div>
+
+      {/* Tab Content */}
+<div style={{ marginTop: "-1px", padding: "20px", textAlign: "justify", fontSize: "14px", lineHeight: "1.5", color: "black" }}>
+  {activeTab === "Terms of Service" && (
+    <div>
+      <p><strong>1. Purpose</strong><br/>
+      This system allows students and staff to pre-order food and beverages from the school cafeteria for faster and more organized service.<br/><br/></p>
+
+      <p><strong>2. Account Use</strong><br/>
+      Users must provide accurate information when creating an account. Sharing or misusing another person’s account is strictly prohibited.<br/><br/></p>
+
+      <p><strong>3. Ordering Policy</strong><br/>
+      Orders must be placed within the cafeteria’s operating hours.<br/>
+      Once an order is confirmed, cancellations or changes may not be guaranteed.<br/>
+      Payment (if applicable) must be settled following the cafeteria’s approved payment method.<br/><br/></p>
+
+      <p><strong>4. Pick-Up</strong><br/>
+      Orders should be claimed at the designated pick-up area within the scheduled time. Unclaimed orders after a certain period may be disposed of or re-sold.<br/><br/></p>
+
+      <p><strong>5. Conduct</strong><br/>
+      Users must respect cafeteria staff and follow school policies when using the system. Misuse or abuse of the system may result in suspension or restriction of access.<br/><br/></p>
+
+      <p><strong>6. Modifications</strong><br/>
+      The school reserves the right to update menu items, prices, and system features without prior notice.<br/><br/></p>
+
+      <p><strong>7. Agreement</strong><br/>
+      By using this system, you agree to abide by these terms and the cafeteria’s operating policies.<br/><br/></p>
+    </div>
+  )}
+
+  {activeTab === "Privacy Policy" && (
+    <div>
+      <p><strong>1. Information We Collect</strong><br/>
+      We collect only the necessary information such as your name, student/staff ID, contact details, and order history.<br/><br/></p>
+
+      <p><strong>2. How We Use Your Information</strong><br/>
+      Your information is used to process orders, notify you of order status, and improve cafeteria operations.<br/><br/></p>
+
+      <p><strong>3. Data Security</strong><br/>
+      All personal information is securely stored and accessible only to authorized cafeteria personnel or system administrators.<br/><br/></p>
+
+      <p><strong>4. Data Sharing</strong><br/>
+      We do not share your information with outside parties unless required by school administration or law.<br/><br/></p>
+
+      <p><strong>5. User Rights</strong><br/>
+      You may request to review or update your personal information at any time by contacting the cafeteria management.<br/><br/></p>
+
+      <p><strong>6. Policy Updates</strong><br/>
+      This policy may be updated to reflect improvements or new regulations. Users will be informed of significant changes through the system.<br/><br/></p>
+    </div>
+  )}
+</div>
+    </div>
+  </div>
+)}
 
       {/* Bottom Navigation */}
       <div
