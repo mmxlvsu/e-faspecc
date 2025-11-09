@@ -133,7 +133,7 @@ export default function Notification() {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  padding: "vw",
+                  padding: "4vw",
                   borderRadius: "2vw",
                   color: "#000", border: "1px solid #ccc",
                   cursor: "pointer",
@@ -141,8 +141,8 @@ export default function Notification() {
                 onClick={() => navigate("/order", { state: { status: notif.status, orderId: notif.id } })}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "vw" }}>
-                    <img src={getStatusIcon(notif.status)} alt={notif.status} style={{ width: "5vw", height: "5vw"}} />
+                  <div style={{ display: "flex", alignItems: "center", gap: "4vw" }}>
+                    <img src={getStatusIcon(notif.status)} alt={notif.status} style={{ width: "6vw", height: "6vw" }} />
                     <span style={{ fontSize: "4vw", fontWeight: "bold", textTransform: "capitalize" }}>
                       {notif.status}
                     </span>
