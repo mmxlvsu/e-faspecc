@@ -163,12 +163,15 @@ export default function Signup() {
         onToggle={() => setShowConfirm(!showConfirm)}
         value={{ top: "65vh" }}
       />
+<p className="absolute text-gray-600" style={{ left: "8vw", top: "71.5vh", fontSize: "2.8vw" }}>
+        Password must match
+      </p>
 
       {/* Signup Button */}
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          top: "74vh",
+          top: "75.5vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
