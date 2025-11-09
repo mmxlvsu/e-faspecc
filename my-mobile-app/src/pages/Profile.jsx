@@ -19,6 +19,9 @@ import hideIcon from "../assets/hide.png";
 import showIcon from "../assets/show.png";
 import filledStar from "../assets/filled_star.png";
 import emptyStar from "../assets/empty_star.png";
+import user from "../assets/user.png";
+import email from "../assets/email.png";
+import phone from "../assets/phone.png";
 
 const faqsData = [
   {
@@ -405,25 +408,20 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
     </div>
 
     {/* Form Fields */}
-<div style={{ display: "flex", flexDirection: "column", gap: "15px", width: "100%" }}>
+<div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%" }}>
   {/* Full Name */}
-  <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
-    <label
-      style={{
-        fontSize: "14px",
-        fontWeight: "500",
-        marginBottom: "5px",
-      }}
-    >
-      Full Name
-    </label>
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+      <img src={user} alt="User" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
+      <label style={{ fontSize: "14px", fontWeight: "500" }}>Full Name</label>
+    </div>
     <input
       type="text"
       placeholder="Enter your full name"
       value={editValues.fullName}
       onChange={(e) => setEditValues({ ...editValues, fullName: e.target.value })}
       style={{
-        padding: "10px 40px 10px 10px",
+        padding: "10px",
         fontSize: "14px",
         borderRadius: "8px",
         border: "1px solid #ccc",
@@ -436,23 +434,18 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
   </div>
 
   {/* Email Address */}
-  <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
-    <label
-      style={{
-        fontSize: "14px",
-        fontWeight: "500",
-        marginBottom: "5px",
-      }}
-    >
-      Email Address
-    </label>
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
+      <img src={email} alt="Email" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
+      <label style={{ fontSize: "14px", fontWeight: "500" }}>Email Address</label>
+    </div>
     <input
       type="email"
       placeholder="Enter your email address"
       value={editValues.email}
       onChange={(e) => setEditValues({ ...editValues, email: e.target.value })}
       style={{
-        padding: "10px 40px 10px 10px",
+        padding: "10px",
         fontSize: "14px",
         borderRadius: "8px",
         border: "1px solid #ccc",
@@ -465,23 +458,18 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
   </div>
 
   {/* Contact */}
-  <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
-    <label
-      style={{
-        fontSize: "14px",
-        fontWeight: "500",
-        marginBottom: "5px",
-      }}
-    >
-      Contact
-    </label>
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
+      <img src={phone} alt="Phone" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
+      <label style={{ fontSize: "14px", fontWeight: "500" }}>Contact</label>
+    </div>
     <input
       type="text"
       placeholder="Enter your contact number"
       value={editValues.contact}
       onChange={(e) => setEditValues({ ...editValues, contact: e.target.value })}
       style={{
-        padding: "10px 40px 10px 10px",
+        padding: "10px",
         fontSize: "14px",
         borderRadius: "8px",
         border: "1px solid #ccc",
@@ -494,11 +482,10 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
   </div>
 </div>
 
-
     {/* Save Button */}
     <button
       style={{
-        marginTop: "6vh",
+        marginTop: "4vh",
         padding: "3vw",
         fontSize: "3.5vw",
         fontWeight: "bold",
