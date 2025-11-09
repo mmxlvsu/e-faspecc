@@ -648,7 +648,7 @@ export default function BottomBarPage() {
                     right: "4vw",
                     fontSize: "8vw",
                     fontWeight: "bold",
-                    color: "#888",
+                    color: "black",
                     cursor: "pointer",
                   }}
                   onClick={() => setIsModalOpen(false)}
