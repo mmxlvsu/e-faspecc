@@ -17,7 +17,8 @@ import backIcon from "../assets/back.png";
 import searchIcon from "../assets/search.png";
 import hideIcon from "../assets/hide.png";
 import showIcon from "../assets/show.png";
-
+import filledStar from "../assets/filled_star.png";
+import emptyStar from "../assets/empty_star.png";
 
 const faqsData = [
   {
@@ -98,6 +99,8 @@ const [showCurrent, setShowCurrent] = useState(false);
 const [showNew, setShowNew] = useState(false);
 const [showConfirm, setShowConfirm] = useState(false);
   const scrollContainerRef = useRef(null);
+const [starRating, setStarRating] = useState(0); // current rating
+const [reviewText, setReviewText] = useState("");
 
   useEffect(() => {
     async function fetchUser() {
@@ -219,7 +222,7 @@ const [showConfirm, setShowConfirm] = useState(false);
 
         {/* Profile Info */}
         <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "10px" }}>
-          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>
+          <h2 style={{ color: "#36570A", margin: 0, fontSize: "16px", fontWeight: "600" }}>
             Profile Information
           </h2>
         </div>
@@ -242,7 +245,7 @@ const [showConfirm, setShowConfirm] = useState(false);
 
         {/* Settings */}
         <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "-1px" }}>
-          <h2 style={{ color: "#36570A", margin: 0, fontSize: "15px", fontWeight: "500" }}>Settings</h2>
+          <h2 style={{ color: "#36570A", margin: 0, fontSize: "16px", fontWeight: "600" }}>Settings</h2>
         </div>
 
         <div
@@ -937,10 +940,6 @@ const [showConfirm, setShowConfirm] = useState(false);
   </div>
 )}
 
-
-
-
-
 {/* Rate Popup */}
 {showRatePopup && (
   <div
@@ -960,9 +959,16 @@ const [showConfirm, setShowConfirm] = useState(false);
     <div
       style={{
         backgroundColor: "#fff",
-        width: "100%",
-        height: "100vh",
+        width: "90vw",       // smaller width
+        maxWidth: "400px",   // optional max width
+        padding: "5vh 5vw",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
         position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        boxSizing: "border-box",
       }}
     >
       {/* Back Icon */}
@@ -972,16 +978,128 @@ const [showConfirm, setShowConfirm] = useState(false);
         onClick={() => setShowRatePopup(false)}
         style={{
           position: "absolute",
-          left: "4vw",
-          top: "4vh",
-          width: "5vw",
-          height: "5vw",
+          left: "5%",
+          top: "5%",
+          width: "6vw",
+          maxWidth: "24px",
           cursor: "pointer",
         }}
       />
+
+      {/* Heading */}
+      <h2
+        style={{
+          fontSize: "3.5vw",
+          fontWeight: "bold",
+          color: "#36570A",
+          marginTop: "5vh",
+          textAlign: "center",
+        }}
+      >
+        How are you experiencing our pre-ordering system so far?
+      </h2>
+
+      {/* Stars */}
+<div style={{ display: "flex", gap: "2vw", marginTop: "2vh" }}>
+  {[1, 2, 3, 4, 5].map((star) => (
+    <img
+      key={star}
+      src={starRating >= star ? filledStar : emptyStar}
+      alt={`${star} star`}
+      style={{ width: "6vw", maxWidth: "40px", cursor: "pointer" }}
+      onClick={() => setStarRating(star)}
+    />
+  ))}
+</div>
+
+{/* Counter and Text */}
+{starRating > 0 && (
+  <div
+    style={{
+      marginTop: "1vh",
+      textAlign: "center",
+      fontSize: "3vw",
+      fontWeight: "400",
+      color: "black",
+    }}
+  >
+    {" "}
+    {starRating === 1
+      ? "Very Bad"
+      : starRating === 2
+      ? "Bad"
+      : starRating === 3
+      ? "Meh"
+      : starRating === 4
+      ? "Good"
+      : "Very Good"}
+  </div>
+)}
+{/* Detailed Review Label */}
+<div
+  style={{
+    marginTop: "3vh",
+    width: "95%",
+    textAlign: "left",
+    fontSize: "3vw",
+    fontWeight: "500",
+  }}
+>
+  Detailed Review
+</div>
+
+{/* Detailed Review */}
+<div style={{ marginTop: "1vh", width: "105%", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+  <textarea
+    placeholder="Help us improve by leaving a detailed review here..."
+    value={reviewText}
+    onChange={(e) => {
+      if (e.target.value.length <= 200) setReviewText(e.target.value);
+    }}
+    style={{
+      width: "90%",        
+      height: "20vh",      
+      padding: "10px",
+      fontSize: "3vw",
+      borderRadius: "8px",
+      border: "1px solid #ccc",
+      resize: "none",
+      boxSizing: "border-box",
+      color: "#000",
+      fontFamily: "inherit",
+    }}
+  />
+{/* Character Counter (left-aligned) */}
+  <div style={{ width: "89%", textAlign: "left", marginTop: "1vh", fontSize: "2.5vw", color: "#000" }}>
+    ({reviewText.length}/200)
+  </div>
+</div>
+
+
+{/* Submit Button */}
+<button
+  style={{
+    marginTop: "3vh",
+    padding: "10px 30px",
+    fontSize: "3.5vw",
+    color: "black",
+    backgroundcolor: "#000",
+          border: "1px solid #ccc",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+  onClick={() => {
+    console.log("Rated:", starRating);
+    setShowRatePopup(false);
+  }}
+>
+  Submit
+</button>
+
     </div>
   </div>
 )}
+
 
       {/* Bottom Navigation */}
       <div
