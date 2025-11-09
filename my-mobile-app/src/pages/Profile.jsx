@@ -15,6 +15,9 @@ import rate from "../assets/rate.png";
 import faq from "../assets/faq.png";
 import backIcon from "../assets/back.png";
 import searchIcon from "../assets/search.png";
+import hideIcon from "../assets/hide.png";
+import showIcon from "../assets/show.png";
+
 
 const faqsData = [
   {
@@ -79,8 +82,10 @@ export default function BottomBarPage() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [activeTab, setActiveTab] = useState("Terms of Service");
-
-  const [showTermsPopup, setShowTermsPopup] = useState(false);
+  const [showAboutPopup, setShowAboutPopup] = useState(false);
+  const [showPasswordPopup, setShowPasswordPopup] = useState(false);
+    const [showRatePopup, setShowRatePopup] = useState(false);
+const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(true);
@@ -89,7 +94,9 @@ export default function BottomBarPage() {
     contact: "",
   });
   const [openIndex, setOpenIndex] = useState(null);
-
+const [showCurrent, setShowCurrent] = useState(false);
+const [showNew, setShowNew] = useState(false);
+const [showConfirm, setShowConfirm] = useState(false);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
@@ -271,13 +278,13 @@ export default function BottomBarPage() {
     }}
     onClick={() => {
       if(item.text === "Password") {
-        navigate("/change-password");
+        setShowPasswordPopup(true);
       } else if(item.text === "Terms & Policies") {
-        setShowTermsPopup(true); // <-- open terms popup
+        setShowTermsPopup(true); 
       } else if(item.text === "About") {
-        navigate("/about"); // optional
+        setShowAboutPopup(true); 
       } else if(item.text === "Rate") {
-        navigate("/rate"); // optional
+        setShowRatePopup(true); 
       }
     }}
   >
@@ -491,7 +498,7 @@ export default function BottomBarPage() {
       />
 
       {/* Tabs Navigator */}
-<div style={{ marginTop: "8vh", padding: "0 20px", position: "relative", display: "flex", width: "100%" }}>
+<div style={{ marginTop: "8.5vh", padding: "0 20px", position: "relative", display: "flex", width: "100%" }}>
   {["Terms of Service", "Privacy Policy"].map((tab, index) => (
     <div
       key={index}
@@ -574,6 +581,404 @@ export default function BottomBarPage() {
     </div>
   )}
 </div>
+    </div>
+  </div>
+)}
+
+{/* About Popup */}
+{showAboutPopup && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    {/* Scrollable White Container */}
+    <div
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        height: "100vh", // slight margin for better popup feel
+        overflowY: "auto", // 👈 whole popup scrolls (including back icon)
+        padding: "5vh 5vw",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Back Icon */}
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => setShowAboutPopup(false)}
+        style={{
+          position: "absolute",
+          left: "4vw",
+          top: "4vh",
+          width: "5vw",
+          height: "5vw",
+          cursor: "pointer",
+        }}
+      />
+
+      {/* About Us Text */}
+      <div
+        style={{
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "black",
+          marginTop: "30px",
+        }}
+      >
+        About Us
+      </div>
+
+      {/* About Description */}
+      <div
+        style={{
+          marginTop: "15px",
+          backgroundColor: "rgba(54, 87, 10, 0.1)",
+          borderRadius: "15px",
+          padding: "18px",
+          fontSize: "14px",
+          lineHeight: "1.5",
+          color: "#000",
+          textAlign: "justify",
+          fontWeight: "500",
+        }}
+      >
+        The Cafeteria Pre-Ordering System is designed to make food service in our school faster, more organized, and more convenient.
+        It allows students and staff to browse available meals, place orders in advance, and pick them up without waiting in long lines.
+        <br /><br />
+        This system aims to reduce congestion during break hours, minimize food waste, and help the cafeteria staff manage orders efficiently.
+      </div>
+
+      {/* Developers Text */}
+      <div
+        style={{
+          marginTop: "25px",
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "black",
+        }}
+      >
+        Developers
+      </div>
+
+      {/* Developers Description */}
+      <div
+        style={{
+          marginTop: "15px",
+          backgroundColor: "rgba(54, 87, 10, 0.1)",
+          borderRadius: "15px",
+          padding: "18px",
+          fontSize: "14px",
+          lineHeight: "1.5",
+          color: "#000",
+          textAlign: "justify",
+          fontWeight: "500",
+          marginBottom: "40px",
+        }}
+      >
+        This system was developed by a team of 3rd year Computer Science students as part of a course project.
+        Our goal is to create simple, practical solutions applying software engineering theories and practices.
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+{/* Password Popup */}
+{showPasswordPopup && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        height: "100vh",
+        position: "relative",
+      }}
+    >
+      {/* Back Icon */}
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => setShowPasswordPopup(false)}
+        style={{
+          position: "absolute",
+          left: "4vw",
+          top: "4vh",
+          width: "5vw",
+          height: "5vw",
+          cursor: "pointer",
+        }}
+      />
+
+      {/* Scrollable Content */}
+      <div
+        style={{
+          marginTop: "10.5vh",
+          height: "91vh",
+          overflowY: "auto",
+          padding: "0 5vw 5vh 5vw",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Icon + Title + Description */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: "20px",
+          }}
+        >
+          <img
+            src={password} // make sure 'password' is imported above
+            alt="Password"
+            style={{ width: "40px", height: "40px" }}
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "black",
+              }}
+            >
+              Change Password
+            </div>
+            <div
+              style={{
+                fontSize: "11.5px",
+                color: "#000",
+                lineHeight: "1.5",
+                fontWeight: "400",
+              }}
+            >
+              Update password for enhanced account security.
+            </div>
+          </div>
+        </div>
+
+        {/* Password Fields */}
+        <div
+          style={{
+            marginTop: "35px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          {/* Current Password */}
+          <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
+            <label
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                marginBottom: "5px",
+              }}
+            >
+              Current Password
+            </label>
+            <input
+              type={showCurrent ? "text" : "password"}
+              placeholder="Enter current password"
+              style={{
+                padding: "10px 40px 10px 10px",
+                fontSize: "14px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                width: "100%",
+                height: "40px",
+                boxSizing: "border-box",
+                color: "#000",
+              }}
+            />
+            <img
+              src={showCurrent ? showIcon : hideIcon}
+              alt="toggle"
+              onClick={() => setShowCurrent(!showCurrent)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "35px",
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            />
+          </div>
+
+          {/* New Password */}
+          <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
+            <label
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                marginBottom: "5px",
+              }}
+            >
+              New Password
+            </label>
+            <input
+              type={showNew ? "text" : "password"}
+              placeholder="Enter new password"
+              style={{
+                padding: "10px 40px 10px 10px",
+                fontSize: "14px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                width: "100%",
+                height: "40px",
+                boxSizing: "border-box",
+                color: "#000",
+              }}
+            />
+            <img
+              src={showNew ? showIcon : hideIcon}
+              alt="toggle"
+              onClick={() => setShowNew(!showNew)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "35px",
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            />
+          </div>
+
+          {/* Confirm New Password */}
+          <div style={{ display: "flex", flexDirection: "column", position: "relative" }}>
+            <label
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                marginBottom: "5px",
+              }}
+            >
+              Confirm New Password
+            </label>
+            <input
+              type={showConfirm ? "text" : "password"}
+              placeholder="Confirm new password"
+              style={{
+                padding: "10px 40px 10px 10px",
+                fontSize: "14px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                width: "100%",
+                height: "40px",
+                boxSizing: "border-box",
+                color: "#000",
+              }}
+            />
+            <img
+              src={showConfirm ? showIcon : hideIcon}
+              alt="toggle"
+              onClick={() => setShowConfirm(!showConfirm)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "35px",
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            />
+          </div>
+
+          {/* Password Note */}
+          <div style={{ fontSize: "12px", color: "#555" }}>
+            New password must be 8-16 characters.
+          </div>
+
+          {/* Apply Changes Button */}
+          <button
+            style={{
+              marginTop: "20px",
+              padding: "10px",
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "#fff",
+              backgroundColor: "#36570A",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          >
+            Apply Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+{/* Rate Popup */}
+{showRatePopup && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        height: "100vh",
+        position: "relative",
+      }}
+    >
+      {/* Back Icon */}
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => setShowRatePopup(false)}
+        style={{
+          position: "absolute",
+          left: "4vw",
+          top: "4vh",
+          width: "5vw",
+          height: "5vw",
+          cursor: "pointer",
+        }}
+      />
     </div>
   </div>
 )}

@@ -129,8 +129,9 @@ export default function Login() {
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.1)",
-          fontSize: "3.8vw"
+          color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px"
         }}
       />
 
@@ -145,15 +146,16 @@ export default function Login() {
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.1)",
-          fontSize: "3.8vw"
+          color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px"
         }}
       />
       <img
         src={showPassword ? showIcon : hideIcon}
         alt="Toggle Password"
         className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "48.8vh", width: "6vw", height: "3vh" }}
+        style={{ right: "10vw", top: "49vh", width: "6vw", height: "3vh" }}
         onClick={() => setShowPassword(!showPassword)}
       />
 
@@ -165,7 +167,7 @@ export default function Login() {
           width: "86vw",
           height: "6vh",
           backgroundColor: "#36570A",
-          fontSize: "4vw"
+          fontSize: "3.5vw"
         }}
         onClick={handleLogin}
         disabled={loading}
@@ -174,7 +176,7 @@ export default function Login() {
       </button>
 
       <p
-        className="absolute font-bold text-black cursor-pointer text-center"
+        className="absolute  text-black cursor-pointer text-center"
         style={{ top: "65vh", left: "30vw", fontSize: "3vw", width: "40vw" }}
         onClick={() => navigate("/forgot")}
       >

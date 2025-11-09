@@ -104,7 +104,7 @@ export default function ResetPassword() {
           if (error) setError("");
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ left: "7vw", top: "40.8vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ left: "7vw", top: "40.8vh", width: "86vw", height: "6vh", color: "#000",border: "1px solid #ccc",fontSize: "14px" }}
       />
       <img
         src={showNew ? showIcon : hideIcon}
@@ -127,7 +127,7 @@ export default function ResetPassword() {
           if (error) setError("");
         }}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ left: "7vw", top: "51vh", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ left: "7vw", top: "51vh", width: "86vw", height: "6vh", color: "#000",border: "1px solid #ccc",fontSize: "14px" }}
       />
       <img
         src={showConfirm ? showIcon : hideIcon}
@@ -143,7 +143,7 @@ export default function ResetPassword() {
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ left: "7vw", top: "62vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ left: "7vw", top: "62vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleResetPassword}
         disabled={loading}
       >

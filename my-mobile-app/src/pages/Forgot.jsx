@@ -139,9 +139,9 @@ export default function ForgotPassword() {
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54, 87, 10, 0.1)",
-          color: "#36570A",
-          fontSize: "3.8vw",
+          color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px"
         }}
       />
 

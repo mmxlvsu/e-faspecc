@@ -111,7 +111,7 @@ export default function Signup() {
         value={formData.fullName}
         onChange={(e) => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }}
       />
 
       <input
@@ -120,7 +120,7 @@ export default function Signup() {
         value={formData.email}
         onChange={(e) => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc",fontSize: "14px" }}
       />
 
       <input
@@ -129,7 +129,9 @@ export default function Signup() {
         value={formData.password}
         onChange={(e) => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px" }}
       />
       <img
         src={showPassword ? showIcon : hideIcon}
@@ -148,7 +150,9 @@ export default function Signup() {
         value={formData.confirmPassword}
         onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "rgba(54, 87, 10, 0.1)", fontSize: "3.8vw" }}
+        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px" }}
       />
       <img
         src={showConfirm ? showIcon : hideIcon}
@@ -160,7 +164,7 @@ export default function Signup() {
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "74vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ top: "74vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleSignup}
         disabled={loading}
       >

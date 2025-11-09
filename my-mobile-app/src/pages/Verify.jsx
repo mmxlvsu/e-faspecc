@@ -182,7 +182,8 @@ export default function VerificationCode() {
               maxLength={1}
               ref={ref}
               className="text-center rounded-lg font-bold"
-              style={{ width: "18vw", height: "18vw", fontSize: "6vw", backgroundColor: "rgba(54,87,10,0.1)" }}
+              style={{ width: "18vw", height: "18vw", fontSize: "6vw", color: "#000",
+          border: "1px solid #ccc" }}
               onChange={e => handleChange(e, nextInput)}
               onKeyDown={e => handleKeyDown(e, prevInput)}
             />
@@ -196,7 +197,7 @@ export default function VerificationCode() {
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "62vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "4vw" }}
+        style={{ top: "62vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleVerify}
         disabled={loading}
       >
@@ -210,9 +211,9 @@ export default function VerificationCode() {
           left: "7vw",
           width: "86vw",
           height: "6vh",
-          backgroundColor: "rgba(54,87,10,0.4)",
-          fontSize: "4vw",
-          color: "black",
+          color: "#000",
+          border: "1px solid #ccc",
+          fontSize: "14px",
           opacity: timer > 0 ? 0.5 : 1,
         }}
         onClick={handleResendCode}
