@@ -4,11 +4,10 @@ import { authAPI } from "../lib/api";
 import backIcon from "../assets/back.png";
 import logo from "../assets/logo.png";
 
-
 export default function VerificationCode() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const input1 = useRef(null);
   const input2 = useRef(null);
   const input3 = useRef(null);
@@ -21,8 +20,7 @@ export default function VerificationCode() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const getVerificationCode = () =>
-    [input1, input2, input3, input4].map(ref => ref.current?.value || "").join("");
+  const getCode = () => [input1, input2, input3, input4].map(ref => ref.current?.value || "").join("");
 
   const handleChange = (e, nextInput) => {
     if (e.target.value.length === 1 && nextInput) nextInput.current.focus();
@@ -44,13 +42,11 @@ export default function VerificationCode() {
   const seconds = timer % 60;
 
   const handleVerify = async () => {
-    const code = getVerificationCode();
+    const code = getCode();
     if (code.length !== 4) return setError("Please enter the complete 4-digit code");
     if (!email) return setError("Something went wrong");
 
-    setLoading(true);
-    setError("");
-    setSuccess("");
+    setLoading(true); setError(""); setSuccess("");
 
     try {
       await authAPI.verifyEmail(email, code);
@@ -66,9 +62,7 @@ export default function VerificationCode() {
   const handleResendCode = async () => {
     if (!email) return setError("Email is required to resend code");
 
-    setLoading(true);
-    setError("");
-    setSuccess("");
+    setLoading(true); setError(""); setSuccess("");
 
     try {
       await authAPI.resendCode(email);
@@ -84,89 +78,33 @@ export default function VerificationCode() {
     }
   };
 
-  const handleResendYes = () => handleResendCode();
-  const handleResendCancel = () => setShowPopup(false);
-
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
-      <img
-        src={backIcon}
-        alt="Back"
-        className="absolute cursor-pointer"
+      <img src={backIcon} alt="Back" className="absolute cursor-pointer"
         style={{ top: "4vh", left: "4vw", width: "5vw", height: "5vw" }}
-        onClick={() => navigate("/login")}
-      />
+        onClick={() => navigate("/login")} />
 
-      {/* Logo Image */}
-      <img
-        src={logo}
-        alt="Logo"
-        className="absolute"
-        style={{
-          top: "9vh",       
-          left: "50%",       
-          transform: "translateX(-50%)",
-          width: "45vw",     
-          height: "auto",    
-        }}
-      />
+      <img src={logo} alt="Logo" className="absolute"
+        style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw", height: "auto" }} />
 
-      <h1
-        className="absolute font-extrabold text-black"
-        style={{ top: "30vh", left: "7vw", width: "80vw", fontSize: "7vw" }}
-      >
+      <h1 className="absolute font-extrabold text-black" style={{ top: "30vh", left: "7vw", width: "80vw", fontSize: "7vw" }}>
         Verification Code
       </h1>
 
-      <p
-        className="absolute text-black"
-        style={{ top: "35vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}
-      >
+      <p className="absolute text-black" style={{ top: "35vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}>
         We have sent the code verification to
       </p>
 
-      {error && (
-        <div
-          className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
-        >
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div
-          className="absolute text-green-600 font-semibold text-center"
-          style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
-        >
-          {success}
-        </div>
-      )}
+      {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
+      {success && <div className="absolute text-green-600 font-semibold text-center" style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{success}</div>}
 
       <div className="absolute flex items-center justify-start" style={{ top: "37.5vh", left: "8vw", width: "85vw", gap: "2vw" }}>
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)}
           placeholder="your.email@example.com"
           className="bg-white focus:outline-none font-bold"
-          style={{
-            fontSize: "3vw",
-            color: "black",
-            borderBottom: "none",
-            flexShrink: 1,
-            minWidth: "40vw",
-            width: `${Math.max(4 * (email.length || 20), 40)}vw`,
-            transition: "width 0.2s ease",
-          }}
-        />
-        <p
-          className="underline cursor-pointer font-semibold"
-          style={{ fontSize: "3vw", color: "#36570A", whiteSpace: "nowrap" }}
-          onClick={() => navigate("/signup")}
-        >
-          Change email address?
-        </p>
+          style={{ fontSize: "3vw", color: "black", borderBottom: "none", flexShrink: 1, minWidth: "40vw", width: `${Math.max(4 * (email.length || 20), 40)}vw`, transition: "width 0.2s ease" }} />
+        <p className="underline cursor-pointer font-semibold" style={{ fontSize: "3vw", color: "#36570A", whiteSpace: "nowrap" }}
+          onClick={() => navigate("/signup")}>Change email address?</p>
       </div>
 
       <div className="absolute flex justify-between" style={{ top: "46.5vh", left: "7vw", width: "86vw" }}>
@@ -174,19 +112,10 @@ export default function VerificationCode() {
           const prevInput = idx > 0 ? [input1, input2, input3][idx - 1] : null;
           const nextInput = idx < 3 ? [input2, input3, input4][idx] : null;
           return (
-            <input
-              key={idx}
-              type="tel"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength={1}
-              ref={ref}
+            <input key={idx} type="tel" inputMode="numeric" pattern="[0-9]*" maxLength={1} ref={ref}
               className="text-center rounded-lg font-bold"
-              style={{ width: "18vw", height: "18vw", fontSize: "6vw", color: "#000",
-          border: "1px solid #ccc" }}
-              onChange={e => handleChange(e, nextInput)}
-              onKeyDown={e => handleKeyDown(e, prevInput)}
-            />
+              style={{ width: "18vw", height: "18vw", fontSize: "6vw", color: "#000", border: "1px solid #ccc" }}
+              onChange={e => handleChange(e, nextInput)} onKeyDown={e => handleKeyDown(e, prevInput)} />
           );
         })}
       </div>
@@ -195,42 +124,25 @@ export default function VerificationCode() {
         Resend code after: <span className="font-bold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
       </div>
 
-      <button
-        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+      <button className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ top: "62vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
-        onClick={handleVerify}
-        disabled={loading}
-      >
+        onClick={handleVerify} disabled={loading}>
         {loading ? "Verifying..." : "Confirm"}
       </button>
 
-      <button
-        className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
-        style={{
-          top: "69.5vh",
-          left: "7vw",
-          width: "86vw",
-          height: "6vh",
-          color: "#000",
-          border: "1px solid #ccc",
-          fontSize: "14px",
-          opacity: timer > 0 ? 0.5 : 1,
-        }}
-        onClick={handleResendCode}
-        disabled={timer > 0 || loading}
-      >
+      <button className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
+        style={{ top: "69.5vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px", opacity: timer > 0 ? 0.5 : 1 }}
+        onClick={handleResendCode} disabled={timer > 0 || loading}>
         {loading ? "Sending..." : "Resend"}
       </button>
 
       {showPopup && (
         <div className="fixed inset-0 flex justify-center items-center bg-black/50 p-4">
           <div className="bg-white rounded-lg text-center p-5" style={{ width: "86vw" }}>
-            <p className="text-black mb-4" style={{ fontSize: "3.5vw" }}>
-              Do you want to resend a new code?
-            </p>
+            <p className="text-black mb-4" style={{ fontSize: "3.5vw" }}>Do you want to resend a new code?</p>
             <div className="flex justify-between gap-3">
-              <button className="flex-1 rounded-lg bg-black text-white" style={{ height: "7vh", fontSize: "3.5vw" }} onClick={handleResendYes}>Yes</button>
-              <button className="flex-1 rounded-lg bg-green-900/20" style={{ height: "7vh", fontSize: "3.5vw" }} onClick={handleResendCancel}>Cancel</button>
+              <button className="flex-1 rounded-lg bg-black text-white" style={{ height: "7vh", fontSize: "3.5vw" }} onClick={handleResendCode}>Yes</button>
+              <button className="flex-1 rounded-lg bg-green-900/20" style={{ height: "7vh", fontSize: "3.5vw" }} onClick={() => setShowPopup(false)}>Cancel</button>
             </div>
           </div>
         </div>

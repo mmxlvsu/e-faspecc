@@ -43,6 +43,7 @@ export default function BottomBarPage() {
   const scrollRef = useRef(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
+  
   const items = [
     { icon: homeIcon, onClick: () => navigate("/home"), iconSize: "6vw", filter: "invert(35%) sepia(72%) saturate(454%) hue-rotate(53deg) brightness(95%) contrast(93%)" },
     { icon: cartIcon, onClick: () => navigate("/cart"), iconSize: "6vw", filter: "invert(0%) brightness(0%)" },

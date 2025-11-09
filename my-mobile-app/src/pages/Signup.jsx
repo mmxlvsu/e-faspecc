@@ -12,7 +12,6 @@ export default function Signup() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -25,30 +24,22 @@ export default function Signup() {
     if (error) setError("");
   };
 
-  // Form validation
   const validateForm = () => {
-    const { fullName, email, password, confirmPassword, studentId, contact } = formData;
-    
+    const { fullName, email, password, confirmPassword } = formData;
     if (!fullName.trim()) return "Full name is required";
     if (!email.trim()) return "Email is required";
     if (!email.includes("@")) return "Please enter a valid email";
     if (!password) return "Password is required";
     if (password.length < 8 || password.length > 16) return "Password must be 8-16 characters";
     if (password !== confirmPassword) return "Passwords do not match";
-
     return null;
   };
 
   const handleSignup = async () => {
     const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
+    if (validationError) { setError(validationError); return; }
 
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     try {
       const { confirmPassword, ...registrationData } = formData;
       const response = await authAPI.register(registrationData);
@@ -69,105 +60,52 @@ export default function Signup() {
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
-      <img
-        src={backIcon}
-        alt="Back"
-        className="absolute cursor-pointer"
+      <img src={backIcon} alt="Back" className="absolute cursor-pointer"
         style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }}
-        onClick={() => navigate("/")}
-      />
-
-{/* Logo Image */}
-      <img
-        src={logo}
-        alt="Logo"
-        className="absolute"
-        style={{
-          top: "9vh",       
-          left: "50%",       
-          transform: "translateX(-50%)",
-          width: "45vw",     
-          height: "auto",    
-        }}
-      />
+        onClick={() => navigate("/")} />
+      <img src={logo} alt="Logo" className="absolute"
+        style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw", height: "auto" }} />
 
       <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw", width: "80vw" }}>
         Create an account
       </h1>
-
       <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw", width: "70vw" }}>
         Please enter your details
       </p>
 
-      {error && (
-        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="absolute text-red-600 font-semibold text-center"
+        style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
 
-      <input
-        type="text"
-        placeholder="Full Name"
-        value={formData.fullName}
-        onChange={(e) => handleInputChange("fullName", e.target.value)}
+      <input type="text" placeholder="Full Name" value={formData.fullName}
+        onChange={e => handleInputChange("fullName", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }}
-      />
+        style={{ top: "40.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }} />
 
-      <input
-        type="email"
-        placeholder="Email Address"
-        value={formData.email}
-        onChange={(e) => handleInputChange("email", e.target.value)}
+      <input type="email" placeholder="Email Address" value={formData.email}
+        onChange={e => handleInputChange("email", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc",fontSize: "14px" }}
-      />
+        style={{ top: "47.8vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }} />
 
-      <input
-        type={showPassword ? "text" : "password"}
-        placeholder="Password"
-        value={formData.password}
-        onChange={(e) => handleInputChange("password", e.target.value)}
+      <input type={showPassword ? "text" : "password"} placeholder="Password" value={formData.password}
+        onChange={e => handleInputChange("password", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", color: "#000",
-          border: "1px solid #ccc",
-          fontSize: "14px" }}
-      />
-      <img
-        src={showPassword ? showIcon : hideIcon}
-        alt="Toggle Password"
-        className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "56.5vh", width: "6vw", height: "3vh" }}
-        onClick={() => setShowPassword(!showPassword)}
-      />
+        style={{ top: "55vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }} />
+      <img src={showPassword ? showIcon : hideIcon} alt="Toggle Password" className="absolute cursor-pointer"
+        style={{ right: "10vw", top: "56.5vh", width: "6vw", height: "3vh" }} onClick={() => setShowPassword(!showPassword)} />
       <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw", width: "70vw" }}>
         Password must be 8-16 characters
       </p>
 
-      <input
-        type={showConfirm ? "text" : "password"}
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+      <input type={showConfirm ? "text" : "password"} placeholder="Confirm Password" value={formData.confirmPassword}
+        onChange={e => handleInputChange("confirmPassword", e.target.value)}
         className="absolute rounded-lg px-4 text-black placeholder-black"
-        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", color: "#000",
-          border: "1px solid #ccc",
-          fontSize: "14px" }}
-      />
-      <img
-        src={showConfirm ? showIcon : hideIcon}
-        alt="Toggle Confirm Password"
-        className="absolute cursor-pointer"
-        style={{ right: "10vw", top: "66.5vh", width: "6vw", height: "3vh" }}
-        onClick={() => setShowConfirm(!showConfirm)}
-      />
+        style={{ top: "65vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px" }} />
+      <img src={showConfirm ? showIcon : hideIcon} alt="Toggle Confirm Password" className="absolute cursor-pointer"
+        style={{ right: "10vw", top: "66.5vh", width: "6vw", height: "3vh" }} onClick={() => setShowConfirm(!showConfirm)} />
 
-      <button
-        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+      <button className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ top: "74vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
-        onClick={handleSignup}
-        disabled={loading}
-      >
+        onClick={handleSignup} disabled={loading}>
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
