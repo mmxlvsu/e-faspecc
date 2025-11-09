@@ -246,7 +246,7 @@ export default function BottomBarPage() {
           cursor: "pointer",
           zIndex: 1000,
         }}
-        onClick={() => navigate("/notifications")}
+        onClick={() => navigate("/notification")}
       >
         <img
           src={notifIcon}

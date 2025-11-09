@@ -13,6 +13,7 @@ import Order from "./pages/Order";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
+import Notification from "./pages/Notification";
 
 import "./index.css";
 
@@ -31,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/profile" element={<Profile />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/payment" element={<Payment />} />
-
+        <Route path="/notification" element={<Notification />} />
       </Routes>
       
       <Toaster position="top-center" />

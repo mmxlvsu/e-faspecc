@@ -167,33 +167,35 @@ export default function Cart() {
       {/* Scrollable content */}
       <div
         ref={scrollRef}
-        className="absolute top-[15vw] bottom-0 left-0 right-0 overflow-y-auto px-4vw"
-        style={{ backgroundColor: "white", paddingTop: "4vw" }}
+        style={{
+          position: "absolute",
+          top: "15vw",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          overflowY: "auto",
+          backgroundColor: "white",
+          paddingTop: "4vw",
+        }}
       >
         {cartItems.length === 0 ? (
-          <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    height: "100%",
+    textAlign: "center",
+  }}
+>
             <img
-              src={cartempty}
-              alt="Cart Empty"
-              style={{
-                position: "absolute",
-                top: "50vw",
-                left: "42vw",
-                width: "20vw",
-                height: "20vw",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: "75vw",
-                left: "31vw",
-                fontSize: "5vw",
-                color: "#777",
-              }}
-            >
-              Your cart is empty
-            </div>
+                src={cartempty}
+                alt="Notification Empty"
+                style={{ marginTop: "210px", width: "20vw", height: "20vw" }}
+              />
+              <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
+                Your cart is empty
+              </p>
           </div>
         ) : (
           cartItems.map((item, i) => {
