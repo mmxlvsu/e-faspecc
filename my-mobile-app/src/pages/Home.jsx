@@ -181,21 +181,21 @@ export default function BottomBarPage() {
   const getStockStatus = (item) => {
     // If not available, consider it sold out
     if (!item.availability) {
-      return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white" };
+      return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white", isAvailable: false, };
     }
 
     // Check stockLimit if it exists
     if (item.stockLimit !== null) {
       if (item.stockLimit === 0) {
-        return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white" };
+        return { label: "Sold Out", backgroundColor: "#F44336", textColor: "white", isAvailable: false, };
       } 
       if (item.stockLimit <= 5) {
-        return { label: "Low Stock", backgroundColor: "#FFC107", textColor: "#333" };
+        return { label: "Low Stock", backgroundColor: "#FFC107", textColor: "#333", isAvailable: true, };
       }
     }
 
     // Otherwise, available
-    return { label: "Available", backgroundColor: "#4CAF50", textColor: "white" };
+    return { label: "Available", backgroundColor: "#4CAF50", textColor: "white", isAvailable: true, };
   };
 
   return (
@@ -542,6 +542,7 @@ export default function BottomBarPage() {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
+                    opacity: status.isAvailable ? 1 : 0.5, // 🔹 Gray out sold out
                   }}
                 >
                   {/* Status Banner */}
@@ -573,9 +574,10 @@ export default function BottomBarPage() {
                       objectFit: "cover",
                       marginTop: "3vw",
                       marginBottom: "2vw",
-                      cursor: "pointer",
+                      cursor: status.isAvailable ? "pointer" : "not-allowed",
                     }}
-                    onClick={() => {
+                     onClick={() => {
+                      if (!status.isAvailable) return; // prevent modal for sold-out
                       setSelectedItem(item);
                       setIsModalOpen(true);
                       openItemModal(item);

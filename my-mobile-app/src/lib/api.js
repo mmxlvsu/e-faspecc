@@ -176,10 +176,15 @@ export const orderAPI = {
     return apiCall('/orders', { method: 'GET' });
   },
 
-  // ✅ Confirm payment readiness
+  // Confirm payment readiness
   confirmPayment: async (orderId) => {
     return apiCall(`/orders/${orderId}/confirm-payment`, {
       method: 'PATCH',
     });
+  },
+
+  // NEW — for canceling (students can’t delete, but we can update status)
+  cancelOrder: async (orderId) => {
+    return apiCall(`/orders/${orderId}/cancel`, { method: 'PATCH' });
   },
 };

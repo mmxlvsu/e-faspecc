@@ -53,17 +53,14 @@ export default function Notification() {
         return pendingIcon;
       case "preparing":
         return preparingIcon;
-      default:
-        return pendingIcon;
-        case "ready":
+      case "ready":
         return readyIcon;
       case "completed":
         return completedIcon;
-        return pendingIcon;
-        case "pending":
-        return pendingIcon;
       case "cancelled":
         return cancelledIcon;
+      default:
+        return pendingIcon;
     }
   };
 
