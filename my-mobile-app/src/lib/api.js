@@ -215,3 +215,11 @@ export const feedbackAPI = {
   },
 };
 
+// ✅ Fetch notifications
+export const fetchNotifications = async (token) => {
+  const res = await api.get("/notifications", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data;
+};
+

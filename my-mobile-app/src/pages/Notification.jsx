@@ -1,52 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchNotifications } from "../lib/api";
 import backIcon from "../assets/back.png";
 import notifEmpty from "../assets/notif_empty.png";
-import pendingIcon from "../assets/pending.png"; // example icon
-import preparingIcon from "../assets/preparing.png"; // example icon
-import readyIcon from "../assets/ready.png"; // example icon
-import completedIcon from "../assets/complete.png"; // example icon
-import cancelledIcon from "../assets/cancel.png"; // example icon
+import pendingIcon from "../assets/pending.png";
+import preparingIcon from "../assets/preparing.png";
+import readyIcon from "../assets/ready.png";
+import completedIcon from "../assets/complete.png";
+import cancelledIcon from "../assets/cancel.png";
 
 export default function Notification() {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
 
-  // Example notifications placeholder
-  const [notifications, setNotifications] = useState([
-    {
-      id: "1",
-      status: "pending",
-      orderNumber: "12345",
-      time: "1 min ago",
-    },
-    {
-      id: "2",
-      status: "preparing",
-      orderNumber: "12346",
-      time: "5 mins ago",
-    },
-    {
-      id: "1",
-      status: "ready",
-      orderNumber: "12345",
-      time: "1 min ago",
-    },
-    {
-      id: "2",
-      status: "completed",
-      orderNumber: "12346",
-      time: "5 mins ago",
-    },
-    {
-      id: "2",
-      status: "cancelled",
-      orderNumber: "12346",
-      time: "5 mins ago",
-    },
-  ]);
-
-  // Get icon based on status
   const getStatusIcon = (status) => {
     switch (status) {
       case "pending":
@@ -58,11 +25,23 @@ export default function Notification() {
       case "completed":
         return completedIcon;
       case "cancelled":
+      case "rejected":
         return cancelledIcon;
       default:
         return pendingIcon;
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetchNotifications(token)
+      .then((data) => setNotifications(data))
+      .catch((err) =>
+        console.error("Failed to fetch notifications:", err)
+      );
+  }, []);
 
   return (
     <div className="w-screen h-screen relative bg-[#36570A]">
@@ -81,10 +60,17 @@ export default function Notification() {
           src={backIcon}
           alt="Back"
           className="cursor-pointer"
-          style={{ width: "5vw", height: "5vw", filter: "brightness(0) invert(1)" }}
+          style={{
+            width: "5vw",
+            height: "5vw",
+            filter: "brightness(0) invert(1)",
+          }}
           onClick={() => navigate("/home")}
         />
-        <h1 className="flex-1 text-center font-bold" style={{ fontSize: "4vw", color: "white" }}>
+        <h1
+          className="flex-1 text-center font-bold"
+          style={{ fontSize: "4vw", color: "white" }}
+        >
           Notification
         </h1>
       </div>
@@ -118,39 +104,88 @@ export default function Notification() {
               alt="Notification Empty"
               style={{ width: "18vw", height: "18vw" }}
             />
-            <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
+            <p
+              style={{
+                fontSize: "5vw",
+                color: "#777",
+                marginTop: "5vw",
+              }}
+            >
               Your notification is empty
             </p>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "2vw" }}>
-            {notifications.map((notif) => (
-              <div
-                key={notif.id}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: "4vw",
-                  borderRadius: "2vw",
-                  color: "#000", border: "1px solid #ccc",
-                  cursor: "pointer",
-                }}
-                onClick={() => navigate("/order", { state: { status: notif.status, orderId: notif.id } })}
-              >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "4vw" }}>
-                    <img src={getStatusIcon(notif.status)} alt={notif.status} style={{ width: "6vw", height: "6vw" }} />
-                    <span style={{ fontSize: "4vw", fontWeight: "bold", textTransform: "capitalize" }}>
-                      {notif.status}
+            {notifications.map((notif) => {
+              const orderStatus = notif.order?.status || "pending";
+              const orderId = notif.orderId;
+
+              return (
+                <div
+                  key={notif.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: "4vw",
+                    borderRadius: "2vw",
+                    color: "#000",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    navigate("/order", { state: { orderId } })
+                  }
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4vw",
+                      }}
+                    >
+                      <img
+                        src={getStatusIcon(orderStatus)}
+                        alt={orderStatus}
+                        style={{ width: "6vw", height: "6vw" }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "4vw",
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {orderStatus}
+                      </span>
+                    </div>
+                    <span
+                      style={{ fontSize: "3vw", color: "#999" }}
+                    >
+                      {new Date(notif.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
                   </div>
-                  <span style={{ fontSize: "3vw", color: "#999" }}>{notif.time}</span>
+                  <p
+                    style={{
+                      fontSize: "3.2vw",
+                      marginLeft: "10vw",
+                      marginTop: "1vw",
+                    }}
+                  >
+                    {notif.message || `Order #${orderId} updated.`}
+                  </p>
                 </div>
-                <p style={{ fontSize: "3.2vw", marginLeft: "10vw", marginTop: "1vw" }}>
-                  Your order #{notif.orderNumber} is {notif.status}.
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
