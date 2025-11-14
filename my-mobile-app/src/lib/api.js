@@ -96,7 +96,15 @@ export const authAPI = {
       body: JSON.stringify({ newPassword }),
     });
   },
+
+  changePassword: async (currentPassword, newPassword) => {
+    return apiCall("/auth/change-password", {
+      method: "PATCH",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+  },
 };
+
 
 // Storage utilities
 export const storage = {
@@ -188,3 +196,22 @@ export const orderAPI = {
     return apiCall(`/orders/${orderId}/cancel`, { method: 'PATCH' });
   },
 };
+
+// Feedback API functions
+export const feedbackAPI = {
+  // Submit feedback (rating + optional comment)
+  submitFeedback: async (rating, comment, itemId = "SYSTEM_FEEDBACK") => {
+    return apiCall('/feedback', {
+      method: 'POST',
+      body: JSON.stringify({ rating, comment, itemId }),
+    });
+  },
+
+  // Get all feedback of logged-in user
+  getMyFeedback: async () => {
+    return apiCall('/feedback', {
+      method: 'GET',
+    });
+  },
+};
+

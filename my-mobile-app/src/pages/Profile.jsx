@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { authAPI, logout } from "../lib/api";
+import { authAPI, logout, feedbackAPI } from "../lib/api";
 import homeIcon from "../assets/home.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
@@ -88,8 +88,8 @@ export default function BottomBarPage() {
   const [activeTab, setActiveTab] = useState("Terms of Service");
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
-    const [showRatePopup, setShowRatePopup] = useState(false);
-const [showTermsPopup, setShowTermsPopup] = useState(false);
+  const [showRatePopup, setShowRatePopup] = useState(false);
+  const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(true);
@@ -106,6 +106,49 @@ const [showConfirm, setShowConfirm] = useState(false);
 const [starRating, setStarRating] = useState(0); // current rating
 const [reviewText, setReviewText] = useState("");
 const [showCustomPopup, setShowCustomPopup] = useState(false);
+const [currentPassword, setCurrentPassword] = useState("");
+const [newPassword, setNewPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+
+const handleChangePassword = async () => {
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert("New password and confirmation do not match.");
+    return;
+  }
+
+  try {
+    const response = await authAPI.changePassword(currentPassword, newPassword);
+    alert("Password updated successfully!");
+    setShowPasswordPopup(false);
+  } catch (error) {
+    alert(error.message || "Failed to change password.");
+  }
+};
+
+const handleSubmitFeedback = async () => {
+  if (!starRating) {
+    alert("Please select a rating!");
+    return;
+  }
+
+  try {
+    // Replace this with your actual API call
+    await feedbackAPI.submitFeedback(starRating, reviewText);
+
+    alert("Thank you for your feedback!");
+    setShowRatePopup(false);
+    setStarRating(0);
+    setReviewText("");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to submit feedback. Please try again.");
+  }
+};
 
   useEffect(() => {
     async function fetchUser() {
@@ -1014,6 +1057,8 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
             <input
               type={showCurrent ? "text" : "password"}
               placeholder="Enter current password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               style={{
                 padding: "10px 40px 10px 10px",
                 fontSize: "14px",
@@ -1054,6 +1099,8 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
             <input
               type={showNew ? "text" : "password"}
               placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               style={{
                 padding: "10px 40px 10px 10px",
                 fontSize: "14px",
@@ -1094,6 +1141,8 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
             <input
               type={showConfirm ? "text" : "password"}
               placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               style={{
                 padding: "10px 40px 10px 10px",
                 fontSize: "14px",
@@ -1138,6 +1187,7 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
               borderRadius: "8px",
               cursor: "pointer",
             }}
+            onClick={handleChangePassword}
           >
             Apply Changes
           </button>
@@ -1166,8 +1216,8 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
     <div
       style={{
         backgroundColor: "#fff",
-        width: "90vw",       // smaller width
-        maxWidth: "400px",   // optional max width
+        width: "90vw",
+        maxWidth: "400px",
         padding: "5vh 5vw",
         borderRadius: "12px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
@@ -1207,107 +1257,109 @@ const [showCustomPopup, setShowCustomPopup] = useState(false);
       </h2>
 
       {/* Stars */}
-<div style={{ display: "flex", gap: "2vw", marginTop: "2vh" }}>
-  {[1, 2, 3, 4, 5].map((star) => (
-    <img
-      key={star}
-      src={starRating >= star ? filledStar : emptyStar}
-      alt={`${star} star`}
-      style={{ width: "6vw", maxWidth: "40px", cursor: "pointer" }}
-      onClick={() => setStarRating(star)}
-    />
-  ))}
-</div>
+      <div style={{ display: "flex", gap: "2vw", marginTop: "2vh" }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <img
+            key={star}
+            src={starRating >= star ? filledStar : emptyStar}
+            alt={`${star} star`}
+            style={{ width: "6vw", maxWidth: "40px", cursor: "pointer" }}
+            onClick={() => setStarRating(star)}
+          />
+        ))}
+      </div>
 
-{/* Counter and Text */}
-{starRating > 0 && (
-  <div
-    style={{
-      marginTop: "1vh",
-      textAlign: "center",
-      fontSize: "3vw",
-      fontWeight: "400",
-      color: "black",
-    }}
-  >
-    {" "}
-    {starRating === 1
-      ? "Very Bad"
-      : starRating === 2
-      ? "Bad"
-      : starRating === 3
-      ? "Meh"
-      : starRating === 4
-      ? "Good"
-      : "Very Good"}
-  </div>
-)}
-{/* Detailed Review Label */}
-<div
-  style={{
-    marginTop: "3vh",
-    width: "95%",
-    textAlign: "left",
-    fontSize: "3vw",
-    fontWeight: "500",
-  }}
->
-  Detailed Review
-</div>
+      {/* Star Label */}
+      {starRating > 0 && (
+        <div
+          style={{
+            marginTop: "1vh",
+            textAlign: "center",
+            fontSize: "3vw",
+            fontWeight: "400",
+            color: "black",
+          }}
+        >
+          {["Very Bad", "Bad", "Meh", "Good", "Very Good"][starRating - 1]}
+        </div>
+      )}
 
-{/* Detailed Review */}
-<div style={{ marginTop: "1vh", width: "105%", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
-  <textarea
-    placeholder="Help us improve by leaving a detailed review here..."
-    value={reviewText}
-    onChange={(e) => {
-      if (e.target.value.length <= 200) setReviewText(e.target.value);
-    }}
-    style={{
-      width: "90%",        
-      height: "20vh",      
-      padding: "10px",
-      fontSize: "3vw",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-      resize: "none",
-      boxSizing: "border-box",
-      color: "#000",
-      fontFamily: "inherit",
-    }}
-  />
-{/* Character Counter (left-aligned) */}
-  <div style={{ width: "89%", textAlign: "left", marginTop: "1vh", fontSize: "2.5vw", color: "#000" }}>
-    ({reviewText.length}/200)
-  </div>
-</div>
+      {/* Detailed Review Label */}
+      <div
+        style={{
+          marginTop: "3vh",
+          width: "95%",
+          textAlign: "left",
+          fontSize: "3vw",
+          fontWeight: "500",
+        }}
+      >
+        Detailed Review
+      </div>
 
+      {/* Detailed Review */}
+      <div
+        style={{
+          marginTop: "1vh",
+          width: "105%",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <textarea
+          placeholder="Help us improve by leaving a detailed review here..."
+          value={reviewText}
+          onChange={(e) => {
+            if (e.target.value.length <= 200) setReviewText(e.target.value);
+          }}
+          style={{
+            width: "90%",
+            height: "20vh",
+            padding: "10px",
+            fontSize: "3vw",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            resize: "none",
+            boxSizing: "border-box",
+            color: "#000",
+            fontFamily: "inherit",
+          }}
+        />
+        {/* Character Counter */}
+        <div
+          style={{
+            width: "89%",
+            textAlign: "left",
+            marginTop: "1vh",
+            fontSize: "2.5vw",
+            color: "#000",
+          }}
+        >
+          ({reviewText.length}/200)
+        </div>
+      </div>
 
-{/* Submit Button */}
-<button
-  style={{
-    marginTop: "3vh",
-    padding: "10px 30px",
-    fontSize: "3.5vw",
-    color: "black",
-    backgroundcolor: "#000",
+      {/* Submit Button */}
+      <button
+        style={{
+          marginTop: "3vh",
+          padding: "10px 30px",
+          fontSize: "3.5vw",
+          color: "#fff",
+          backgroundColor: "#36570A",
           border: "1px solid #ccc",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
-  onClick={() => {
-    console.log("Rated:", starRating);
-    setShowRatePopup(false);
-  }}
->
-  Submit
-</button>
-
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+        onClick={handleSubmitFeedback}
+      >
+        Submit
+      </button>
     </div>
   </div>
 )}
-
-
       {/* Bottom Navigation */}
       <div
         style={{
