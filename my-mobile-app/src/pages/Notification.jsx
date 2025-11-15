@@ -5,7 +5,9 @@ import {
   storage,
   markAllNotificationsRead,
   getUnreadNotificationsCount,
+  markNotificationRead,   // ✅ NEW
 } from "../lib/api";
+
 import backIcon from "../assets/back.png";
 import notifEmpty from "../assets/notif_empty.png";
 import pendingIcon from "../assets/pending.png";
@@ -23,30 +25,25 @@ export default function Notification() {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "pending":
-        return pendingIcon;
-      case "preparing":
-        return preparingIcon;
-      case "ready":
-        return readyIcon;
-      case "completed":
-        return completedIcon;
+      case "pending": return pendingIcon;
+      case "preparing": return preparingIcon;
+      case "ready": return readyIcon;
+      case "completed": return completedIcon;
       case "cancelled":
-      case "rejected":
-        return cancelledIcon;
-      default:
-        return pendingIcon;
+      case "rejected": return cancelledIcon;
+      default: return pendingIcon;
     }
   };
 
   const loadNotifications = async () => {
-    const token = storage.getToken();
-    if (!token) return;
-
     try {
-      const data = await fetchNotifications();
-      const unreadNotifications = data.filter(notif => !notif.read);
-      setNotifications(unreadNotifications);
+      const all = await fetchNotifications();
+
+      // ✅ FIXED — only unread notifications
+      const unread = all.filter(n => n.status === "unread");
+
+      setNotifications(unread);
+
       const countData = await getUnreadNotificationsCount();
       setUnreadCount(countData.unread);
     } catch (err) {
@@ -61,11 +58,23 @@ export default function Notification() {
   const handleClearAll = async () => {
     try {
       await markAllNotificationsRead();
+
       setNotifications([]);
       setUnreadCount(0);
     } catch (err) {
       console.error("Failed to clear notifications:", err);
     }
+  };
+
+  const openNotification = async (notif) => {
+    // ✅ mark this notification as read in DB
+    await markNotificationRead(notif.id);
+
+    // Remove it from screen instantly without reload
+    setNotifications(prev => prev.filter(n => n.id !== notif.id));
+
+    // Navigate to order page
+    navigate("/order", { state: { status: notif.status, orderId: notif.orderId } });
   };
 
   return (
@@ -84,20 +93,17 @@ export default function Notification() {
           src={backIcon}
           alt="Back"
           className="cursor-pointer"
-          style={{
-            width: "5vw",
-            height: "5vw",
-            filter: "brightness(0) invert(1)",
-          }}
+          style={{ width: "5vw", height: "5vw", filter: "brightness(0) invert(1)" }}
           onClick={() => navigate("/home")}
         />
+
         <h1
           className="flex-1 text-center font-bold"
           style={{ fontSize: "4vw", color: "white" }}
         >
           Notifications
         </h1>
-        {/* Clear All Button */}
+
         {notifications.length > 0 && (
           <button
             onClick={handleClearAll}
@@ -115,7 +121,7 @@ export default function Notification() {
         )}
       </div>
 
-      {/* Scrollable content */}
+      {/* Scrollable Content */}
       <div
         ref={scrollRef}
         style={{
@@ -139,18 +145,8 @@ export default function Notification() {
               marginTop: "30vw",
             }}
           >
-            <img
-              src={notifEmpty}
-              alt="Notification Empty"
-              style={{ width: "18vw", height: "18vw" }}
-            />
-            <p
-              style={{
-                fontSize: "5vw",
-                color: "#777",
-                marginTop: "5vw",
-              }}
-            >
+            <img src={notifEmpty} style={{ width: "18vw", height: "18vw" }} />
+            <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
               Your notification is empty
             </p>
           </div>
@@ -158,7 +154,7 @@ export default function Notification() {
           <div style={{ display: "flex", flexDirection: "column", gap: "2vw" }}>
             {notifications.map((notif) => {
               const orderStatus = notif.order?.status || "pending";
-              const orderId = notif.orderId?.slice(0, 5); // Only show first 5 characters
+              const orderId = notif.orderId?.slice(0, 5);
 
               return (
                 <div
@@ -172,9 +168,7 @@ export default function Notification() {
                     border: "1px solid #ccc",
                     cursor: "pointer",
                   }}
-                  onClick={() =>
-                    navigate("/order", { state: { orderId: notif.orderId } })
-                  }
+                  onClick={() => openNotification(notif)}
                 >
                   <div
                     style={{
@@ -183,34 +177,18 @@ export default function Notification() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "4vw",
-                      }}
-                    >
+                    <div style={{ display: "flex", alignItems: "center", gap: "4vw" }}>
                       <img
                         src={getStatusIcon(orderStatus)}
-                        alt={orderStatus}
                         style={{ width: "6vw", height: "6vw" }}
                       />
-                      <span
-                        style={{
-                          fontSize: "4vw",
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
+                      <span style={{ fontSize: "4vw", fontWeight: "bold", textTransform: "capitalize" }}>
                         {orderStatus}
                       </span>
                     </div>
 
                     <span style={{ fontSize: "3vw", color: "#999" }}>
-                      {new Date(notif.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {new Date(notif.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
 
