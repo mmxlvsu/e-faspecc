@@ -216,10 +216,30 @@ export const feedbackAPI = {
 };
 
 // ✅ Fetch notifications
-export const fetchNotifications = async (token) => {
-  const res = await api.get("/notifications", {
-    headers: { Authorization: `Bearer ${token}` },
+export const fetchNotifications = async () => {
+  return apiCall("/notifications", {
+    method: "GET",
   });
-  return res.data;
+};
+
+// ✅ Mark all notifications as read
+export const markAllNotificationsRead = async () => {
+  return apiCall("/notifications/mark-all", {
+    method: "PATCH",
+  });
+};
+
+// ✅ Get unread notifications count
+export const getUnreadNotificationsCount = async () => {
+  return apiCall("/notifications/unread-count", {
+    method: "GET",
+  });
+};
+
+// ✅ Mark single notification as read
+export const markNotificationRead = async (id) => {
+  return apiCall(`/notifications/${id}/read`, {
+    method: "PATCH",
+  });
 };
 

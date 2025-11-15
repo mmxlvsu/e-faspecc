@@ -1,6 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchNotifications } from "../lib/api";
+import {
+  fetchNotifications,
+  storage,
+  markAllNotificationsRead,
+  getUnreadNotificationsCount,
+} from "../lib/api";
 import backIcon from "../assets/back.png";
 import notifEmpty from "../assets/notif_empty.png";
 import pendingIcon from "../assets/pending.png";
@@ -12,7 +17,9 @@ import cancelledIcon from "../assets/cancel.png";
 export default function Notification() {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
+
   const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -32,28 +39,45 @@ export default function Notification() {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const loadNotifications = async () => {
+    const token = storage.getToken();
     if (!token) return;
 
-    fetchNotifications(token)
-      .then((data) => setNotifications(data))
-      .catch((err) =>
-        console.error("Failed to fetch notifications:", err)
-      );
+    try {
+      const data = await fetchNotifications();
+      const unreadNotifications = data.filter(notif => !notif.read);
+      setNotifications(unreadNotifications);
+      const countData = await getUnreadNotificationsCount();
+      setUnreadCount(countData.unread);
+    } catch (err) {
+      console.error("Failed to fetch notifications:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadNotifications();
   }, []);
+
+  const handleClearAll = async () => {
+    try {
+      await markAllNotificationsRead();
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (err) {
+      console.error("Failed to clear notifications:", err);
+    }
+  };
 
   return (
     <div className="w-screen h-screen relative bg-[#36570A]">
       {/* Header */}
       <div
-        className="fixed top-0 left-0 right-0 flex items-center"
+        className="fixed top-0 left-0 right-0 flex items-center justify-between"
         style={{
           height: "15vw",
           padding: "0 4vw",
           boxShadow: "0 0.2vw 0.5vw rgba(0,0,0,0.1)",
           zIndex: 9999,
-          position: "relative",
         }}
       >
         <img
@@ -71,8 +95,24 @@ export default function Notification() {
           className="flex-1 text-center font-bold"
           style={{ fontSize: "4vw", color: "white" }}
         >
-          Notification
+          Notifications
         </h1>
+        {/* Clear All Button */}
+        {notifications.length > 0 && (
+          <button
+            onClick={handleClearAll}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "white",
+              fontSize: "3vw",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            Clear All
+          </button>
+        )}
       </div>
 
       {/* Scrollable content */}
@@ -118,7 +158,7 @@ export default function Notification() {
           <div style={{ display: "flex", flexDirection: "column", gap: "2vw" }}>
             {notifications.map((notif) => {
               const orderStatus = notif.order?.status || "pending";
-              const orderId = notif.orderId;
+              const orderId = notif.orderId?.slice(0, 5); // Only show first 5 characters
 
               return (
                 <div
@@ -133,7 +173,7 @@ export default function Notification() {
                     cursor: "pointer",
                   }}
                   onClick={() =>
-                    navigate("/order", { state: { orderId } })
+                    navigate("/order", { state: { orderId: notif.orderId } })
                   }
                 >
                   <div
@@ -165,15 +205,15 @@ export default function Notification() {
                         {orderStatus}
                       </span>
                     </div>
-                    <span
-                      style={{ fontSize: "3vw", color: "#999" }}
-                    >
+
+                    <span style={{ fontSize: "3vw", color: "#999" }}>
                       {new Date(notif.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </span>
                   </div>
+
                   <p
                     style={{
                       fontSize: "3.2vw",

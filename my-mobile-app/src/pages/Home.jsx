@@ -8,7 +8,7 @@ import notifIcon from "../assets/noti.png";
 import locIcon from "../assets/location.png";
 import searchIcon from "../assets/search.png";
 import foodIcon from "../assets/food.png";
-import { menuAPI, authAPI, storage } from "../lib/api";
+import { menuAPI, authAPI, storage, fetchNotifications, getUnreadNotificationsCount } from "../lib/api";
 
 export default function BottomBarPage() {
 
@@ -63,6 +63,25 @@ export default function BottomBarPage() {
     updateCount();
     window.addEventListener("storage", updateCount);
     return () => window.removeEventListener("storage", updateCount);
+  }, []);
+
+  const [notifCount, setNotifCount] = useState(0);
+  
+    useEffect(() => {
+    const loadUnreadCount = async () => {
+      try {
+        const data = await getUnreadNotificationsCount();
+        setNotifCount(data.unread);
+      } catch (err) {
+        console.error("Failed to fetch unread notifications count:", err);
+      }
+    };
+
+    loadUnreadCount();
+
+    // Optionally, refresh count every 30 seconds
+    const interval = setInterval(loadUnreadCount, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const [categories, setCategories] = useState(["All"]);
@@ -253,6 +272,29 @@ export default function BottomBarPage() {
           alt="notification"
           style={{ width: "100%", height: "100%", filter: "invert(100%) brightness(200%)" }}
         />
+
+        {/* Notification Badge */}
+        {notifCount > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-3px",
+              right: "-3px",
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              width: "18px",
+              height: "18px",
+              fontSize: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontWeight: "600",
+            }}
+          >
+            {notifCount}
+          </div>
+        )}
       </div>
 
       <div
