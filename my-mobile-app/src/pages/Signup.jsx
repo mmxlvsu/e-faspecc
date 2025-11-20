@@ -8,6 +8,8 @@ import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
 import showIcon from "../assets/show.png";
 import hideIcon from "../assets/hide.png";
+import studentIcon from "../assets/user.png";
+import contactIcon from "../assets/phone.png";
 
 // ===============================
 // InputField wrapped in memo
@@ -55,6 +57,8 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    studentId: "",
+    contact: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -67,13 +71,15 @@ export default function Signup() {
   };
 
   const validateForm = () => {
-    const { fullName, email, password, confirmPassword } = formData;
+    const { fullName, email, password, confirmPassword, studentId, contact } = formData;
     if (!fullName.trim()) return "Full name is required";
     if (!email.trim()) return "Email is required";
     if (!email.includes("@")) return "Please enter a valid email";
     if (!password) return "Password is required";
     if (password.length < 8 || password.length > 16) return "Password must be 8-16 characters";
     if (password !== confirmPassword) return "Passwords do not match";
+    if (!studentId.trim()) return "Student ID is required";
+    if (!contact.trim()) return "Contact number is required";
     return null;
   };
 
@@ -112,20 +118,22 @@ export default function Signup() {
 
       <InputField top="40.8vh" icon={userIcon} type="text" field="fullName" placeholder="Full Name" formData={formData} handleInputChange={handleInputChange} />
       <InputField top="47.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" formData={formData} handleInputChange={handleInputChange} />
-      <InputField top="55vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} formData={formData} handleInputChange={handleInputChange} />
-      <p className="absolute text-gray-600" style={{ left: "8vw", top: "61vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
-      <InputField top="64vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="55vh" icon={studentIcon} type="text" field="studentId" placeholder="Student ID" formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="62.2vh" icon={contactIcon} type="tel" field="contact" placeholder="Contact Number" formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="69.4vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} formData={formData} handleInputChange={handleInputChange} />
+      <p className="absolute text-gray-600" style={{ left: "8vw", top: "75.7vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
+      <InputField top="78vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} formData={formData} handleInputChange={handleInputChange} />
 
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "73vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
+        style={{ top: "86vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleSignup}
         disabled={loading}
       >
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      <p className="absolute text-black text-center" style={{ top: "85vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "93vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account? <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>Log in here.</span>
       </p>
     </div>
