@@ -35,7 +35,7 @@ export default function Splash() {
       />
 
 {/* Center Logo */}
-<div className="absolute z-30 left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2">
+<div className="absolute z-30 left-1/2 top-[33%] -translate-x-1/2 -translate-y-1/2">
   <img 
     src={name}
     alt="Logo"
@@ -43,7 +43,7 @@ export default function Splash() {
   />
 </div>
 
-<div className="absolute z-30 left-1/2 top-[76%] w-[82%] -translate-x-1/2">
+<div className="absolute z-30 left-1/2 top-[70%] w-[82%] -translate-x-1/2">
         <button
   onClick={handleLogin}
   style={{
@@ -60,7 +60,7 @@ export default function Splash() {
 </button>
 </div>
 
-      <div className="absolute z-30 left-1/2 top-[85%] w-[82%] -translate-x-1/2">
+      <div className="absolute z-30 left-1/2 top-[78%] w-[82%] -translate-x-1/2">
         <button
   onClick={handleLogin}
   style={{
