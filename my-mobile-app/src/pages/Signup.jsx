@@ -63,16 +63,20 @@ export default function Signup() {
     }
   };
 
-  const InputField = ({ icon, type, placeholder, field, value, toggle, onToggle }) => (
+  const InputField = ({ icon, type, placeholder, field, toggle, onToggle, top }) => (
     <div
-      className="absolute flex items-center rounded-lg"
       style={{
-        top: value.top,
+        position: "absolute",
+        top,
         left: "7vw",
         width: "86vw",
         height: "6vh",
         border: "1px solid #ccc",
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
         paddingLeft: "3vw",
+        boxSizing: "border-box",
       }}
     >
       <img
@@ -85,16 +89,30 @@ export default function Signup() {
         placeholder={placeholder}
         value={formData[field]}
         onChange={e => handleInputChange(field, e.target.value)}
-        className="flex-1 text-black placeholder-black focus:outline-none"
-        style={{ fontSize: "14px" }}
+        style={{
+          flex: 1,
+          fontSize: "14px",
+          height: "100%",
+          border: "none",
+          outline: "none",
+          color: "#000",
+          boxSizing: "border-box",
+        }}
       />
       {onToggle && (
         <img
           src={toggle ? showIcon : hideIcon}
           alt="Toggle Visibility"
-          className="cursor-pointer"
-          style={{ width: "6vw", height: "3vh", marginRight: "2vw" }}
           onClick={onToggle}
+          style={{
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "22px",
+            height: "22px",
+            cursor: "pointer",
+          }}
         />
       )}
     </div>
@@ -106,8 +124,7 @@ export default function Signup() {
       <img
         src={backIcon}
         alt="Back"
-        className="absolute cursor-pointer"
-        style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }}
+        style={{ position: "absolute", left: "4vw", top: "4vh", width: "5vw", height: "5vw", cursor: "pointer" }}
         onClick={() => navigate("/")}
       />
 
@@ -115,31 +132,27 @@ export default function Signup() {
       <img
         src={logo}
         alt="Logo"
-        className="absolute"
-        style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }}
+        style={{ position: "absolute", top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }}
       />
 
       {/* Heading */}
-      <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw" }}>
+      <h1 style={{ position: "absolute", left: "8vw", top: "30vh", fontSize: "7vw", fontWeight: 900, color: "#000" }}>
         Create an account
       </h1>
-      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw" }}>
+      <p style={{ position: "absolute", left: "8.5vw", top: "34vh", fontSize: "3.5vw", fontWeight: 600, color: "#36570A" }}>
         Please enter your details
       </p>
 
       {/* Error Message */}
       {error && (
-        <div
-          className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
-        >
+        <div style={{ position: "absolute", top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw", color: "red", fontWeight: 600, textAlign: "center" }}>
           {error}
         </div>
       )}
 
-      {/* Inputs */}
-      <InputField icon={userIcon} type="text" placeholder="Full Name" field="fullName" value={{ top: "40.8vh" }} />
-      <InputField icon={emailIcon} type="email" placeholder="Email Address" field="email" value={{ top: "47.8vh" }} />
+      {/* Input Fields */}
+      <InputField icon={userIcon} type="text" placeholder="Full Name" field="fullName" top="40.8vh" />
+      <InputField icon={emailIcon} type="email" placeholder="Email Address" field="email" top="47.8vh" />
       <InputField
         icon={passwordIcon}
         type="password"
@@ -147,13 +160,11 @@ export default function Signup() {
         field="password"
         toggle={showPassword}
         onToggle={() => setShowPassword(!showPassword)}
-        value={{ top: "55vh" }}
+        top="55vh"
       />
-
-      <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw" }}>
+      <p style={{ position: "absolute", left: "8vw", top: "62vh", fontSize: "2.8vw", color: "#555" }}>
         Password must be 8-16 characters
       </p>
-
       <InputField
         icon={passwordIcon}
         type="password"
@@ -161,30 +172,35 @@ export default function Signup() {
         field="confirmPassword"
         toggle={showConfirm}
         onToggle={() => setShowConfirm(!showConfirm)}
-        value={{ top: "65vh" }}
+        top="65vh"
       />
 
       {/* Signup Button */}
       <button
-        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+        onClick={handleSignup}
+        disabled={loading}
         style={{
+          position: "absolute",
           top: "74vh",
           left: "7vw",
           width: "86vw",
           height: "6vh",
           backgroundColor: "#36570A",
           fontSize: "3.5vw",
+          color: "#fff",
+          fontWeight: 700,
+          borderRadius: "8px",
+          border: "none",
+          cursor: loading ? "not-allowed" : "pointer",
         }}
-        onClick={handleSignup}
-        disabled={loading}
       >
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
       {/* Login Link */}
-      <p className="absolute text-black text-center" style={{ top: "85vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p style={{ position: "absolute", top: "85vh", left: "19vw", fontSize: "3.2vw", width: "80vw", color: "#000" }}>
         Already have an account?{" "}
-        <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>
+        <span style={{ textDecoration: "underline", fontWeight: 700, color: "#36570A", cursor: "pointer" }} onClick={() => navigate("/login")}>
           Log in here.
         </span>
       </p>
