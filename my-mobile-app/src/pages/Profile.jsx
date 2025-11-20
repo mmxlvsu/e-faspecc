@@ -1065,7 +1065,7 @@ const handleSubmitFeedback = async () => {
                 borderRadius: "8px",
                 border: "1px solid #ccc",
                 width: "100%",
-                height: "40px",
+                height: "45px",
                 boxSizing: "border-box",
                 color: "#000",
               }}
@@ -1077,7 +1077,7 @@ const handleSubmitFeedback = async () => {
               style={{
                 position: "absolute",
                 right: "10px",
-                top: "33px",
+                top: "35px",
                 width: "22px",
                 height: "22px",
                 cursor: "pointer",
@@ -1107,7 +1107,7 @@ const handleSubmitFeedback = async () => {
                 borderRadius: "8px",
                 border: "1px solid #ccc",
                 width: "100%",
-                height: "40px",
+                height: "45px",
                 boxSizing: "border-box",
                 color: "#000",
               }}
@@ -1119,7 +1119,7 @@ const handleSubmitFeedback = async () => {
               style={{
                 position: "absolute",
                 right: "10px",
-                top: "33px",
+                top: "35px",
                 width: "22px",
                 height: "22px",
                 cursor: "pointer",
@@ -1149,7 +1149,7 @@ const handleSubmitFeedback = async () => {
                 borderRadius: "8px",
                 border: "1px solid #ccc",
                 width: "100%",
-                height: "40px",
+                height: "45px",
                 boxSizing: "border-box",
                 color: "#000",
               }}
@@ -1161,7 +1161,7 @@ const handleSubmitFeedback = async () => {
               style={{
                 position: "absolute",
                 right: "10px",
-                top: "33px",
+                top: "35px",
                 width: "22px",
                 height: "22px",
                 cursor: "pointer",

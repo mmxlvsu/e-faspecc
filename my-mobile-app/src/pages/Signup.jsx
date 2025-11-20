@@ -63,37 +63,50 @@ export default function Signup() {
     }
   };
 
-  const InputField = ({ icon, type, placeholder, field, value, toggle, onToggle }) => (
+  const InputField = ({ top, icon, type, field, placeholder, toggle, onToggle }) => (
     <div
       className="absolute flex items-center rounded-lg"
       style={{
-        top: value.top,
+        top,
         left: "7vw",
         width: "86vw",
         height: "6vh",
         border: "1px solid #ccc",
         paddingLeft: "3vw",
+        paddingRight: "3vw",
+        boxSizing: "border-box",
       }}
     >
       <img
         src={icon}
         alt=""
-        style={{ width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 }}
+        style={{ width: "4.5vw", height: "4.5vw", opacity: 0.7, marginRight: "2vw" }}
       />
       <input
         type={toggle ? "text" : type}
         placeholder={placeholder}
         value={formData[field]}
         onChange={e => handleInputChange(field, e.target.value)}
-        className="flex-1 text-black placeholder-black focus:outline-none"
-        style={{ fontSize: "14px" }}
+        className="text-black placeholder-black focus:outline-none"
+        style={{
+          width: "100%",
+          height: "100%",
+          fontSize: "14px",
+          boxSizing: "border-box",
+          paddingRight: toggle ? "40px" : "10px",
+        }}
       />
       {onToggle && (
         <img
           src={toggle ? showIcon : hideIcon}
-          alt="Toggle Visibility"
+          alt="Toggle"
           className="cursor-pointer"
-          style={{ width: "6vw", height: "3vh", marginRight: "2vw" }}
+          style={{
+            position: "absolute",
+            right: "10px",
+            width: "22px",
+            height: "22px",
+          }}
           onClick={onToggle}
         />
       )}
@@ -102,7 +115,6 @@ export default function Signup() {
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
-      {/* Back Button */}
       <img
         src={backIcon}
         alt="Back"
@@ -111,7 +123,6 @@ export default function Signup() {
         onClick={() => navigate("/")}
       />
 
-      {/* Logo */}
       <img
         src={logo}
         alt="Logo"
@@ -119,7 +130,6 @@ export default function Signup() {
         style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }}
       />
 
-      {/* Heading */}
       <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw" }}>
         Create an account
       </h1>
@@ -127,47 +137,40 @@ export default function Signup() {
         Please enter your details
       </p>
 
-      {/* Error Message */}
       {error && (
-        <div
-          className="absolute text-red-600 font-semibold text-center"
-          style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}
-        >
+        <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
           {error}
         </div>
       )}
 
-      {/* Inputs */}
-      <InputField icon={userIcon} type="text" placeholder="Full Name" field="fullName" value={{ top: "40.8vh" }} />
-      <InputField icon={emailIcon} type="email" placeholder="Email Address" field="email" value={{ top: "47.8vh" }} />
+      <InputField top="40.8vh" icon={userIcon} type="text" field="fullName" placeholder="Full Name" />
+      <InputField top="47.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" />
       <InputField
+        top="55vh"
         icon={passwordIcon}
         type="password"
-        placeholder="Password"
         field="password"
+        placeholder="Password"
         toggle={showPassword}
         onToggle={() => setShowPassword(!showPassword)}
-        value={{ top: "55vh" }}
       />
-
       <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw" }}>
         Password must be 8-16 characters
       </p>
 
       <InputField
+        top="65vh"
         icon={passwordIcon}
         type="password"
-        placeholder="Confirm Password"
         field="confirmPassword"
+        placeholder="Confirm Password"
         toggle={showConfirm}
         onToggle={() => setShowConfirm(!showConfirm)}
-        value={{ top: "65vh" }}
       />
-<p className="absolute text-gray-600" style={{ left: "8vw", top: "71.5vh", fontSize: "2.8vw" }}>
+      <p className="absolute text-gray-600" style={{ left: "8vw", top: "71.5vh", fontSize: "2.8vw" }}>
         Password must match
       </p>
 
-      {/* Signup Button */}
       <button
         className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
@@ -184,7 +187,6 @@ export default function Signup() {
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
-      {/* Login Link */}
       <p className="absolute text-black text-center" style={{ top: "85vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Already have an account?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/login")}>

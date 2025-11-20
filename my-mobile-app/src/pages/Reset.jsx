@@ -51,14 +51,14 @@ export default function ResetPassword() {
       <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "40.8vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
         <img src={passwordIcon} alt="Password" style={{ marginLeft: "-2vw",width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 }} />
         <input type={showNew ? "text" : "password"} placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="flex-1 text-black placeholder-black focus:outline-none" style={{ fontSize: "14px" }} />
-        <img src={showNew ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "6vw", height: "3vh" }} onClick={() => setShowNew(!showNew)} />
+        <img src={showNew ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "22px", height: "22px" }} onClick={() => setShowNew(!showNew)} />
       </div>
       <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "47.5vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
 
       <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "51vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
         <img src={passwordIcon} alt="Password" style={{ marginLeft: "-2vw", width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 }} />
         <input type={showConfirm ? "text" : "password"} placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="flex-1 text-black placeholder-black focus:outline-none" style={{ fontSize: "14px" }} />
-        <img src={showConfirm ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "6vw", height: "3vh" }} onClick={() => setShowConfirm(!showConfirm)} />
+        <img src={showConfirm ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "22px", height: "22px" }} onClick={() => setShowConfirm(!showConfirm)} />
       </div>
       <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "58vh", fontSize: "2.8vw" }}>Password must match</p>
 
