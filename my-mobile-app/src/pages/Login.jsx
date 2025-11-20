@@ -47,55 +47,56 @@ export default function Login() {
   };
 
   // Input box with proper padding and absolute eye icon
-  const inputBox = (top, type, icon, field, placeholder, showToggle) => (
-    <div
-      className="absolute flex items-center rounded-lg"
+ const inputBox = (top, type, icon, field, placeholder, showToggle) => (
+  <div
+    className="absolute flex items-center rounded-lg"
+    style={{
+      top,
+      left: "7vw",
+      width: "86vw",
+      height: "6vh",
+      border: "1px solid #ccc",
+      paddingLeft: "3vw",
+      position: "absolute",
+      boxSizing: "border-box",
+    }}
+  >
+    <img
+      src={icon}
+      alt=""
+      style={{ width: "4.5vw", height: "4.5vw", opacity: 0.7 }}
+    />
+    <input
+      type={type}
+      placeholder={placeholder}
+      value={formData[field]}
+      onChange={e => handleInputChange(field, e.target.value)}
+      className="text-black placeholder-black focus:outline-none"
       style={{
-        top,
-        left: "7vw",
-        width: "86vw",
-        height: "6vh",
-        border: "1px solid #ccc",
-        paddingLeft: "3vw",
+        width: "100%",           // take full width of parent
+        fontSize: 14,
+        marginLeft: "2vw",
+        paddingRight: showToggle ? "40px" : "10px", // leave space for icon
+        height: "100%",
         boxSizing: "border-box",
-        position: "absolute",
       }}
-    >
+    />
+    {showToggle && (
       <img
-        src={icon}
-        alt=""
-        style={{ width: "4.5vw", height: "4.5vw", opacity: 0.7 }}
-      />
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={formData[field]}
-        onChange={e => handleInputChange(field, e.target.value)}
-        className="flex-1 text-black placeholder-black focus:outline-none"
+        src={showPassword ? showIcon : hideIcon}
+        alt="Toggle"
+        onClick={() => setShowPassword(!showPassword)}
         style={{
-          fontSize: 14,
-          marginLeft: "2vw",
-          paddingRight: "40px", // leave space for the eye icon
-          height: "100%",
-          boxSizing: "border-box",
+          position: "absolute",
+          right: "10px",
+          width: "22px",
+          height: "22px",
+          cursor: "pointer",
         }}
       />
-      {showToggle && (
-        <img
-          src={showPassword ? showIcon : hideIcon}
-          alt="Toggle"
-          onClick={() => setShowPassword(!showPassword)}
-          style={{
-            position: "absolute",
-            right: "10px", // consistent with popup example
-            width: "22px",
-            height: "22px",
-            cursor: "pointer",
-          }}
-        />
-      )}
-    </div>
-  );
+    )}
+  </div>
+);
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins px-[5vw]">
