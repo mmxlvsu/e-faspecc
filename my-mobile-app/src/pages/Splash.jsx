@@ -1,8 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import splashImage from "../assets/splash.png";
-import logo1 from "../assets/logo1.png";
-import logo2 from "../assets/logo2.png";
+import name from "../assets/faspecc.png";
 
 export default function Splash() {
   const navigate = useNavigate();
@@ -20,7 +18,6 @@ export default function Splash() {
 
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-black font-poppins">
-      <img src={splashImage} alt="Splash" className="w-full h-full object-cover" />
 
       <div
         aria-hidden="true"
@@ -29,60 +26,57 @@ export default function Splash() {
           background: `linear-gradient(
             to top,
             #6A972E 0%,         
-            rgba(106, 151, 46, 0.8) 40%,
-            rgba(106, 151, 46, 0.5) 60%,
+            rgba(106, 151, 46, 0.8) 20%,
+            rgba(106, 151, 46, 0.7) 60%,
             rgba(106, 151, 46, 0.2) 100%,
-            rgba(106, 151, 46, 0) 100%
+            rgba(106, 151, 46, 0) 0%
           )`,
         }}
       />
 
-      <div className="absolute z-30 left-1/2 top-[48%] w-[82%] -translate-x-1/2">
+{/* Center Logo */}
+<div className="absolute z-30 left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2">
+  <img 
+    src={name}
+    alt="Logo"
+    className="w-[70vw] h-auto opacity-100"
+  />
+</div>
+
+<div className="absolute z-30 left-1/2 top-[76%] w-[82%] -translate-x-1/2">
         <button
-          onClick={handleGetStarted}
-          className="w-full h-[8vh] bg-black text-white text-[4.5vw] font-bold rounded-lg"
-        >
-          Get Started
+  onClick={handleLogin}
+  style={{
+    width: "100%",
+    height: "6.7vh",
+    color: "white",
+    fontSize: "4.2vw",
+    fontWeight: "bold",
+    borderRadius: "8px",
+    border: "2px solid white",   // changeable
+  }}
+>
+  Sign in
+</button>
+</div>
+
+      <div className="absolute z-30 left-1/2 top-[85%] w-[82%] -translate-x-1/2">
+        <button
+  onClick={handleLogin}
+  style={{
+    width: "100%",
+    height: "6.7vh",
+    backgroundColor: "white",
+    color: "black",
+    fontSize: "4.2vw",
+    fontWeight: "bold",
+    borderRadius: "8px",
+    border: "2px solid white",   // changeable
+  }} >
+          Create an Account
         </button>
       </div>
-
-      <div className="absolute z-30 left-1/2 top-[63%] w-[82%] -translate-x-1/2">
-        <button
-          onClick={handleGoogle}
-          className="w-full h-[8vh] bg-white text-black text-[4.5vw] font-bold rounded-lg flex items-center justify-center gap-2"
-        >
-          <img src={logo1} alt="Google" className="w-5 h-5" />
-          Continue with Google
-        </button>
-      </div>
-
-      <div className="absolute z-30 left-1/2 top-[73%] w-[82%] -translate-x-1/2">
-        <button
-          onClick={handleFacebook}
-          className="w-full h-[8vh] bg-white text-black text-[4.5vw] font-bold flex items-center justify-center gap-2 rounded-lg"
-        >
-          <img src={logo2} alt="Facebook" className="w-5 h-5" />
-          Continue with Facebook
-        </button>
-      </div>
-
-      <div className="absolute z-30 left-1/2 top-[58%] w-3/4 -translate-x-1/2 flex items-center">
-        <div className="flex-grow border-t border-white"></div>
-        <span
-          className="mx-2 text-[3.5vw] text-white text-center cursor-pointer"
-          onClick={() => navigate("/signup")}
-        >
-          or use social sign up
-        </span>
-        <div className="flex-grow border-t border-white"></div>
-      </div>
-
-      <p className="absolute z-30 left-1/2 top-[83%] w-3/4 -translate-x-1/2 text-[3.5vw] text-white text-center">
-        Already have an account?{" "}
-        <span onClick={handleLogin} className="underline font-semibold cursor-pointer">
-          Log in here.
-        </span>
-      </p>
+      
     </div>
   );
 }
