@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { authAPI, storage } from "../lib/api";
 import backIcon from "../assets/back.png";
@@ -8,6 +8,44 @@ import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
 import showIcon from "../assets/show.png";
 import hideIcon from "../assets/hide.png";
+
+// =========================================================
+// InputField wrapped in memo to prevent losing focus
+// =========================================================
+const InputField = memo(({ top, icon, type, field, placeholder, toggle, onToggle, formData, handleInputChange }) => {
+  const wrapperStyle = {
+    position: "absolute",
+    top,
+    left: "7vw",
+    width: "86vw",
+    height: "6vh",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: "3vw",
+    boxSizing: "border-box",
+  };
+  const iconStyle = { width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 };
+  const eyeStyle = { position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", width: "22px", height: "22px", cursor: "pointer" };
+  const inputStyle = { flex: 1, fontSize: 14, height: "100%", border: "none", outline: "none", color: "#000" };
+
+  const inputType = onToggle && toggle ? "text" : type;
+
+  return (
+    <div style={wrapperStyle}>
+      <img src={icon} alt="" style={iconStyle} />
+      <input
+        type={inputType}
+        placeholder={placeholder}
+        value={formData[field]}
+        onChange={e => handleInputChange(field, e.target.value)}
+        style={inputStyle}
+      />
+      {onToggle && <img src={toggle ? showIcon : hideIcon} alt="Toggle" style={eyeStyle} onClick={onToggle} />}
+    </div>
+  );
+});
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -52,39 +90,6 @@ export default function Signup() {
     }
   };
 
-  const InputField = ({ top, icon, type, field, placeholder, toggle, onToggle }) => {
-    const wrapperStyle = {
-      position: "absolute",
-      top,
-      left: "7vw",
-      width: "86vw",
-      height: "6vh",
-      border: "1px solid #ccc",
-      borderRadius: "8px",
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: "3vw",
-      boxSizing: "border-box",
-    };
-    const iconStyle = { width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 };
-    const eyeStyle = { position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", width: "22px", height: "22px", cursor: "pointer" };
-    const inputStyle = { flex: 1, fontSize: 14, height: "100%", border: "none", outline: "none", color: "#000" };
-
-    return (
-      <div style={wrapperStyle}>
-        <img src={icon} alt="" style={iconStyle} />
-        <input
-          type={toggle ? "text" : type}
-          placeholder={placeholder}
-          value={formData[field]}
-          onChange={e => handleInputChange(field, e.target.value)}
-          style={inputStyle}
-        />
-        {onToggle && <img src={toggle ? showIcon : hideIcon} alt="Toggle" style={eyeStyle} onClick={onToggle} />}
-      </div>
-    );
-  };
-
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
       <img src={backIcon} alt="Back" className="absolute cursor-pointer" style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }} onClick={() => navigate("/")} />
@@ -95,10 +100,10 @@ export default function Signup() {
 
       {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
 
-      <InputField top="40.8vh" icon={userIcon} type="text" field="fullName" placeholder="Full Name" />
-      <InputField top="47.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" />
-      <InputField top="55vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} />
-      <InputField top="65vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} />
+      <InputField top="40.8vh" icon={userIcon} type="text" field="fullName" placeholder="Full Name" formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="47.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="55vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} formData={formData} handleInputChange={handleInputChange} />
+      <InputField top="65vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} formData={formData} handleInputChange={handleInputChange} />
 
       <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
 
