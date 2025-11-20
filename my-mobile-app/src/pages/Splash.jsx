@@ -65,7 +65,7 @@ export default function Splash() {
       {/* Create an Account button */}
       <div className="absolute z-30 left-1/2 top-[80%] w-[82%] -translate-x-1/2">
         <button
-          onClick={handleLogin}
+          onClick={handleGetStarted}
           style={{
             width: "100%",
             height: "6.7vh",
