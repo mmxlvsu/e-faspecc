@@ -9,9 +9,9 @@ import passwordIcon from "../assets/password.png";
 import showIcon from "../assets/show.png";
 import hideIcon from "../assets/hide.png";
 
-// =========================================================
-// InputField wrapped in memo to prevent losing focus
-// =========================================================
+// ===============================
+// InputField wrapped in memo
+// ===============================
 const InputField = memo(({ top, icon, type, field, placeholder, toggle, onToggle, formData, handleInputChange }) => {
   const wrapperStyle = {
     position: "absolute",
@@ -25,6 +25,7 @@ const InputField = memo(({ top, icon, type, field, placeholder, toggle, onToggle
     alignItems: "center",
     paddingLeft: "3vw",
     boxSizing: "border-box",
+    backgroundColor: "#ffffff",
   };
   const iconStyle = { width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 };
   const eyeStyle = { position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", width: "22px", height: "22px", cursor: "pointer" };
@@ -49,7 +50,12 @@ const InputField = memo(({ top, icon, type, field, placeholder, toggle, onToggle
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ fullName: "", email: "", password: "", confirmPassword: "" });
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -82,7 +88,7 @@ export default function Signup() {
       const response = await authAPI.register(data);
       storage.setToken(response.token);
       storage.setUser(response.user);
-      navigate("/verify", { state: { email: formData.email, message: "Registration successful! Check email for verification." } });
+      navigate("/verify", { state: { email: formData.email, message: "Registration successful! Check your email for verification." } });
     } catch (err) {
       setError(err.message || "Registration failed. Please try again.");
     } finally {
@@ -92,22 +98,30 @@ export default function Signup() {
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
-      <img src={backIcon} alt="Back" className="absolute cursor-pointer" style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }} onClick={() => navigate("/")} />
+      <img
+        src={backIcon}
+        alt="Back"
+        className="absolute cursor-pointer"
+        style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }}
+        onClick={() => navigate("/")}
+      />
       <img src={logo} alt="Logo" className="absolute" style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }} />
-
       <h1 className="absolute font-black text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw" }}>Create an account</h1>
       <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw" }}>Please enter your details</p>
-
       {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
 
       <InputField top="40.8vh" icon={userIcon} type="text" field="fullName" placeholder="Full Name" formData={formData} handleInputChange={handleInputChange} />
       <InputField top="47.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" formData={formData} handleInputChange={handleInputChange} />
       <InputField top="55vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} formData={formData} handleInputChange={handleInputChange} />
-      <InputField top="65vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} formData={formData} handleInputChange={handleInputChange} />
+      <p className="absolute text-gray-600" style={{ left: "8vw", top: "61vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
+      <InputField top="64vh" icon={passwordIcon} type="password" field="confirmPassword" placeholder="Confirm Password" toggle={showConfirm} onToggle={() => setShowConfirm(!showConfirm)} formData={formData} handleInputChange={handleInputChange} />
 
-      <p className="absolute text-gray-600" style={{ left: "8vw", top: "62vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
-
-      <button className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed" style={{ top: "74vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }} onClick={handleSignup} disabled={loading}>
+      <button
+        className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ top: "73vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
+        onClick={handleSignup}
+        disabled={loading}
+      >
         {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
