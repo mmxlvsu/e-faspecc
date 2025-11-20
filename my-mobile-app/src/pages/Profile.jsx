@@ -188,7 +188,7 @@ const handleSubmitFeedback = async () => {
         email: userData.email || "",
         contact: userData.contact || "",
       });
-      setIsEditing(true);
+      setIsEditing(false);
     }
   };
 
