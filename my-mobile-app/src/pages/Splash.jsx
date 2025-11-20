@@ -43,7 +43,7 @@ export default function Splash() {
   />
 </div>
 
-<div className="absolute z-30 left-1/2 top-[70%] w-[82%] -translate-x-1/2">
+<div className="absolute z-30 left-1/2 top-[72%] w-[82%] -translate-x-1/2">
         <button
   onClick={handleLogin}
   style={{
@@ -53,14 +53,14 @@ export default function Splash() {
     fontSize: "4.2vw",
     fontWeight: "bold",
     borderRadius: "8px",
-    border: "2px solid white",   // changeable
+    border: "1px solid white",   // changeable
   }}
 >
   Sign in
 </button>
 </div>
 
-      <div className="absolute z-30 left-1/2 top-[78%] w-[82%] -translate-x-1/2">
+      <div className="absolute z-30 left-1/2 top-[80%] w-[82%] -translate-x-1/2">
         <button
   onClick={handleLogin}
   style={{
