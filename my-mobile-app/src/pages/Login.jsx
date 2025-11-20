@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react"; // <-- Import memo
 import { useNavigate } from "react-router-dom";
 import { authAPI, storage } from "../lib/api";
 import backIcon from "../assets/back.png";
@@ -8,6 +8,47 @@ import passwordIcon from "../assets/password.png";
 import showIcon from "../assets/show.png";
 import hideIcon from "../assets/hide.png";
 
+// =========================================================
+// 1. DEFINE INPUTFIELD OUTSIDE AND WRAP IN REACT.MEMO
+// =========================================================
+const InputField = memo(({ top, icon, type, field, placeholder, toggle, onToggle, formData, handleInputChange }) => {
+  const wrapperStyle = {
+    position: "absolute",
+    top,
+    left: "7vw",
+    width: "86vw",
+    height: "6vh",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    paddingLeft: "3vw",
+    boxSizing: "border-box",
+  };
+  const iconStyle = { width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 };
+  const eyeStyle = { position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", width: "22px", height: "22px", cursor: "pointer" };
+  const inputStyle = { flex: 1, fontSize: 14, height: "100%", border: "none", outline: "none", color: "#000" };
+
+  // FIX 1: Keep the previous type fix logic just in case
+  const inputType = onToggle && toggle ? "text" : type;
+
+  return (
+    <div style={wrapperStyle}>
+      <img src={icon} alt="" style={iconStyle} />
+      <input
+        type={inputType}
+        placeholder={placeholder}
+        // FIX 2: Access formData via props
+        value={formData[field]}
+        // FIX 3: Call handleInputChange via props
+        onChange={e => handleInputChange(field, e.target.value)}
+        style={inputStyle}
+      />
+      {onToggle && <img src={toggle ? showIcon : hideIcon} alt="Toggle" style={eyeStyle} onClick={onToggle} />}
+    </div>
+  );
+});
+
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -15,6 +56,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Memoize handleInputChange to prevent unnecessary re-renders in InputField
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (error) setError("");
@@ -45,38 +87,6 @@ export default function Login() {
     }
   };
 
-  const InputField = ({ top, icon, type, field, placeholder, toggle, onToggle }) => {
-    const wrapperStyle = {
-      position: "absolute",
-      top,
-      left: "7vw",
-      width: "86vw",
-      height: "6vh",
-      border: "1px solid #ccc",
-      borderRadius: "8px",
-      display: "flex",
-      alignItems: "center",
-      paddingLeft: "3vw",
-      boxSizing: "border-box",
-    };
-    const iconStyle = { width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 };
-    const eyeStyle = { position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", width: "22px", height: "22px", cursor: "pointer" };
-    const inputStyle = { flex: 1, fontSize: 14, height: "100%", border: "none", outline: "none", color: "#000" };
-
-    return (
-      <div style={wrapperStyle}>
-        <img src={icon} alt="" style={iconStyle} />
-        <input
-          type={toggle ? "text" : type}
-          placeholder={placeholder}
-          value={formData[field]}
-          onChange={e => handleInputChange(field, e.target.value)}
-          style={inputStyle}
-        />
-        {onToggle && <img src={toggle ? showIcon : hideIcon} alt="Toggle" style={eyeStyle} onClick={onToggle} />}
-      </div>
-    );
-  };
 
   return (
     <div className="w-screen h-screen relative bg-white font-poppins px-[5vw]">
@@ -100,8 +110,27 @@ export default function Login() {
       {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
 
       {/* Inputs */}
-      <InputField top="40.8vh" icon={emailIcon} type="email" field="email" placeholder="Email Address" />
-      <InputField top="47.8vh" icon={passwordIcon} type="password" field="password" placeholder="Password" toggle={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+      {/* 2. PASS PROPS INCLUDING FORM DATA AND HANDLER */}
+      <InputField 
+        top="40.8vh" 
+        icon={emailIcon} 
+        type="email" 
+        field="email" 
+        placeholder="Email Address" 
+        formData={formData} // <-- Pass formData
+        handleInputChange={handleInputChange} // <-- Pass handler
+      />
+      <InputField 
+        top="47.8vh" 
+        icon={passwordIcon} 
+        type="password" 
+        field="password" 
+        placeholder="Password" 
+        toggle={showPassword} 
+        onToggle={() => setShowPassword(!showPassword)} 
+        formData={formData} // <-- Pass formData
+        handleInputChange={handleInputChange} // <-- Pass handler
+      />
 
       {/* Login Button */}
       <button
