@@ -96,7 +96,6 @@ export default function BottomBarPage() {
   const [editValues, setEditValues] = useState({
     fullName: "",
     email: "",
-    contact: "",
   });
   const [openIndex, setOpenIndex] = useState(null);
 const [showCurrent, setShowCurrent] = useState(false);
@@ -186,7 +185,6 @@ const handleSubmitFeedback = async () => {
       setEditValues({
         fullName: userData.fullName || "",
         email: userData.email || "",
-        contact: userData.contact || "",
       });
       setIsEditing(false);
     }
@@ -288,7 +286,6 @@ const handleSubmitFeedback = async () => {
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px" }}>
             <div><strong>Full Name:</strong> {userData.fullName}</div>
             <div><strong>Email:</strong> {userData.email}</div>
-            <div><strong>Contact:</strong> {userData.contact}</div>
           </div>
         </div>
 
