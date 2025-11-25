@@ -85,20 +85,20 @@ export default function VerificationCode() {
         onClick={() => navigate("/login")} />
 
       <img src={logo} alt="Logo" className="absolute"
-        style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw", height: "auto" }} />
+        style={{ top: "7vh", left: "50%", transform: "translateX(-50%)", width: "45vw", height: "auto" }} />
 
-      <h1 className="absolute font-extrabold text-black" style={{ top: "30vh", left: "7vw", width: "80vw", fontSize: "7vw" }}>
+      <h1 className="absolute font-extrabold text-black" style={{ top: "26.5vh", left: "7vw", width: "80vw", fontSize: "7vw" }}>
         Verification Code
       </h1>
 
-      <p className="absolute text-black" style={{ top: "35vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}>
+      <p className="absolute text-black" style={{ top: "31vh", left: "8vw", width: "86vw", fontSize: "3vw", lineHeight: "5vw" }}>
         We have sent the code verification to
       </p>
 
-      {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
-      {success && <div className="absolute text-green-600 font-semibold text-center" style={{ top: "43vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{success}</div>}
+      {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "40vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
+      {success && <div className="absolute text-green-600 font-semibold text-center" style={{ top: "40vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{success}</div>}
 
-      <div className="absolute flex items-center justify-start" style={{ top: "37.5vh", left: "8vw", width: "85vw", gap: "2vw" }}>
+      <div className="absolute flex items-center justify-start" style={{ top: "33vh", left: "8vw", width: "85vw", gap: "2vw" }}>
         <input type="email" value={email} onChange={e => setEmail(e.target.value)}
           placeholder="your.email@example.com"
           className="bg-white focus:outline-none font-bold"
@@ -107,7 +107,7 @@ export default function VerificationCode() {
           onClick={() => navigate("/signup")}>Change email address?</p>
       </div>
 
-      <div className="absolute flex justify-between" style={{ top: "46.5vh", left: "7vw", width: "86vw" }}>
+      <div className="absolute flex justify-between" style={{ top: "44vh", left: "7vw", width: "86vw" }}>
         {[input1, input2, input3, input4].map((ref, idx) => {
           const prevInput = idx > 0 ? [input1, input2, input3][idx - 1] : null;
           const nextInput = idx < 3 ? [input2, input3, input4][idx] : null;
@@ -120,20 +120,14 @@ export default function VerificationCode() {
         })}
       </div>
 
-      <div className="absolute text-black" style={{ top: "56.5vh", left: "35vw", fontSize: "3vw" }}>
+      <div className="absolute text-black" style={{ top: "55.5vh", left: "35vw", fontSize: "3vw" }}>
         Resend code after: <span className="font-bold">{minutes}:{seconds < 10 ? `0${seconds}` : seconds}</span>
       </div>
 
       <button className="absolute rounded-lg text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ top: "62vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
+        style={{ top: "61vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleVerify} disabled={loading}>
         {loading ? "Verifying..." : "Confirm"}
-      </button>
-
-      <button className="absolute rounded-lg disabled:opacity-40 font-medium disabled:cursor-not-allowed"
-        style={{ top: "69.5vh", left: "7vw", width: "86vw", height: "6vh", color: "#000", border: "1px solid #ccc", fontSize: "14px", opacity: timer > 0 ? 0.5 : 1 }}
-        onClick={handleResendCode} disabled={timer > 0 || loading}>
-        {loading ? "Sending..." : "Resend"}
       </button>
 
       {showPopup && (

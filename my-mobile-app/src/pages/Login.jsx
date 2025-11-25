@@ -100,19 +100,19 @@ export default function Login() {
       />
 
       {/* Logo */}
-      <img src={logo} alt="Logo" className="absolute" style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }} />
+      <img src={logo} alt="Logo" className="absolute" style={{ top: "7vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }} />
 
       {/* Title */}
-      <h1 className="absolute font-extrabold text-black" style={{ left: "8vw", top: "30vh", fontSize: "7vw" }}>Welcome Back!</h1>
-      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "34vh", fontSize: "3.5vw" }}>Good to see you again</p>
+      <h1 className="absolute font-extrabold text-black" style={{ left: "8vw", top: "26.5vh", fontSize: "7vw" }}>Welcome Back!</h1>
+      <p className="absolute font-semibold text-[#36570A]" style={{ left: "8.5vw", top: "30vh", fontSize: "3.5vw" }}>Good to see you again</p>
 
       {/* Error */}
-      {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
+      {error && <div className="absolute text-red-600 font-semibold text-center" style={{ top: "34vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>{error}</div>}
 
       {/* Inputs */}
       {/* 2. PASS PROPS INCLUDING FORM DATA AND HANDLER */}
       <InputField 
-        top="40.8vh" 
+        top="37vh" 
         icon={emailIcon} 
         type="email" 
         field="email" 
@@ -121,7 +121,7 @@ export default function Login() {
         handleInputChange={handleInputChange} // <-- Pass handler
       />
       <InputField 
-        top="47.8vh" 
+        top="44vh" 
         icon={passwordIcon} 
         type="password" 
         field="password" 
@@ -135,7 +135,7 @@ export default function Login() {
       {/* Login Button */}
       <button
         className="absolute rounded-lg text-white font-bold"
-        style={{ top: "56.8vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
+        style={{ top: "51.5vh", left: "7vw", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }}
         onClick={handleLogin}
         disabled={loading}
       >
@@ -143,10 +143,10 @@ export default function Login() {
       </button>
 
       {/* Forgot */}
-      <p className="absolute text-black text-center cursor-pointer" style={{ top: "65vh", left: "37vw", fontSize: "3vw" }} onClick={() => navigate("/forgot")}>Forgot password?</p>
+      <p className="absolute text-black text-center cursor-pointer" style={{ top: "60vh", left: "37vw", fontSize: "3vw" }} onClick={() => navigate("/forgot")}>Forgot password?</p>
 
       {/* Signup */}
-      <p className="absolute text-black text-center" style={{ top: "85vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
+      <p className="absolute text-black text-center" style={{ top: "90vh", left: "10vw", fontSize: "3.2vw", width: "80vw" }}>
         Don't have an account yet?{" "}
         <span className="underline cursor-pointer font-bold text-[#36570A]" onClick={() => navigate("/signup")}>Sign up here.</span>
       </p>

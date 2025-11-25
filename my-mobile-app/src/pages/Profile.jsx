@@ -268,7 +268,7 @@ const handleSubmitFeedback = async () => {
         </div>
 
         {/* Profile Info */}
-        <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "10px" }}>
+        <div style={{ width: "90%", maxWidth: "400px", marginTop: "50px", marginBottom: "10px" }}>
           <h2 style={{ color: "#36570A", margin: 0, fontSize: "16px", fontWeight: "600" }}>
             Profile Information
           </h2>
@@ -277,7 +277,7 @@ const handleSubmitFeedback = async () => {
           style={{
             width: "90%",
             maxWidth: "400px",
-            backgroundColor: "#f3f3f3",
+            backgroundColor: "white",
             border: "1px solid #ccc",
             borderRadius: "12px",
             padding: "20px",
@@ -290,7 +290,7 @@ const handleSubmitFeedback = async () => {
         </div>
 
         {/* Settings */}
-        <div style={{ width: "90%", maxWidth: "400px", marginTop: "22px", marginBottom: "-1px" }}>
+        <div style={{ width: "90%", maxWidth: "400px", marginTop: "30px", marginBottom: "-1px" }}>
           <h2 style={{ color: "#36570A", margin: 0, fontSize: "16px", fontWeight: "600" }}>Settings</h2>
         </div>
 
@@ -322,7 +322,7 @@ const handleSubmitFeedback = async () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      backgroundColor: "#f3f3f3",
+      backgroundColor: "white",
       cursor: "pointer",
     }}
     onClick={() => {
@@ -556,7 +556,7 @@ const handleSubmitFeedback = async () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: "#f3f3f3",
+              backgroundColor: "white",
               cursor: "pointer",
             }}
             onClick={() => setShowPopup(true)}
@@ -646,11 +646,11 @@ const handleSubmitFeedback = async () => {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    width: "350px",
-                    height: "50px",
+                    width: "380px",
+                    height: "45px",
                     gap: "10px",
-                    backgroundColor: "rgba(54, 87, 10, 0.1)",
-                    borderRadius: "12px",
+                    backgroundColor: "rgba(54, 87, 10, 0.09)",
+                    borderRadius: "10px",
                     padding: "10px 25px",
                     cursor: "pointer",
                     fontSize: "15px",
@@ -672,7 +672,7 @@ const handleSubmitFeedback = async () => {
             </div>
 
             {/* Scrollable FAQ List */}
-<div style={{ padding: "20px", marginTop: "-15px", display: "flex", flexDirection: "column", gap: "10px" }}>
+<div style={{ padding: "20px", marginTop: "-20px", display: "flex", flexDirection: "column", gap: "12px" }}>
   {faqsData.map((faqItem, index) => (
     <div
       key={index}
@@ -685,7 +685,7 @@ const handleSubmitFeedback = async () => {
       onClick={() => setOpenIndex(openIndex === index ? null : index)}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: "13.5px", color: "black" }}>{faqItem.question}</span>
+        <span style={{ fontSize: "14px", color: "#36570A" }}>{faqItem.question}</span>
         <span
           style={{
             fontSize: "15px",
@@ -698,7 +698,7 @@ const handleSubmitFeedback = async () => {
         </span>
       </div>
       {openIndex === index && (
-        <p style={{ marginTop: "6px", textAlign: "justify", fontSize: "12px", fontWeight: "bold", lineHeight: "1.2", color: "black" }}>{faqItem.answer}</p>
+        <p style={{ marginTop: "10px", textAlign: "justify", fontSize: "14px", fontWeight: "bold", lineHeight: "1.2", color: "black" }}>{faqItem.answer}</p>
       )}
     </div>
   ))}
@@ -883,7 +883,7 @@ const handleSubmitFeedback = async () => {
           fontSize: "18px",
           fontWeight: "bold",
           color: "black",
-          marginTop: "30px",
+          marginTop: "40px",
         }}
       >
         About Us
@@ -893,8 +893,8 @@ const handleSubmitFeedback = async () => {
       <div
         style={{
           marginTop: "15px",
-          backgroundColor: "rgba(54, 87, 10, 0.1)",
-          borderRadius: "15px",
+          backgroundColor: "rgba(54, 87, 10, 0.08)",
+          borderRadius: "8px",
           padding: "18px",
           fontSize: "14px",
           lineHeight: "1.5",
@@ -912,7 +912,7 @@ const handleSubmitFeedback = async () => {
       {/* Developers Text */}
       <div
         style={{
-          marginTop: "25px",
+          marginTop: "30px",
           fontSize: "18px",
           fontWeight: "bold",
           color: "black",
@@ -925,8 +925,8 @@ const handleSubmitFeedback = async () => {
       <div
         style={{
           marginTop: "15px",
-          backgroundColor: "rgba(54, 87, 10, 0.1)",
-          borderRadius: "15px",
+          backgroundColor: "rgba(54, 87, 10, 0.08)",
+          borderRadius: "10px",
           padding: "18px",
           fontSize: "14px",
           lineHeight: "1.5",
@@ -1172,22 +1172,27 @@ const handleSubmitFeedback = async () => {
           </div>
 
           {/* Apply Changes Button */}
-          <button
-            style={{
-              marginTop: "20px",
-              padding: "10px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              color: "#fff",
-              backgroundColor: "#36570A",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-            onClick={handleChangePassword}
-          >
-            Apply Changes
-          </button>
+<button
+  style={{
+    marginTop: "20px",
+    padding: "10px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    color: "#fff",
+    backgroundColor:
+      currentPassword && newPassword && confirmPassword ? "#36570A" : "#999",
+    border: "none",
+    borderRadius: "8px",
+    cursor:
+      currentPassword && newPassword && confirmPassword
+        ? "pointer"
+        : "not-allowed",
+  }}
+  onClick={handleChangePassword}
+  disabled={!(currentPassword && newPassword && confirmPassword)}
+>
+  Apply Changes
+</button>
         </div>
       </div>
     </div>
@@ -1234,7 +1239,7 @@ const handleSubmitFeedback = async () => {
           position: "absolute",
           left: "5%",
           top: "5%",
-          width: "6vw",
+          width: "5vw",
           maxWidth: "24px",
           cursor: "pointer",
         }}
@@ -1284,10 +1289,10 @@ const handleSubmitFeedback = async () => {
       {/* Detailed Review Label */}
       <div
         style={{
-          marginTop: "3vh",
-          width: "95%",
+          marginTop: "2vh",
+          width: "99%",
           textAlign: "left",
-          fontSize: "3vw",
+          fontSize: "3.2vw",
           fontWeight: "500",
         }}
       >
@@ -1298,7 +1303,7 @@ const handleSubmitFeedback = async () => {
       <div
         style={{
           marginTop: "1vh",
-          width: "105%",
+          width: "110%",
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
@@ -1339,21 +1344,24 @@ const handleSubmitFeedback = async () => {
       </div>
 
       {/* Submit Button */}
-      <button
-        style={{
-          marginTop: "3vh",
-          padding: "10px 30px",
-          fontSize: "3.5vw",
-          color: "#fff",
-          backgroundColor: "#36570A",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-        onClick={handleSubmitFeedback}
-      >
-        Submit
-      </button>
+<button
+  style={{
+    marginTop: "3vh",
+    padding: "10px 30px",
+    fontSize: "3.5vw",
+    fontWeight: "bold",
+    color: "#fff",
+    backgroundColor:
+      starRating > 0 || reviewText.trim() !== "" ? "#36570A" : "#999", // active if either
+    borderRadius: "6px",
+    cursor:
+      starRating > 0 || reviewText.trim() !== "" ? "pointer" : "not-allowed",
+  }}
+  onClick={handleSubmitFeedback}
+  disabled={!(starRating > 0 || reviewText.trim() !== "")} // disabled only if both empty
+>
+  Submit
+</button>
     </div>
   </div>
 )}

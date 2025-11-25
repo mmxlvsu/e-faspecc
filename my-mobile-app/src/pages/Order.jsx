@@ -163,7 +163,7 @@ export default function BottomBarPage() {
         overflowY: "auto",
       }}
     >
-      <h1 style={{ fontSize: "4vw", fontWeight: "bold", margin: "20px 0 10px 5vw" }}>
+      <h1 style={{ fontSize: "4vw", fontWeight: "bold", margin: "30px 0 10px 5vw" }}>
         My Orders
       </h1>
 
@@ -175,65 +175,53 @@ export default function BottomBarPage() {
           overflowX: "auto",
           scrollbarWidth: "none",
           msOverflowStyle: "none",
-          borderBottom: "2px solid #ccc",
+          borderBottom: "1px solid #ccc",
           width: "100%",
         }}
       >
-        {orderTabs.map((tab, index) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "2vw",
-              fontSize: "3.4vw",
-              fontWeight: activeTab === tab ? "600" : "400",
-              color: activeTab === tab ? "#2e7d32" : "#555",
-              padding: "10px 20px 8px 20px",
-              cursor: "pointer",
-              flexShrink: 0,
-              background: "none",
-              border: "none",
-              borderBottom:
-                activeTab === tab
-                  ? "1px solid #2e7d32"
-                  : "1px solid transparent",
-            }}
-          >
-            <div
-              style={{
-                width: "5vw",
-                height: "5vw",
-                borderRadius: "50%",
-                backgroundColor: "#36570A",
-                color: "white",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "2.8vw",
-                fontWeight: "600",
-              }}
-            >
-              {index + 1}
+        {orderTabs.map((tab) => (
+        <button
+          key={tab}
+          onClick={() => setActiveTab(tab)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            fontSize: "3.5vw",
+            fontWeight: activeTab === tab ? "600" : "400",
+            color: activeTab === tab ? "#2e7d32" : "#555",
+            padding: "10px 20px 8px 20px",
+            cursor: "pointer",
+            flexShrink: 0,
+            background: "none",
+            border: "none",
+            borderBottom:
+              activeTab === tab
+                ? "1px solid #36570A"
+                : "1px solid transparent",
+          }}
+        >
+          {tab}
+        </button>
+      ))}
             </div>
-            {tab}
-          </button>
-        ))}
-      </div>
 
       {/* Orders List */}
-      <div style={{ backgroundColor: "#f3f3f3", width: "100%", minHeight: "90vh", padding: "5vw 0" }}>
+      <div style={{ backgroundColor: "white", width: "100%", minHeight: "90vh", padding: "5vw 0" }}>
         {filteredOrders.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#777" }}>No {activeTab} orders found.</p>
+          <p style={{ textAlign: "center", color: "#777", fontSize: "4vw", marginTop: "300px"
+           }}>No {activeTab} orders found.</p>
         ) : (
           filteredOrders.map((order) => (
             <div
               key={order.id}
               style={{
-                backgroundColor: "white",
+                width: "90%",
+            maxWidth: "400px",
+            backgroundColor: "white",
+            border: "1px solid #ccc",
+            borderRadius: "12px",
+            padding: "20px",
                 borderRadius: "2vw",
-                padding: "4vw",
                 width: "90%",
                 margin: "3vw auto",
               }}
@@ -274,21 +262,7 @@ export default function BottomBarPage() {
                       Cancel Order
                     </button>
                     {/*
-                    <button
-                      style={{
-                        backgroundColor: "white",
-                        color: "#36570A",
-                        border: "1px solid #36570A",
-                        borderRadius: "1vw",
-                        padding: "2vw 2vw",
-                        fontSize: "2.8vw",
-                        fontWeight: "500",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => navigate(`/order/${order.id}`)}
-                    >
-                      View Details
-                    </button>
+                    
                     */}
                   </>
                 )}

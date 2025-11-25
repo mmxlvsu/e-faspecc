@@ -145,8 +145,8 @@ export default function Notification() {
               marginTop: "30vw",
             }}
           >
-            <img src={notifEmpty} style={{ width: "18vw", height: "18vw" }} />
-            <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
+            <img src={notifEmpty} style={{ width: "10vw", height: "10vw", marginTop: "40vw" }} />
+            <p style={{ fontSize: "4vw", color: "#777", marginTop: "5vw" }}>
               Your notification is empty
             </p>
           </div>

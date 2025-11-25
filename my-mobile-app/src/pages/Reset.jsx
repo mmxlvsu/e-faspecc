@@ -37,32 +37,32 @@ export default function ResetPassword() {
   return (
     <div className="w-screen h-screen relative bg-white font-poppins">
       <img src={backIcon} alt="Back" className="absolute cursor-pointer" style={{ left: "4vw", top: "4vh", width: "5vw", height: "5vw" }} onClick={() => navigate("/login")} />
-      <img src={logo} alt="Logo" className="absolute" style={{ top: "9vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }} />
-      <h1 className="absolute font-bold text-black" style={{ left: "8vw", top: "30vh", width: "80vw", fontSize: "7vw" }}>Reset Password</h1>
-      <p className="absolute text-[#36570A]" style={{ left: "8.5vw", top: "34vh", width: "86vw", fontSize: "3.2vw" }}>
+      <img src={logo} alt="Logo" className="absolute" style={{ top: "7vh", left: "50%", transform: "translateX(-50%)", width: "45vw" }} />
+      <h1 className="absolute font-bold text-black" style={{ left: "8vw", top: "26.5vh", width: "80vw", fontSize: "7vw" }}>Reset Password</h1>
+      <p className="absolute text-[#36570A]" style={{ left: "8.5vw", top: "31vh", width: "86vw", fontSize: "3.2vw" }}>
         Enter a new password below to reset password
       </p>
       {msg.text && (
-        <div className={`absolute font-semibold text-center ${msg.isError ? "text-red-600" : "text-green-600"}`} style={{ top: "38vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
+        <div className={`absolute font-semibold text-center ${msg.isError ? "text-red-600" : "text-green-600"}`} style={{ top: "36vh", left: "7vw", width: "86vw", fontSize: "3vw" }}>
           {msg.text}
         </div>
       )}
 
-      <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "40.8vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
+      <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "39vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
         <img src={passwordIcon} alt="Password" style={{ marginLeft: "-2vw",width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 }} />
         <input type={showNew ? "text" : "password"} placeholder="New Password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="flex-1 text-black placeholder-black focus:outline-none" style={{ fontSize: "14px" }} />
         <img src={showNew ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "22px", height: "22px" }} onClick={() => setShowNew(!showNew)} />
       </div>
-      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "47.5vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
+      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "45.2vh", fontSize: "2.8vw" }}>Password must be 8-16 characters</p>
 
-      <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "51vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
+      <div className="absolute flex items-center rounded-lg px-4 bg-white" style={{ left: "7vw", top: "47.5vh", width: "86vw", height: "6vh", border: "1px solid #ccc" }}>
         <img src={passwordIcon} alt="Password" style={{ marginLeft: "-2vw", width: "4.5vw", height: "4.5vw", marginRight: "2vw", opacity: 0.7 }} />
         <input type={showConfirm ? "text" : "password"} placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="flex-1 text-black placeholder-black focus:outline-none" style={{ fontSize: "14px" }} />
         <img src={showConfirm ? showIcon : hideIcon} alt="Toggle Password" className="cursor-pointer" style={{ marginRight: "-3vw", width: "22px", height: "22px" }} onClick={() => setShowConfirm(!showConfirm)} />
       </div>
-      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "58vh", fontSize: "2.8vw" }}>Password must match</p>
+      <p className="absolute text-gray-600" style={{ left: "8.5vw", top: "53.7vh", fontSize: "2.8vw" }}>Password must match</p>
 
-      <button className="absolute rounded-lg text-white font-bold disabled:opacity-50" style={{ left: "7vw", top: "62vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }} onClick={handleResetPassword} disabled={loading}>
+      <button className="absolute rounded-lg text-white font-bold disabled:opacity-50" style={{ left: "7vw", top: "58.2vh", width: "86vw", height: "6vh", backgroundColor: "#36570A", fontSize: "3.5vw" }} onClick={handleResetPassword} disabled={loading}>
         {loading ? "Resetting..." : "Reset Password"}
       </button>
     </div>
