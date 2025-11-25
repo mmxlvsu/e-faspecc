@@ -5,7 +5,6 @@ import homeIcon from "../assets/home.png";
 import cartIcon from "../assets/cart.png";
 import orderIcon from "../assets/order.png";
 import personIcon from "../assets/profile.png";
-import editIcon from "../assets/edit.png";
 import defaultProfile from "../assets/default-profile.png";
 import profileBack from "../assets/backk.png";
 import password from "../assets/password.png";
@@ -19,9 +18,6 @@ import hideIcon from "../assets/hide.png";
 import showIcon from "../assets/show.png";
 import filledStar from "../assets/filled_star.png";
 import emptyStar from "../assets/empty_star.png";
-import user from "../assets/user.png";
-import email from "../assets/email.png";
-import phone from "../assets/phone.png";
 
 const faqsData = [
   {
@@ -90,13 +86,8 @@ export default function BottomBarPage() {
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
   const [showRatePopup, setShowRatePopup] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showBottomBar, setShowBottomBar] = useState(true);
-  const [editValues, setEditValues] = useState({
-    fullName: "",
-    email: "",
-  });
   const [openIndex, setOpenIndex] = useState(null);
 const [showCurrent, setShowCurrent] = useState(false);
 const [showNew, setShowNew] = useState(false);
@@ -180,16 +171,6 @@ const handleSubmitFeedback = async () => {
     };
   }, []);
 
-  const handleEditClick = () => {
-    if (userData) {
-      setEditValues({
-        fullName: userData.fullName || "",
-        email: userData.email || "",
-      });
-      setIsEditing(false);
-    }
-  };
-
   const handleSignOut = () => logout(navigate);
 
   const toggleFAQ = (index) => {
@@ -246,24 +227,6 @@ const handleSubmitFeedback = async () => {
               border: "1px solid #f3f3f3",
               cursor: "pointer",
             }}
-            onClick={handleEditClick}
-          />
-          <img
-            src={editIcon}
-            alt="Edit"
-            style={{
-              width: "22px",
-              height: "22px",
-              position: "absolute",
-              bottom: "0",
-              right: "0",
-              borderRadius: "50%",
-              backgroundColor: "#fff",
-              padding: "2px",
-              border: "1px solid #ccc",
-              cursor: "pointer",
-            }}
-            onClick={handleEditClick}
           />
         </div>
 
@@ -344,208 +307,6 @@ const handleSubmitFeedback = async () => {
     <img src={profileBack} alt="Back Icon" style={{ width: "15px", height: "15px" }} />
   </div>
 ))}
-
-
-{/* Edit Profile Fullscreen Popup */}
-{isEditing && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "#fff",
-      zIndex: 1000,
-      display: "flex",
-      flexDirection: "column",
-      padding: "5vw",
-      alignItems: "center",
-    }}
-  >
-    {/* Back Icon */}
-    <img
-      src={backIcon}
-      alt="Back"
-      onClick={() => setIsEditing(false)}
-      style={{
-        position: "absolute",
-        left: "4vw",
-        top: "4vh",
-        width: "5vw",
-        height: "5vw",
-        cursor: "pointer",
-      }}
-    />
-
-    {/* Heading */}
-    <h2
-      style={{
-        fontSize: "4vw",
-        fontWeight: "bold",
-        color: "black",
-        marginTop: "1vh",
-        marginBottom: "3vh",
-      }}
-    >
-      Edit Profile
-    </h2>
-
-    {/* Hidden File Input */}
-    <input
-      type="file"
-      accept="image/*"
-      style={{ display: "none" }}
-      id="profileImageInput"
-      onChange={(e) => {
-        if (e.target.files && e.target.files[0]) {
-          setEditValues({
-            ...editValues,
-            profileImage: URL.createObjectURL(e.target.files[0]),
-          });
-        }
-      }}
-    />
-
-    {/* Profile Image */}
-    <div
-      style={{
-        marginBottom: "6vh",
-        textAlign: "center",
-        position: "relative",
-        display: "inline-block",
-      }}
-    >
-      <img
-        src={editValues.profileImage || defaultProfile}
-        alt="Profile"
-        style={{
-          width: "20vw",
-          height: "20vw",
-          borderRadius: "50%",
-          objectFit: "cover",
-          cursor: "pointer",
-        }}
-        onClick={() => document.getElementById("profileImageInput").click()}
-      />
-      <img
-        src={editIcon}
-        alt="Edit"
-        style={{
-          width: "22px",
-          height: "22px",
-          position: "absolute",
-          bottom: "0",
-          right: "0",
-          borderRadius: "60%",
-          backgroundColor: "#fff",
-          border: "1px solid #ccc",
-          padding: "3px",
-          cursor: "pointer",
-        }}
-        onClick={() => document.getElementById("profileImageInput").click()}
-      />
-    </div>
-
-    {/* Form Fields */}
-<div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%" }}>
-  {/* Full Name */}
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-      <img src={user} alt="User" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
-      <label style={{ fontSize: "14px", fontWeight: "500" }}>Full Name</label>
-    </div>
-    <input
-      type="text"
-      placeholder="Enter your full name"
-      value={editValues.fullName}
-      onChange={(e) => setEditValues({ ...editValues, fullName: e.target.value })}
-      style={{
-        padding: "10px",
-        fontSize: "14px",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-        width: "100%",
-        height: "40px",
-        boxSizing: "border-box",
-        color: "#000",
-      }}
-    />
-  </div>
-
-  {/* Email Address */}
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
-      <img src={email} alt="Email" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
-      <label style={{ fontSize: "14px", fontWeight: "500" }}>Email Address</label>
-    </div>
-    <input
-      type="email"
-      placeholder="Enter your email address"
-      value={editValues.email}
-      onChange={(e) => setEditValues({ ...editValues, email: e.target.value })}
-      style={{
-        padding: "10px",
-        fontSize: "14px",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-        width: "100%",
-        height: "40px",
-        boxSizing: "border-box",
-        color: "#000",
-      }}
-    />
-  </div>
-
-  {/* Contact */}
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
-      <img src={phone} alt="Phone" style={{ width: "16px", height: "16px", opacity: 0.7 }} />
-      <label style={{ fontSize: "14px", fontWeight: "500" }}>Contact</label>
-    </div>
-    <input
-      type="text"
-      placeholder="Enter your contact number"
-      value={editValues.contact}
-      onChange={(e) => setEditValues({ ...editValues, contact: e.target.value })}
-      style={{
-        padding: "10px",
-        fontSize: "14px",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-        width: "100%",
-        height: "40px",
-        boxSizing: "border-box",
-        color: "#000",
-      }}
-    />
-  </div>
-</div>
-
-    {/* Save Button */}
-    <button
-      style={{
-        marginTop: "4vh",
-        padding: "3vw",
-        fontSize: "3.5vw",
-        fontWeight: "bold",
-        color: "#fff",
-        backgroundColor: "#36570A",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-        width: "100%",
-      }}
-      onClick={() => {
-        console.log("Saved:", editValues);
-        setIsEditing(false);
-      }}
-    >
-      Save Changes
-    </button>
-  </div>
-)}
-
           {/* FAQs Row */}
           <div
             style={{

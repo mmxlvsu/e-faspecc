@@ -378,21 +378,6 @@ export default function BottomBarPage() {
       }}
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Close button */}
-      <div
-        style={{
-          position: "absolute",
-          top: "1vw",
-          right: "4vw",
-          fontSize: "8vw",
-          fontWeight: "bold",
-          color: "#36570A",
-          cursor: "pointer",
-        }}
-        onClick={() => setIsLocationModalOpen(false)}
-      >
-        ×
-      </div>
 
       {/* Google Maps iframe */}
       <iframe

@@ -7,16 +7,15 @@ import { menuAPI } from "../lib/api";
 export default function Cart() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const scrollRef = useRef(null);
+  const [addOns, setAddOns] = useState([]);
   const [showCheckout, setShowCheckout] = useState(true);
+  const scrollRef = useRef(null);
 
-  // 🔹 Load cart from localStorage on mount
   useEffect(() => {
     const loadCart = () => {
       const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
       setCartItems(storedCart);
     };
-
     loadCart();
     window.addEventListener("storage", loadCart);
     return () => window.removeEventListener("storage", loadCart);
@@ -25,7 +24,7 @@ export default function Cart() {
   const updateCart = (newCart) => {
     setCartItems(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
-    window.dispatchEvent(new Event("storage")); // update other pages
+    window.dispatchEvent(new Event("storage"));
   };
 
   const handleQuantityChange = (index, delta) => {
@@ -52,6 +51,52 @@ export default function Cart() {
     return () => el && el.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const fetchAddOns = async () => {
+      try {
+        const categories = await menuAPI.getCategories();
+        const addOnsCategory = categories.find(
+          (cat) => cat.id === "4e26ef2e-f46a-43ed-8538-cdde3e372af4"
+        );
+        if (addOnsCategory?.items) setAddOns(addOnsCategory.items);
+      } catch (err) {
+        console.error("Error fetching add-ons:", err);
+      }
+    };
+    fetchAddOns();
+  }, []);
+
+  const handleAddToCart = (item) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const itemId = item.id || item._id || Math.random().toString(36).substr(2, 9);
+    const image = item.photoUrl || item.image || item.imageUrl || item.img || "";
+
+    const existingItem = cart.find((i) => i.id === itemId || i._id === itemId);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: itemId,
+        name: item.name || "Unnamed Item",
+        description: item.description || "",
+        price: Number(item.price) || 0,
+        image,
+        quantity: 1,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    setCartItems(cart);
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) return;
+    navigate("/payment", { state: { totalAmount, cartItems } });
+  };
+
   const addOnsContainerStyle = {
     marginTop: "2vw",
     marginBottom: "12vw",
@@ -72,76 +117,8 @@ export default function Cart() {
     marginBottom: "2vw",
   };
 
-  const totalAmount =
-    cartItems.length > 0
-      ? cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      : 0;
-
-    const handleCheckout = () => {
-      if (cartItems.length === 0) return;
-      navigate("/payment", { state: { totalAmount, cartItems } });
-    };
-
-  const [addOns, setAddOns] = useState([]);
-    useEffect(() => {
-      const fetchAddOns = async () => {
-        try {
-          const categories = await menuAPI.getCategories();
-          const addOnsCategory = categories.find(
-            (cat) => cat.id === "4e26ef2e-f46a-43ed-8538-cdde3e372af4"
-          );
-
-          if (addOnsCategory && addOnsCategory.items) {
-            setAddOns(addOnsCategory.items);
-          } else {
-            console.warn("Add-ons category not found or empty");
-          }
-        } catch (err) {
-          console.error("Error fetching add-ons:", err);
-        }
-      };
-
-      fetchAddOns();
-    }, []);
-
-    const handleAddToCart = (item) => {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const itemId = item.id || item._id || Math.random().toString(36).substr(2, 9);
-
-      const image =
-        item.photoUrl ||
-        item.image ||
-        item.imageUrl ||
-        item.img ||
-        "";
-
-      const existingItem = cart.find((i) => i.id === itemId || i._id === itemId);
-
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cart.push({
-          id: itemId,
-          name: item.name || "Unnamed Item",
-          description: item.description || "",
-          price: Number(item.price) || 0,
-          image,
-          quantity: 1,
-        });
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-
-      // ✅ update local state so total updates instantly
-      setCartItems(cart);
-
-      // still trigger global update for other pages
-      window.dispatchEvent(new Event("storage"));
-    };
-
   return (
     <div className="w-screen h-screen relative bg-[#36570A]">
-      {/* Header */}
       <div
         className="fixed top-0 left-0 right-0 flex items-center"
         style={{
@@ -164,7 +141,6 @@ export default function Cart() {
         </h1>
       </div>
 
-      {/* Scrollable content */}
       <div
         ref={scrollRef}
         style={{
@@ -180,161 +156,163 @@ export default function Cart() {
       >
         {cartItems.length === 0 ? (
           <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
-    textAlign: "center",
-  }}
->
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: "100%",
+              textAlign: "center",
+            }}
+          >
             <img
-                src={cartempty}
-                alt="Notification Empty"
-                style={{ marginTop: "210px", width: "20vw", height: "20vw" }}
-              />
-              <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
-                Your cart is empty
-              </p>
+              src={cartempty}
+              alt="Notification Empty"
+              style={{ marginTop: "210px", width: "20vw", height: "20vw" }}
+            />
+            <p style={{ fontSize: "5vw", color: "#777", marginTop: "5vw" }}>
+              Your cart is empty
+            </p>
           </div>
         ) : (
-          cartItems.map((item, i) => {
-            const quantity = item.quantity;
-            return (
+          cartItems.map((item, i) => (
+            <div
+              key={i}
+              style={{
+                position: "relative",
+                backgroundColor: "white",
+                borderRadius: "1vw",
+                border: "0.2vw solid #36570A",
+                padding: "2vw",
+                height: "25vw",
+                width: "90%",
+                margin: "0 auto 4vw",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {item.image ? (
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{
+                    position: "absolute",
+                    top: "2.5vw",
+                    left: "3vw",
+                    width: "25%",
+                    height: "80%",
+                    objectFit: "cover",
+                    borderRadius: "2vw",
+                    backgroundColor: "#f0f0f0",
+                  }}
+                  onError={(e) => (e.target.style.display = "none")}
+                />
+              ) : (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "2.5vw",
+                    left: "3vw",
+                    width: "25%",
+                    height: "80%",
+                    backgroundColor: "#ddd",
+                    borderRadius: "2vw",
+                  }}
+                />
+              )}
               <div
-                key={i}
                 style={{
-                  position: "relative",
-                  backgroundColor: "white",
-                  borderRadius: "1vw",
-                  border: "0.2vw solid #36570A",
-                  padding: "2vw",
-                  height: "25vw",
-                  width: "90%",
-                  margin: "0 auto 4vw",
-                  display: "flex",
-                  flexDirection: "column",
+                  position: "absolute",
+                  top: "3vw",
+                  left: "30vw",
+                  fontSize: "3.5vw",
+                  fontWeight: "600",
+                  color: "#333",
                 }}
               >
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    style={{
-                      position: "absolute",
-                      top: "2.5vw",
-                      left: "3vw",
-                      width: "25%",
-                      height: "80%",
-                      objectFit: "cover",
-                      borderRadius: "2vw",
-                      backgroundColor: "#f0f0f0",
-                    }}
-                    onError={(e) => (e.target.style.display = "none")}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "2.5vw",
-                      left: "3vw",
-                      width: "25%",
-                      height: "80%",
-                      backgroundColor: "#ddd",
-                      borderRadius: "2vw",
-                    }}
-                  />
-                )}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "3vw",
-                    left: "30vw",
-                    fontSize: "3.5vw",
-                    fontWeight: "600",
-                    color: "#333",
-                  }}
-                >
-                  {item.name}
-                </div>
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "8vw",
-                    left: "30vw",
-                    fontSize: "3.2vw",
-                    color: "#2e7d32",
-                    fontWeight: "500",
-                  }}
-                >
-                  ₱{Number(item.price).toFixed(2)}
-                </div>
+                {item.name}
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "8vw",
+                  left: "30vw",
+                  fontSize: "3.2vw",
+                  color: "#2e7d32",
+                  fontWeight: "500",
+                }}
+              >
+                ₱{Number(item.price).toFixed(2)}
+              </div>
+              <button
+                onClick={() => handleRemove(i)}
+                style={{
+                  position: "absolute",
+                  top: "1vw",
+                  right: "3vw",
+                  fontSize: "5vw",
+                  fontWeight: "bold",
+                  background: "none",
+                  border: "none",
+                  color: "black",
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+
+              <div
+                style={{
+                  position: "absolute",
+                  top: "16vw",
+                  right: "3vw",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1vw",
+                }}
+              >
                 <button
-                  onClick={() => handleRemove(i)}
+                  onClick={() => handleQuantityChange(i, -1)}
                   style={{
-                    position: "absolute",
-                    top: "1vw",
-                    right: "3vw",
-                    fontSize: "5vw",
-                    fontWeight: "bold",
-                    background: "none",
-                    border: "none",
-                    color: "black",
+                    width: "6vw",
+                    height: "6vw",
+                    borderRadius: "20%",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    fontSize: "4vw",
                     cursor: "pointer",
                   }}
                 >
-                  ×
+                  -
                 </button>
-
-                {/* Quantity */}
                 <div
                   style={{
-                    position: "absolute",
-                    top: "16vw",
-                    right: "3vw",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1vw",
+                    width: "5vw",
+                    textAlign: "center",
+                    fontSize: "3vw",
+                    fontWeight: "500",
                   }}
                 >
-                  <button
-                    onClick={() => handleQuantityChange(i, -1)}
-                    style={{
-                      width: "6vw",
-                      height: "6vw",
-                      borderRadius: "20%",
-                      border: "1px solid #ccc",
-                      backgroundColor: "#fff",
-                      fontSize: "4vw",
-                      cursor: "pointer",
-                    }}
-                  >
-                    -
-                  </button>
-                  <div style={{ width: "5vw", textAlign: "center", fontSize: "3vw", fontWeight: "500" }}>
-                    {quantity}
-                  </div>
-                  <button
-                    onClick={() => handleQuantityChange(i, 1)}
-                    style={{
-                      width: "6vw",
-                      height: "6vw",
-                      borderRadius: "20%",
-                      border: "1px solid #ccc",
-                      backgroundColor: "#fff",
-                      fontSize: "4vw",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </button>
+                  {item.quantity}
                 </div>
+                <button
+                  onClick={() => handleQuantityChange(i, 1)}
+                  style={{
+                    width: "6vw",
+                    height: "6vw",
+                    borderRadius: "20%",
+                    border: "1px solid #ccc",
+                    backgroundColor: "#fff",
+                    fontSize: "4vw",
+                    cursor: "pointer",
+                  }}
+                >
+                  +
+                </button>
               </div>
-            );
-          })
+            </div>
+          ))
         )}
 
-        {/* Add-ons */}
         {cartItems.length > 0 && addOns.length > 0 && (
           <div style={addOnsContainerStyle}>
             <h2
@@ -347,17 +325,9 @@ export default function Cart() {
             >
               Add-ons
             </h2>
-
             {addOns.map((addOn) => (
               <div key={addOn.id} style={addOnItemStyle}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2vw",
-                    flex: 1,
-                  }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "2vw", flex: 1 }}>
                   <img
                     src={addOn.photoUrl}
                     alt={addOn.name}
@@ -370,17 +340,10 @@ export default function Cart() {
                     }}
                     onError={(e) => (e.target.style.display = "none")}
                   />
-                  <span
-                    style={{
-                      fontSize: "3.2vw",
-                      fontWeight: "500",
-                      color: "#333",
-                    }}
-                  >
+                  <span style={{ fontSize: "3.2vw", fontWeight: "500", color: "#333" }}>
                     {addOn.name}
                   </span>
                 </div>
-
                 <div
                   style={{
                     fontSize: "3.2vw",
@@ -391,9 +354,8 @@ export default function Cart() {
                 >
                   ₱{Number(addOn.price).toFixed(2)}
                 </div>
-
                 <button
-                   onClick={() => handleAddToCart(addOn)}
+                  onClick={() => handleAddToCart(addOn)}
                   style={{
                     color: "black",
                     borderRadius: "1vw",
@@ -411,7 +373,6 @@ export default function Cart() {
         )}
       </div>
 
-      {/* Pulse animation */}
       <style>{`
         @keyframes pulse {
           0% { opacity: 1; }
@@ -420,29 +381,46 @@ export default function Cart() {
         }
       `}</style>
 
-      {/* Checkout */}
       {showCheckout && cartItems.length > 0 && (
         <div
-        style={{
-          position: "fixed",
-          bottom: "0vw",
-          left: "0vw",
-          right: "0vw",
-          height: "18vh",
-          backgroundColor: "white",
-          boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
-          zIndex: 9999,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          padding: "2vw",            
+          style={{
+            position: "fixed",
+            bottom: "0vw",
+            left: "0vw",
+            right: "0vw",
+            height: "18vh",
+            backgroundColor: "white",
+            boxShadow: "0 -0.3vw 1vw rgba(0,0,0,0.1)",
+            zIndex: 9999,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            padding: "2vw",
           }}
         >
-          <div style={{ position: "absolute", top: "6.3vw", left: "7.7vw", fontSize: "5vw", fontWeight: "400", color: "#333" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "6.3vw",
+              left: "7.7vw",
+              fontSize: "5vw",
+              fontWeight: "400",
+              color: "#333",
+            }}
+          >
             Total:
           </div>
-          <div style={{ position: "absolute", top: "6.3vw", right: "7.7vw", fontSize: "5vw", fontWeight: "600", color: "#36570A" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "6.3vw",
+              right: "7.7vw",
+              fontSize: "5vw",
+              fontWeight: "600",
+              color: "#36570A",
+            }}
+          >
             ₱{totalAmount.toFixed(2)}
           </div>
           <button
