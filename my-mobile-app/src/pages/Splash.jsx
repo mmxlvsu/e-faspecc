@@ -52,10 +52,10 @@ export default function Splash() {
             width: "100%",
             height: "6.7vh",
             color: "white",
+            backgroundColor: "black",
             fontSize: "4.2vw",
             fontWeight: "bold",
             borderRadius: "8px",
-            border: "1px solid white",
           }}
         >
           Sign in
@@ -72,7 +72,7 @@ export default function Splash() {
             backgroundColor: "white",
             color: "black",
             fontSize: "4.2vw",
-            fontWeight: "bold",
+            fontWeight: "semi-bold",
             borderRadius: "8px",
             border: "2px solid white",
           }}
