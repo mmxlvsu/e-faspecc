@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import name from "../assets/faspecc.png";
@@ -6,6 +6,7 @@ import animationData from "../assets/animation.json";
 
 export default function Splash() {
   const navigate = useNavigate();
+  const lottieRef = useRef();
 
   const handleGetStarted = () => navigate("/signup");
   const handleLogin = () => navigate("/login");
@@ -13,35 +14,22 @@ export default function Splash() {
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-black font-poppins">
 
-      {/* Green gradient overlay */}
-<div
-  aria-hidden="true"
-  className="absolute inset-0 z-10 pointer-events-none"
-  style={{
-    background: `linear-gradient(
-      to top,
-      #6A972E 0%,         
-      rgba(106, 151, 46, 0.8) 20%,
-      rgba(106, 151, 46, 0.7) 60%,
-      rgba(106, 151, 46, 0.2) 100%,
-      rgba(106, 151, 46, 0) 0%
-    )`,
-  }}
-/>
-
-{/* Lottie Animation - above the gradient */}
-<div className="absolute z-20 left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 w-[60vw]">
-  <Lottie animationData={animationData} loop={false} />
-</div>
-
+      {/* Lottie Animation */}
+      <div className="absolute z-20 left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 w-[60vw]">
+        <Lottie
+          lottieRef={lottieRef}
+          animationData={animationData}
+          loop={false}
+          autoplay={true}
+          onComplete={() => {
+            lottieRef.current?.stop(); // hard stop after 1 play
+          }}
+        />
+      </div>
 
       {/* Center Logo */}
       <div className="absolute z-30 left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2">
-        <img 
-          src={name}
-          alt="Logo"
-          className="w-[70vw] h-auto opacity-100"
-        />
+        <img src={name} alt="Logo" className="w-[70vw] h-auto" />
       </div>
 
       {/* Sign in button */}
