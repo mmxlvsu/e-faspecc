@@ -31,7 +31,7 @@ export default function Splash() {
 
 {/* Lottie Animation - above the gradient */}
 <div className="absolute z-20 left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 w-[60vw]">
-  <Lottie animationData={animationData} loop={true} />
+  <Lottie animationData={animationData} loop={false} />
 </div>
 
 
